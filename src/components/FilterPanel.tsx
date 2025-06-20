@@ -1,14 +1,12 @@
 // src/components/FilterPanel.tsx
 import React, { useState } from 'react';
-import { Search, Filter, ChevronDown, ChevronUp } from 'lucide-react'; // Star, Sword, Shield, Zap は不要なら削除
+import { Search, Filter, ChevronDown, ChevronUp } from 'lucide-react';
 import { SkillCategory, SkillCategoriesList } from '../types/SkillCategories';
-import { UnitElement } from '../types/Unit'; // UnitElement をインポート
+import { UnitElement } from '../types/Unit';
 
 interface FilterPanelProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;
-  // selectedRarity: number | null; // 削除
-  // onRarityChange: (rarity: number | null) => void; // 削除
   selectedAttackType: number | null;
   onAttackTypeChange: (type: number | null) => void;
   showLimitedOnly: boolean;
@@ -17,12 +15,10 @@ interface FilterPanelProps {
   filteredCount: number;
   selectedSkillFilters: Partial<Record<SkillCategory, boolean>>;
   onSkillFilterChange: (category: SkillCategory, checked: boolean) => void;
-  // 新しいprops
   selectedElement: UnitElement | null;
   onElementChange: (element: UnitElement | null) => void;
 }
 
-// カテゴリをUI表示用にグループ化 (変更なし)
 const skillFilterGroups: Record<string, SkillCategory[]> = (() => {
   const groups: Record<string, SkillCategory[]> = {
     "HP/TP関連": [],
@@ -80,7 +76,7 @@ const skillFilterGroups: Record<string, SkillCategory[]> = (() => {
       categorized.add(cat);
     }
   });
-  const otherSpecialEffectKeywords: SkillCategory[] = ["召喚", "フィールド展開", "行動パターン変化", "スキル効果量変化(条件付き)", "複数回ヒット攻撃", "特定属性味方への追加効果", "特定タイプ敵への追加効果", "敵討伐時追加効果", "ダメージでTP回復しない効果"];
+  const otherSpecialEffectKeywords: SkillCategory[] = ["召喚", "フィールド展開", "行動パターン変化", "スキル効果量変化(条件付き)", "複数回ヒット攻撃", "特定属性味方への追加効果", "特定タイプ敵への追加効果", /*"敵討伐時追加効果",*/ "ダメージでTP回復しない効果"]; // "敵討伐時追加効果" をコメントアウトまたは削除
    otherSpecialEffectKeywords.forEach(keyword => {
     if (SkillCategoriesList.includes(keyword) && !categorized.has(keyword)) {
         groups["その他特殊効果"].push(keyword);
@@ -113,22 +109,19 @@ const AccordionSection: React.FC<{ title: string; children: React.ReactNode; def
   );
 };
 
-// 属性の定義とアイコンパス
 const elementOptions: { value: UnitElement; label: string; icon?: string }[] = [
   { value: "火", label: "火", icon: "/elementIcon/fire.png" },
   { value: "水", label: "水", icon: "/elementIcon/water.png" },
   { value: "風", label: "風", icon: "/elementIcon/wind.png" },
   { value: "光", label: "光", icon: "/elementIcon/light.png" },
   { value: "闇", label: "闇", icon: "/elementIcon/dark.png" },
-  { value: "不明", label: "不明" }, // 不明の場合はアイコンなし
+  { value: "不明", label: "不明" },
 ];
 
 
 const FilterPanel: React.FC<FilterPanelProps> = ({
   searchTerm,
   onSearchChange,
-  // selectedRarity, // 削除
-  // onRarityChange, // 削除
   selectedAttackType,
   onAttackTypeChange,
   showLimitedOnly,
@@ -137,8 +130,8 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   filteredCount,
   selectedSkillFilters,
   onSkillFilterChange,
-  selectedElement, // 追加
-  onElementChange, // 追加
+  selectedElement,
+  onElementChange,
 }) => {
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mb-6">
@@ -151,7 +144,6 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-        {/* 検索 */}
         <div className="space-y-1">
           <label htmlFor="search-term-input" className="block text-sm font-medium text-gray-700">
             キャラクター名
@@ -169,7 +161,6 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           </div>
         </div>
 
-        {/* 属性フィルター (レアリティの代わりに配置) */}
         <div className="space-y-1">
           <label htmlFor="element-select-input" className="block text-sm font-medium text-gray-700">
             属性
@@ -183,14 +174,12 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             <option value="">すべて</option>
             {elementOptions.map(opt => (
               <option key={opt.value} value={opt.value}>
-                {opt.icon && <>{/* アイコン表示は難しいので一旦テキストのみ */} </>}
                 {opt.label}
               </option>
             ))}
           </select>
         </div>
 
-        {/* 攻撃タイプ */}
         <div className="space-y-1">
           <label htmlFor="attack-type-select-input" className="block text-sm font-medium text-gray-700">
             攻撃タイプ
@@ -207,7 +196,6 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           </select>
         </div>
 
-        {/* 限定フィルター */}
         <div className="space-y-1">
           <label className="block text-sm font-medium text-gray-700">
             限定キャラ

@@ -86,8 +86,6 @@ const parseSkillFlags = (
     exactContextKeywords?: boolean;
   }
 
-  // このrules配列の充当が最も重要です。
-  // 実際のスキル説明文の多様な表現に対応できるよう、網羅的かつ正確に定義する必要があります。
   const rules: KeywordRule[] = [
     // --- I. HP/TP関連 ---
     { category: "HP回復(自分)", primaryKeywords: ["自分のhpを回復", "自身のhpを回復", "自分のhpを小回復", "自身のhpを小回復", "自分のhpを中回復", "自身のhpを中回復", "自分のhpを大回復", "自身のhpを大回復", "自分のhpを特大回復", "自身のhpを特大回復", "hpを自分に回復", "hpを自身に回復", "hp回復する"], negativeKeywords: ["味方全体のhpを回復", "範囲内の味方すべてのhpを回復", "味方1キャラのhpを回復", "敵のhpを回復", "継続hp回復"] },
@@ -95,12 +93,12 @@ const parseSkillFlags = (
     { category: "HP回復(全体)", primaryKeywords: ["hpを回復", "hpを小回復", "hpを中回復", "hpを大回復", "hpを特大回復"], contextKeywords: ["味方全体"], exactContextKeywords: true, negativeKeywords: ["自分自身", "自分のhpを", "継続hp"] },
     { category: "HP回復(単体)", primaryKeywords: ["hpを回復", "hpを小回復", "hpを中回復", "hpを大回復"], contextKeywords: ["味方1キャラのhpを", "最もhpが低い味方1キャラのhpを", "そのキャラのhpを", "hpが最も低い味方1人のhpを"], negativeKeywords: ["全体", "範囲", "自分自身", "自分のhpを", "継続hp"] },
     { category: "HP継続回復", primaryKeywords: ["継続hp回復状態を付与", "継続hp回復"] },
-    { category: "TP回復(自分)", primaryKeywords: ["自分のtpを回復", "自身のtpを回復", "tpを自身に回復"], negativeKeywords: ["味方", "敵"] },
+    { category: "TP回復(自分)", primaryKeywords: ["自分のtpを回復", "自身のtpを回復", "tpを自身に回復", "自分のtpを小回復", "自身のtpを小回復", "自分のtpを中回復", "自身のtpを中回復", "自分のtpを大回復", "自身のtpを大回復", "自分のtpを特大回復", "自身のtpを特大回復", "tpを小回復", "tpを中回復", "tpを大回復", "tpを特大回復"], contextKeywords: ["自分", "自身"], secondaryKeywords: ["tp"], negativeKeywords: ["味方", "敵", "tp上昇を", "継続tp回復"], exactContextKeywords: false },
     { category: "TP回復(単体)", primaryKeywords: ["tpを回復", "tpを小回復", "tpを中回復", "tpを大回復"], contextKeywords: ["味方1キャラのtpを", "最もtpが低い味方1キャラのtpを", "そのキャラのtpを"], negativeKeywords: ["全体", "範囲", "自分自身", "自分のtpを", "継続tp"] },
     { category: "TP回復(範囲)", primaryKeywords: ["tpを回復", "tpを小回復", "tpを中回復", "tpを大回復"], contextKeywords: ["自分の周囲の味方すべて", "範囲内の味方すべて", "自分を中心とした範囲内の味方すべて", "最も魔法攻撃力が高い味方1キャラを中心とした範囲内の味方すべて"], negativeKeywords: ["味方全体", "自分自身", "自分のtpを", "継続tp"] },
     { category: "TP回復(全体)", primaryKeywords: ["tpを回復", "tpを小回復", "tpを中回復", "tpを大回復", "tpを特大回復"], contextKeywords: ["味方全体"], exactContextKeywords: true, negativeKeywords: ["自分自身", "自分のtpを"] },
     { category: "TP継続回復", primaryKeywords: ["継続tp回復状態を付与", "継続tp回復"] },
-    { category: "敵TP減少", primaryKeywords: ["tpをダウン", "tpを減少"], contextKeywords: ["敵全体", "敵すべて", "範囲内の敵", "目の前の敵", "敵1キャラ"], negativeKeywords: ["味方", "自分", "アップ", "上昇", "回復"] },
+    { category: "敵TP減少", primaryKeywords: ["tpをダウン", "tpを小ダウン", "tpを中ダウン", "tpを大ダウン", "tpを減少"], contextKeywords: ["敵"], negativeKeywords: ["味方", "自分", "アップ", "上昇", "回復"] },
     { category: "味方TP上昇アップ", primaryKeywords: ["tp上昇をアップ", "tp上昇を小アップ", "tp上昇を中アップ"], contextKeywords: ["味方全体", "味方すべて", "範囲内の味方", "自分"], negativeKeywords: ["敵", "ダウン"] },
     { category: "敵TP上昇ダウン", primaryKeywords: ["tp上昇をダウン", "tp上昇を小ダウン"], contextKeywords: ["敵全体", "敵すべて", "範囲内の敵", "目の前の敵", "敵1キャラ"], negativeKeywords: ["味方", "自分", "アップ"] },
     { category: "HP吸収アップ/効果", primaryKeywords: ["hp吸収をアップ", "hp吸収状態", "物理吸収バリア", "魔法吸収バリア", "物理/魔法吸収バリア"] },
@@ -131,7 +129,7 @@ const parseSkillFlags = (
 
     // --- II. バフ（味方強化） - その他バフ ---
     { category: "味方行動速度アップ", primaryKeywords: ["行動速度をアップ", "行動速度を小アップ", "行動速度を中アップ", "行動速度を大アップ", "行動速度を特大アップ"], contextKeywords: ["味方", "自分"], negativeKeywords: ["敵", "ダウン"] },
-    { category: "味方回避アップ", primaryKeywords: ["回避をアップ"], contextKeywords: ["味方", "自分"] },
+    { category: "味方回避", primaryKeywords: ["回避をアップ"], contextKeywords: ["味方", "自分"] },
     { category: "味方無敵状態付与", primaryKeywords: ["無敵状態に"], contextKeywords: ["味方", "自分"] },
     { category: "味方状態異常無効/解除", primaryKeywords: ["状態異常を無効", "状態異常を解除"], contextKeywords: ["味方", "自分"] },
     { category: "攻撃対象にならない状態付与", primaryKeywords: ["攻撃の対象にならない状態"], contextKeywords: ["自分"] },
@@ -153,25 +151,24 @@ const parseSkillFlags = (
     // --- III. デバフ（敵弱体化） - その他デバフ ---
     { category: "敵行動速度ダウン", primaryKeywords: ["行動速度をダウン", "行動速度を小ダウン", "行動速度を中ダウン", "行動速度を大ダウン"], contextKeywords: ["敵"], negativeKeywords: ["味方", "自分", "アップ"] },
     { category: "敵クリティカル時被ダメージアップ", primaryKeywords: ["クリティカルを受けた際のダメージをアップ", "クリティカル被ダメージをアップ"], contextKeywords: ["敵"] },
-    { category: "敵被ダメージアップ(汎用)", primaryKeywords: ["被ダメージをアップ", "受けるダメージをアップ"], contextKeywords: ["敵"] },
+    { category: "敵被ダメージアップ(汎用)", primaryKeywords: ["被ダメージを", "受けるダメージをアップ"], contextKeywords: ["敵"] },
     { category: "敵バリア解除", primaryKeywords: ["バリアを解除", "バリアを全て解除"], contextKeywords: ["敵"] },
     { category: "敵ステータスアップ効果解除", primaryKeywords: ["ステータスアップ効果を解除"], contextKeywords: ["敵"] },
-    { category: "敵命中率ダウン", primaryKeywords: ["命中をダウン", "命中率をダウン"], contextKeywords: ["敵"] },
 
     // --- IV. 状態異常（敵対象） ---
-    { category: "スタン", primaryKeywords: ["スタンさせ", "スタン状態にする", "スタンする"] },
-    { category: "麻痺", primaryKeywords: ["麻痺させ", "麻痺状態にする"] },
-    { category: "束縛", primaryKeywords: ["束縛し", "束縛状態にする"] },
-    { category: "凍結", primaryKeywords: ["凍結させ", "凍結状態にする"] },
-    { category: "石化", primaryKeywords: ["石化させ", "石化状態にする"] },
-    { category: "睡眠", primaryKeywords: ["睡眠状態にする"] },
-    { category: "混乱", primaryKeywords: ["混乱状態に", "混乱させる"] },
-    { category: "誘惑", primaryKeywords: ["誘惑状態に", "誘惑する"] },
-    { category: "恐慌", primaryKeywords: ["恐慌状態に", "恐慌させる"] },
-    { category: "暗闇", primaryKeywords: ["暗闇状態に", "暗闇にする"] },
+    { category: "スタン", primaryKeywords: ["スタン", "スタン状態にする", "スタンする"] },
+    { category: "麻痺", primaryKeywords: ["麻痺", "麻痺状態にする"] },
+    { category: "束縛", primaryKeywords: ["束縛", "束縛状態にする"] },
+    { category: "凍結", primaryKeywords: ["凍結", "凍結状態にする"] },
+    { category: "石化", primaryKeywords: ["石化", "石化状態にする"] },
+    { category: "睡眠", primaryKeywords: ["睡眠"] },
+    { category: "混乱", primaryKeywords: ["混乱", "混乱させる"], contextKeywords: ["敵"], negativeKeywords: ["味方", "自分"] },
+    { category: "誘惑", primaryKeywords: ["誘惑", "誘惑する"], contextKeywords: ["敵"], negativeKeywords: ["味方", "自分"] },
+    { category: "恐慌", primaryKeywords: ["恐慌", "恐慌させる"], contextKeywords: ["敵"], negativeKeywords: ["味方", "自分"] },
+    { category: "暗闇", primaryKeywords: ["暗闇状態に", "暗闇にする", "暗闇を付与", "暗闇状態", "暗闇"], contextKeywords: ["敵"], negativeKeywords: ["味方"] },
     { category: "毒/猛毒", primaryKeywords: ["毒状態に", "猛毒状態に", "毒を付与", "猛毒を付与"] },
-    { category: "火傷", primaryKeywords: ["火傷状態に", "火傷を付与"] },
-    { category: "呪い/呪詛", primaryKeywords: ["呪い状態に", "呪詛状態に", "呪いを付与", "呪詛を付与"] },
+    { category: "火傷", primaryKeywords: ["火傷", "火傷を付与"] },
+    { category: "呪い/呪詛", primaryKeywords: ["呪い", "呪詛", "呪いを付与", "呪詛を付与"] },
     { category: "割合ダメージ状態(敵)", primaryKeywords: ["割合ダメージを発生", "割合ダメージを与える状態に"] },
 
     // --- V. コントロール（敵対象） ---
@@ -198,7 +195,6 @@ const parseSkillFlags = (
     { category: "複数回ヒット攻撃", primaryKeywords: ["ダメージを2回", "ダメージを3回", "ダメージを計3回", "ダメージを計4回"] },
     { category: "特定属性味方への追加効果", primaryKeywords: ["属性の味方すべてに", "属性のキャラに対しては"] },
     { category: "特定タイプ敵への追加効果", primaryKeywords: ["物理攻撃をする敵だった場合", "魔法攻撃をする敵だった場合"] },
-    { category: "敵討伐時追加効果", primaryKeywords: ["敵を倒した場合", "とどめを刺した"] },
     { category: "ダメージでTP回復しない効果", primaryKeywords: ["ダメージでは自分のtpは回復しない", "ダメージでは敵のtpは回復しない"] },
   ];
 
@@ -227,8 +223,9 @@ const parseSkillFlags = (
       }
       if (!secondaryMatch) continue;
 
-      let contextSatisfied = false;
+      let contextSatisfied = true; // デフォルトをtrueに変更
       if (rule.contextKeywords && rule.contextKeywords.length > 0) {
+        contextSatisfied = false; // contextKeywordsがある場合は一旦falseに
         for (const cKeyword of rule.contextKeywords) {
           if (rule.exactContextKeywords) {
             const regex = new RegExp(`(^|\\W)${cKeyword}(\\W|$)`, 'iu');
@@ -243,31 +240,49 @@ const parseSkillFlags = (
             }
           }
         }
-      } else {
-        contextSatisfied = true;
       }
+      // HP回復(自分) と TP回復(自分) の特別なコンテキスト処理
+      if (rule.category === "HP回復(自分)" || rule.category === "TP回復(自分)") {
+        // primaryKeywordsに "自分の" や "自身の" が含まれていれば、contextSatisfiedはtrueとみなす
+        const selfKeywords = ["自分の", "自身の"];
+        let hasSelfKeywordInPrimary = false;
+        for (const pKeyword of rule.primaryKeywords) {
+            if (selfKeywords.some(sk => pKeyword.includes(sk))) {
+                hasSelfKeywordInPrimary = true;
+                break;
+            }
+        }
+        // primaryKeywordsに "自分の" などが含まれておらず、かつスキル説明に "自分の" や "自身の" が含まれている場合
+        if (!hasSelfKeywordInPrimary && selfKeywords.some(sk => data.desc.includes(sk))) {
+            contextSatisfied = true;
+        }
+        // primaryKeywordsに "自分の" などが含まれているが、contextKeywordsに "自分" や "自身" が指定されていない場合、
+        // かつスキル説明に "自分" または "自身" が含まれていれば contextSatisfied は true
+        else if (hasSelfKeywordInPrimary && !(rule.contextKeywords?.includes("自分") || rule.contextKeywords?.includes("自身")) && selfKeywords.some(sk => data.desc.includes(sk))) {
+            contextSatisfied = true;
+        }
+        // それ以外で contextKeywords があり、満たされていない場合はスキップ
+        else if (rule.contextKeywords && rule.contextKeywords.length > 0 && !contextSatisfied) {
+            continue;
+        }
+         // "自分のhpを回復" のような直接的な表現の場合、contextKeywords を満たさなくてもOK
+        if (rule.primaryKeywords.some(pk => pk.startsWith("自分の") || pk.startsWith("自身の"))) {
+            contextSatisfied = true;
+        } else if (rule.contextKeywords && rule.contextKeywords.length > 0 && !contextSatisfied) {
+            // "tpを小回復" のような曖昧な表現で、contextKeywords ("自分", "自身") が満たされない場合はスキップ
+            continue;
+        }
 
-      // HP回復(自分) の特殊なコンテキストチェック
-      if (!contextSatisfied && rule.category === "HP回復(自分)") {
-          if ( (data.desc.includes("自分のhpを") || data.desc.includes("自身のhpを")) ) {
-              contextSatisfied = true;
-          } else {
-              continue; // primaryだけでは曖昧な "hp回復する" などの場合、自分への言及がなければスキップ
-          }
-      } else if (!contextSatisfied) {
-          continue;
+      } else if (rule.contextKeywords && rule.contextKeywords.length > 0 && !contextSatisfied) {
+        // 他のカテゴリでcontextKeywordsがあり、満たされていない場合はスキップ
+        continue;
       }
 
 
       let negativeMatch = false;
       if (rule.negativeKeywords) {
         for (const nKeyword of rule.negativeKeywords) {
-          if (rule.category === "HP回復(自分)" && (nKeyword === "味方全体のhpを回復" || nKeyword === "範囲内の味方すべてのhpを回復" || nKeyword === "味方1キャラのhpを回復")) {
-            if(data.desc.includes(nKeyword) && !(data.desc.includes("自分のhpを") || data.desc.includes("自身のhpを"))){
-                negativeMatch = true;
-                break;
-            }
-          } else if (rule.category !== "HP回復(自分)" && data.desc.includes(nKeyword)) {
+          if (data.desc.includes(nKeyword)) {
              negativeMatch = true;
              break;
           }
