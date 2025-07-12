@@ -5641,8 +5641,8 @@
   },
   {
     "id": "rin_deremasu",
-    "name": "リン（デレマス）",
-    "version": "",
+    "name": "リン(デレマス)",
+    "version": "デレマス",
     "fullName": "リン（デレマス）",
     "rarity": 3,
     "position": "前衛",
@@ -5669,10 +5669,10 @@
     }
   },
   {
-    "id": "mio_normal",
-    "name": "ミオ（デレマス）",
- "version": "",
-    "fullName": "ミオ（デレマス）",
+    "id": "112631",
+    "name": "ミオ",
+    "version": "デレマス",
+    "fullName": "ミオ(デレマス)",
     "rarity": 1,
     "position": "後衛",
     "type": "魔法",
@@ -5698,10 +5698,10 @@
     }
   },
   {
-    "id": "uzuki_deremasu",
+    "id": "112431",
     "name": "ウヅキ",
-    "version": "",
-    "fullName": "ウヅキ（デレマス）",
+    "version": "デレマス",
+    "fullName": "ウヅキ(デレマス)",
     "rarity": 3,
     "position": "中衛",
     "type": "物理",
