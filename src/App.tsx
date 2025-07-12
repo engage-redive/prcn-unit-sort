@@ -1,70 +1,68 @@
-// src/App.tsx
-import React, { useState, useMemo } from 'react';
-import { useUnits } from './hooks/useUnits';
-import UnitCard from './components/UnitCard';
+import React from 'react';
+import { useState, useEffect } from 'react';
+import { Character, UnitSkills, FilterOptions } from './types/character';
+import { filterCharacters } from './utils/characterUtils';
 import FilterPanel from './components/FilterPanel';
-import { Loader2, AlertCircle } from 'lucide-react';
-import { SkillCategory } from './types/SkillCategories';
-import { UnitElement } from './types/Unit';
+import CharacterGrid from './components/CharacterGrid';
+import SkillDetails from './components/SkillDetails';
+import Modal from './components/Modal'; // ★ Modalをインポート
+import { BookOpen } from 'lucide-react';
+import charactersData from './data/unit_data.json';
+import skillsData from './data/unit_skills.json';
 
 function App() {
-  const { units, loading, error, getUnitIcon } = useUnits();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedAttackType, setSelectedAttackType] = useState<number | null>(null);
-  const [showLimitedOnly, setShowLimitedOnly] = useState(false);
-  const [selectedSkillFilters, setSelectedSkillFilters] = useState<Partial<Record<SkillCategory, boolean>>>({});
-  const [selectedElement, setSelectedElement] = useState<UnitElement | null>(null);
+  const [characters, setCharacters] = useState<Character[]>([]);
+  const [skills, setSkills] = useState<UnitSkills>({});
+  const [filters, setFilters] = useState<FilterOptions>({
+    element: [],
+    position: [],
+    atkType: [],
+    roles: [],
+    skillFilters: [],
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSkillFilterChange = (category: SkillCategory, checked: boolean) => {
-    setSelectedSkillFilters(prev => ({
-      ...prev,
-      [category]: checked,
-    }));
+  const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      setCharacters(charactersData as Character[]);
+      setSkills(skillsData as UnitSkills);
+    } catch (err) {
+      console.error('Data setting error:', err);
+      setError('データの処理中にエラーが発生しました。');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // ★ モーダルを開く（カードクリック時に呼ばれる）
+  const handleCharacterSelect = (id: string) => {
+    setSelectedCharacterId(id);
   };
 
-  const handleElementChange = (element: UnitElement | null) => {
-    setSelectedElement(element);
-  };
+  // ★ モーダルを閉じる
+  const handleCloseModal = () => {
+    setSelectedCharacterId(null);
+  }
 
-  const activeSkillFilterKeys = useMemo(() => {
-    return (Object.keys(selectedSkillFilters) as SkillCategory[]).filter(
-      key => selectedSkillFilters[key]
-    );
-  }, [selectedSkillFilters]);
-
-  const filteredUnits = useMemo(() => {
-    // ... (フィルタリングロジックは変更なし) ...
-    return units.filter(unit => {
-      if (searchTerm && !unit.unit_name.toLowerCase().includes(searchTerm.toLowerCase())) {
-        return false;
-      }
-      if (selectedElement !== null && unit.element !== selectedElement) {
-        return false;
-      }
-      if (selectedAttackType !== null && unit.atk_type !== selectedAttackType) {
-        return false;
-      }
-      if (showLimitedOnly && unit.is_limited !== 1) {
-        return false;
-      }
-      if (activeSkillFilterKeys.length > 0) {
-        for (const key of activeSkillFilterKeys) {
-          if (!unit.skill_flags || !unit.skill_flags[key]) {
-            return false;
-          }
-        }
-      }
-      return true;
-    });
-  }, [units, searchTerm, selectedElement, selectedAttackType, showLimitedOnly, activeSkillFilterKeys]);
-
-  // ... (ローディング、エラー表示は変更なし) ...
+  const filteredCharacters = filterCharacters(characters, skills, filters);
+  
+  const selectedCharacter = selectedCharacterId 
+    ? characters.find(c => c.id === selectedCharacterId) 
+    : null;
+  const selectedSkillData = selectedCharacter 
+    ? skills[selectedCharacter.fullName] 
+    : undefined;
+  
+  // (if (loading) ... と if (error) ... の部分は変更なし)
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center">
-        <div className="flex items-center space-x-2">
-          <Loader2 className="w-6 h-6 animate-spin text-purple-600" />
-          <span className="text-lg text-gray-700">キャラクターデータを読み込み中...</span>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">データを読み込み中...</p>
         </div>
       </div>
     );
@@ -72,62 +70,69 @@ function App() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center">
-        <div className="bg-white rounded-lg shadow-md p-8 max-w-md">
-          <div className="flex items-center space-x-2 text-red-600 mb-4">
-            <AlertCircle className="w-6 h-6" />
-            <h2 className="text-lg font-semibold">エラーが発生しました</h2>
-          </div>
-          <p className="text-gray-600">{error}</p>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            再読み込み
+          </button>
         </div>
       </div>
     );
   }
 
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
-      <div className="container mx-auto px-2 py-6">
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
-            プリンセスコネクト！Re:Dive
-          </h1>
-          <p className="text-lg text-gray-600">キャラクター図鑑</p>
-        </header>
-
-        <FilterPanel
-          searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
-          selectedAttackType={selectedAttackType}
-          onAttackTypeChange={setSelectedAttackType}
-          showLimitedOnly={showLimitedOnly}
-          onLimitedToggle={setShowLimitedOnly}
-          totalCount={units.length}
-          filteredCount={filteredUnits.length}
-          selectedSkillFilters={selectedSkillFilters}
-          onSkillFilterChange={handleSkillFilterChange}
-          selectedElement={selectedElement}
-          onElementChange={handleElementChange}
-        />
-
-        {filteredUnits.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-gray-500 text-lg">
-              条件に一致するキャラクターが見つかりませんでした
-            </div>
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center gap-3">
+            <BookOpen className="w-8 h-8 text-blue-600" />
+            <h1 className="text-2xl font-bold text-gray-900">
+              プリンセスコネクト キャラクター図鑑
+            </h1>
           </div>
-        ) : (
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-1.5">
-            {filteredUnits.map(unit => (
-              <UnitCard
-                key={unit.unit_id}
-                unit={unit}
-                iconUrl={getUnitIcon(unit.unit_name)}
-                activeSkillFilters={activeSkillFilterKeys} // activeSkillFilterKeysを渡す
-              />
-            ))}
+        </div>
+      </header>
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <FilterPanel
+          filters={filters}
+          onFiltersChange={setFilters}
+          totalCount={characters.length}
+          filteredCount={filteredCharacters.length}
+        />
+        
+        <CharacterGrid 
+          characters={filteredCharacters}
+          selectedCharacterId={selectedCharacterId}
+          onCharacterSelect={handleCharacterSelect} // ハンドラを渡す
+        />
+        
+        {/* ★ ページ下部の詳細表示は削除 */}
+
+        {filteredCharacters.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">
+              フィルター条件に一致するキャラクターが見つかりませんでした
+            </p>
           </div>
         )}
-      </div>
+      </main>
+
+      {/* ★ モーダルコンポーネントをここに追加 */}
+      <Modal isOpen={!!selectedCharacter} onClose={handleCloseModal}>
+        {selectedCharacter && (
+            <SkillDetails 
+              character={selectedCharacter} 
+              skillData={selectedSkillData}
+            />
+        )}
+      </Modal>
+
     </div>
   );
 }
