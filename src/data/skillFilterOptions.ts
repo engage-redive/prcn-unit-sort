@@ -65,7 +65,6 @@ export const skillFilterOptions: FilterGroup[] = [
       { id: 'type_dot_poison', label: '毒・猛毒', property: 'type', value: '毒' },
       { id: 'type_dot_burn', label: '火傷', property: 'type', value: '火傷' },
       { id: 'type_dot_curse', label: '呪い・呪詛', property: 'type', value: '呪い' },
-      { id: 'type_dot_field', label: 'ダメージフィールド', property: 'type', value: 'ダメージフィールド' },
       { id: 'type_dot_percent', label: '割合ダメージ', property: 'type', value: '割合ダメージ' },
     ]
   },
