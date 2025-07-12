@@ -5728,10 +5728,10 @@
     }
   },
   {
-    "id": "mio_normal",
-    "name": "ミオ（デレマス）",
- "version": "",
-    "fullName": "ミオ（デレマス）",
+    "id": "112631",
+    "name": "ミオ",
+    "version": "デレマス",
+    "fullName": "ミオ(デレマス)",
     "rarity": 1,
     "position": "後衛",
     "type": "魔法",
