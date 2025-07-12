@@ -51043,6 +51043,122 @@
                 }
             ]
         }
+    },
+      "エリス(サマー)": {
+        "union_burst": {
+            "versions": [
+                {
+                    "version_id": "normal",
+                    "name": "アンサス・エリュシオン",
+                    "description": "目の前の敵1キャラに魔法大ダメージを2回与え、味方全体に魔法無効バリアを展開する。【いばらの冠】が付与されている場合、このスキルの効果量が大幅にダウンし、自分のスキル発動時の最大HPの10%を消費する。このスキルで自分のHPを消費する量は、特殊スキルを除くスキルを使用するたびに増加する。このスキルによる自分へのダメージでは自分のTPは回復しない。",
+                    "effects": [
+                        { "target": "目の前の敵1キャラ", "type": "魔法ダメージ", "formula": "(スキルLv+1)*4 + 魔法攻撃力*0.32", "duration": null, "note": "2回", "condition": "【いばらの冠】あり" },
+                        { "target": "目の前の敵1キャラ", "type": "魔法ダメージ", "formula": "(スキルLv+1)*40 + 魔法攻撃力*3.2", "duration": null, "note": "2回", "condition": "【いばらの冠】なし" },
+                        { "target": "味方全体", "type": "魔法無効バリア", "formula": "(スキルLv+1)*6", "duration": 18, "condition": "【いばらの冠】あり" },
+                        { "target": "味方全体", "type": "魔法無効バリア", "formula": "(スキルLv+1)*60", "duration": 18, "condition": "【いばらの冠】なし" },
+                        { "target": "自分", "type": "魔法割合ダメージ", "formula": "最大HPの10%*スキル発動回数", "duration": null, "condition": "【いばらの冠】あり", "note": "スキル発動回数はUB・スキル1・スキル2の合計" }
+                    ]
+                }
+            ]
+        },
+        "special_skill_1": {
+            "base_name": "アナスタシス",
+            "versions": [
+                {
+                    "version_id": "normal",
+                    "name": "アナスタシス",
+                    "description": "HPがゼロになった時に発動し、倒れずに自分の【いばらの冠】とステータスダウン効果を全て解除してHPを大回復させる。さらに、バトル終了時まで味方全体の魔法攻撃力を極大アップ、魔法防御力を大アップ、魔法クリティカルを特大アップ、魔法攻撃クリティカル時のダメージを中アップ、魔法攻撃のダメージを小アップさせ、調和状態を付与する。調和状態の間は物理防御力と魔法防御力のうち高い方によって計算されたダメージを受ける。このスキルはバトル中一度しか発動しない。",
+                    "effects": [
+                        { "target": "自分", "type": "【いばらの冠】", "formula": "解除", "duration": null, "condition": "HPゼロ時に発動" },
+                        { "target": "自分", "type": "ステータスダウン効果全て", "formula": "解除", "duration": null, "condition": "HPゼロ時に発動" },
+                        { "target": "自分", "type": "HP回復", "formula": "(スキルLv+1)*10 + 魔法攻撃力*1.2", "duration": null, "condition": "HPゼロ時に発動" },
+                        { "target": "味方全体", "type": "魔法攻撃力UP", "formula": "(スキルLv+1)*140", "duration": 180, "condition": "HPゼロ時に発動" },
+                        { "target": "味方全体", "type": "魔法防御力UP", "formula": "(スキルLv+1)*1.2", "duration": 180, "condition": "HPゼロ時に発動" },
+                        { "target": "味方全体", "type": "魔法クリティカルUP", "formula": "300", "duration": 180, "condition": "HPゼロ時に発動" },
+                        { "target": "味方全体", "type": "魔法攻撃クリティカルダメージUP", "formula": "30%", "duration": 180, "condition": "HPゼロ時に発動" },
+                        { "target": "味方全体", "type": "魔法与ダメージUP", "formula": "10%", "duration": 180, "condition": "HPゼロ時に発動" },
+                        { "target": "味方全体", "type": "調和状態", "formula": "ダメージを物理防御力/魔法防御力の高い方の防御力で受ける状態", "duration": 180, "condition": "HPゼロ時に発動" }
+                    ],
+                    "note": "スキルLvはUBと連動"
+                }
+            ]
+        },
+        "special_skill_2": {
+            "base_name": "シネスティマ",
+            "versions": [
+                {
+                    "version_id": "normal",
+                    "name": "シネスティマ",
+                    "description": "バトル終了まで自分に【いばらの冠】を付与し、物理防御力と魔法防御力とTP上昇を極大ダウンする。",
+                    "effects": [
+                        { "target": "自分", "type": "【いばらの冠】", "formula": "付与(アナスタシス発動時のみ解除)", "duration": 180 },
+                        { "target": "自分", "type": "物理防御力DOWN", "formula": "9999", "duration": 180 },
+                        { "target": "自分", "type": "魔法防御力DOWN", "formula": "9999", "duration": 180 },
+                        { "target": "自分", "type": "TP上昇DOWN", "formula": "9999", "duration": 180 }
+                    ],
+                    "note": "スキルLvはUBと連動。バトル開始直後に1回だけ発動。"
+                }
+            ]
+        },
+        "skill_1": {
+            "base_name": "ペタラ・カリス",
+            "versions": [
+                {
+                    "version_id": "normal",
+                    "name": "ペタラ・カリス",
+                    "description": "味方全体の魔法攻撃力を特大アップさせ、HPを中回復、TPを小回復させる。【いばらの冠】が付与されている場合、このスキルの効果量が大幅にダウンし、自分のスキル発動時の最大HPの10%を消費する。このスキルで自分のHPを消費する量は、特殊スキルを除くスキルを使用するたびに増加する。このスキルによる自分へのダメージでは自分のTPは回復しない。",
+                    "effects": [
+                        { "target": "味方全体", "type": "魔法攻撃力UP", "formula": "(スキルLv+1)*3.5", "duration": 12, "condition": "【いばらの冠】あり" },
+                        { "target": "味方全体", "type": "魔法攻撃力UP", "formula": "(スキルLv+1)*35", "duration": 12, "condition": "【いばらの冠】なし" },
+                        { "target": "味方全体", "type": "HP回復", "formula": "(スキルLv+1)*0.6 + 魔法攻撃力*0.06", "duration": null, "condition": "【いばらの冠】あり" },
+                        { "target": "味方全体", "type": "HP回復", "formula": "(スキルLv+1)*6 + 魔法攻撃力*0.6", "duration": null, "condition": "【いばらの冠】なし" },
+                        { "target": "味方全体", "type": "TP回復", "formula": "5", "duration": null, "condition": "【いばらの冠】あり" },
+                        { "target": "味方全体", "type": "TP回復", "formula": "50", "duration": null, "condition": "【いばらの冠】なし" },
+                        { "target": "自分", "type": "魔法割合ダメージ", "formula": "最大HPの10%*スキル発動回数", "duration": null, "condition": "【いばらの冠】あり", "note": "スキル発動回数はUB・スキル1・スキル2の合計" }
+                    ]
+                }
+            ]
+        },
+        "skill_2": {
+            "base_name": "プレーステール",
+            "versions": [
+                {
+                    "version_id": "normal",
+                    "name": "プレーステール",
+                    "description": "目の前の敵1キャラに魔法大ダメージを与え、物理攻撃力と魔法攻撃力を大ダウンさせる。【いばらの冠】が付与されている場合、このスキルの効果量が大幅にダウンし、自分のスキル発動時の最大HPの10%を消費する。このスキルで自分のHPを消費する量は、特殊スキルを除くスキルを使用するたびに増加する。このスキルによる自分へのダメージでは自分のTPは回復しない。",
+                    "effects": [
+                        { "target": "目の前の敵1キャラ", "type": "魔法ダメージ", "formula": "(スキルLv+1)*3 + 魔法攻撃力*0.24", "duration": null, "condition": "【いばらの冠】あり" },
+                        { "target": "目の前の敵1キャラ", "type": "魔法ダメージ", "formula": "(スキルLv+1)*30 + 魔法攻撃力*2.4", "duration": null, "condition": "【いばらの冠】なし" },
+                        { "target": "目の前の敵1キャラ", "type": "物理攻撃力DOWN", "formula": "(スキルLv+1)*2", "duration": 18, "condition": "【いばらの冠】あり" },
+                        { "target": "目の前の敵1キャラ", "type": "物理攻撃力DOWN", "formula": "(スキルLv+1)*20", "duration": 18, "condition": "【いばらの冠】なし" },
+                        { "target": "目の前の敵1キャラ", "type": "魔法攻撃力DOWN", "formula": "(スキルLv+1)*2", "duration": 18, "condition": "【いばらの冠】あり" },
+                        { "target": "目の前の敵1キャラ", "type": "魔法攻撃力DOWN", "formula": "(スキルLv+1)*20", "duration": 18, "condition": "【いばらの冠】なし" },
+                        { "target": "自分", "type": "魔法割合ダメージ", "formula": "最大HPの10%*スキル発動回数", "duration": null, "condition": "【いばらの冠】あり", "note": "スキル発動回数はUB・スキル1・スキル2の合計" }
+                    ]
+                }
+            ]
+        },
+        "ex_skill": {
+            "base_name": "メタノイア",
+            "versions": [
+                {
+                    "version_id": "normal",
+                    "name": "メタノイア",
+                    "description": "バトル開始時に自分の魔法攻撃力を中アップさせる。",
+                    "effects": [
+                        { "target": "自分", "type": "魔法攻撃力UP", "formula": "(スキルLv+1)*15", "duration": null }
+                    ]
+                },
+                {
+                    "version_id": "enhanced",
+                    "name": "メタノイア+",
+                    "description": "バトル開始時に自分の魔法攻撃力を大アップさせる。",
+                    "effects": [
+                        { "target": "自分", "type": "魔法攻撃力UP", "formula": "(スキルLv+1)*15 + 225", "duration": null }
+                    ]
+                }
+            ]
+        }
     }
 }
 
