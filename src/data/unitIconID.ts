@@ -315,7 +315,6 @@ const unitData: UnitEntry[] = [
   { name: "ホウオウ", idStar1: 134711, idStar3: 134731, idStar6: 134761 },
   { name: "ツムギ（ジオゲヘナ）", idStar1: 134811, idStar3: 134831, idStar6: 134871 },
   { name: "カノン", idStar1: 134911, idStar3: 134931, idStar6: 137361 },
-  { name: "ジータ", idStar1: 170111, idStar3: 170131, idStar6: 170161 },
   { name: "ヒヨリ（プリンセス）", idStar1: 180111, idStar3: 180131, idStar6: 180161 },
   { name: "ユイ（プリンセス）", idStar1: 180211, idStar3: 180231, idStar6: 180261 },
   { name: "レイ（プリンセス）", idStar1: 180311, idStar3: 180331, idStar6: 180361 },
