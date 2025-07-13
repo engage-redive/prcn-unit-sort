@@ -1,12 +1,12 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Character, UnitSkills, FilterOptions } from './types/character';
-import { filterCharacters } from './utils/characterUtils';
+import { Character, UnitSkills, FilterOptions, SortType } from './types/character';
+import { filterAndSortCharacters } from './utils/characterUtils';
 import FilterPanel from './components/FilterPanel';
 import CharacterGrid from './components/CharacterGrid';
 import SkillDetails from './components/SkillDetails';
 import Modal from './components/Modal';
-import RankingsPage from './pages/RankingsPage'; // ★ このパスが正しいか確認
+import RankingsPage from './pages/RankingsPage';
 import { BookOpen, BarChart3 } from 'lucide-react';
 import charactersData from './data/unit_data.json';
 import skillsData from './data/unit_skills.json';
@@ -28,6 +28,10 @@ function App() {
   const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(null);
   
   const [activeTab, setActiveTab] = useState<Tab>('finder');
+  
+  // 検索とソート用のstateを追加
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortType, setSortType] = useState<SortType>('default');
 
   useEffect(() => {
     try {
@@ -49,7 +53,14 @@ function App() {
     setSelectedCharacterId(null);
   }
 
-  const filteredCharacters = filterCharacters(characters, skills, filters);
+  // filterCharacters を新しい filterAndSortCharacters に置き換え
+  const displayedCharacters = filterAndSortCharacters(
+    characters,
+    skills,
+    filters,
+    searchTerm,
+    sortType
+  );
   
   const selectedCharacter = selectedCharacterId 
     ? characters.find(c => c.id === selectedCharacterId) 
@@ -123,14 +134,18 @@ function App() {
               filters={filters}
               onFiltersChange={setFilters}
               totalCount={characters.length}
-              filteredCount={filteredCharacters.length}
+              filteredCount={displayedCharacters.length}
+              searchTerm={searchTerm}
+              onSearchTermChange={setSearchTerm}
+              sortType={sortType}
+              onSortTypeChange={setSortType}
             />
             <CharacterGrid 
-              characters={filteredCharacters}
+              characters={displayedCharacters}
               selectedCharacterId={selectedCharacterId}
               onCharacterSelect={handleCharacterSelect}
             />
-            {filteredCharacters.length === 0 && (
+            {displayedCharacters.length === 0 && (
               <div className="text-center py-12">
                 <p className="text-gray-500 text-lg">フィルター条件に一致するキャラクターが見つかりませんでした</p>
               </div>

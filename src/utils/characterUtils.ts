@@ -1,6 +1,7 @@
-import { Character, UnitSkills, FilterOptions, SkillFilter, Effect } from '../types/character';
-import { unitIdMap } from '../data/unitIconID';
 
+import { unitIdMap } from '../data/unitIconID';import { Character, UnitSkills, FilterOptions, SkillFilter, SortType, Effect } from '../types/character'; // ★ SortTypeをインポート
+import { unitIdMap } from '../data/unitIconID';
+import { positionOrder } from '../data/positionOrder'; // ★ 隊列順データをインポート
 export const getIconPath = (character: Character): string => {
   const unitEntry = unitIdMap.get(character.fullName) || unitIdMap.get(character.name);
   if (unitEntry) {
@@ -55,12 +56,39 @@ const checkEffect = (effect: Effect, filter: SkillFilter): boolean => {
     return false;
 };
 
-export const filterCharacters = (
+const katakanaToHiragana = (str: string) => {
+  return str.replace(/[\u30a1-\u30f6]/g, (match) => {
+    const chr = match.charCodeAt(0) - 0x60;
+    return String.fromCharCode(chr);
+  });
+};
+
+
+export const filterAndSortCharacters = (
   characters: Character[],
   allSkills: UnitSkills,
-  filters: FilterOptions
+  filters: FilterOptions,
+  searchTerm: string,
+  sortType: SortType
 ): Character[] => {
-  return characters.filter(character => {
+  // ★ searchTermを一度だけ変換
+  const lowerCaseSearchTerm = searchTerm.toLowerCase();
+  const hiraganaSearchTerm = katakanaToHiragana(lowerCaseSearchTerm);
+
+  let filtered = characters.filter(character => {
+    // ★ 名前検索フィルターを修正
+    if (searchTerm) {
+      const lowerCaseFullName = character.fullName.toLowerCase();
+      const hiraganaFullName = katakanaToHiragana(lowerCaseFullName);
+      // カタカナのまま、またはひらがなに変換したもののいずれかで一致すればOK
+      if (
+        !lowerCaseFullName.includes(lowerCaseSearchTerm) &&
+        !hiraganaFullName.includes(hiraganaSearchTerm)
+      ) {
+        return false;
+      }
+    }
+
     // 基本フィルター
     if (filters.element.length > 0 && !filters.element.includes(character.attribute)) return false;
     if (filters.position.length > 0 && !filters.position.includes(character.position)) return false;
@@ -93,4 +121,21 @@ export const filterCharacters = (
 
     return true;
   });
+
+  // ★ ソート処理
+  if (sortType === 'name_asc') {
+    filtered.sort((a, b) => a.fullName.localeCompare(b.fullName, 'ja'));
+  } else if (sortType === 'position') {
+    filtered.sort((a, b) => {
+        const indexA = positionOrder.indexOf(a.fullName);
+        const indexB = positionOrder.indexOf(b.fullName);
+        // positionOrderにないキャラは末尾に
+        if (indexA === -1) return 1;
+        if (indexB === -1) return -1;
+        return indexA - indexB;
+    });
+  }
+  // 'default'の場合はソートしない（元のJSONの順序）
+
+  return filtered;
 };

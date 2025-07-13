@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FilterOptions, SkillFilter } from '../types/character';
+import { FilterOptions, SkillFilter, SortType } from '../types/character'; // ★ SortType をインポート
 import { skillFilterOptions } from '../data/skillFilterOptions';
 import { characterRoles } from '../data/role';
 import { ChevronDown, ChevronUp } from 'lucide-react';
@@ -9,13 +9,23 @@ interface FilterPanelProps {
   onFiltersChange: (filters: FilterOptions) => void;
   totalCount: number;
   filteredCount: number;
+  // ★ ソートと検索用のプロップを追加
+  searchTerm: string;
+  onSearchTermChange: (term: string) => void;
+  sortType: SortType;
+  onSortTypeChange: (sortType: SortType) => void;
 }
 
 const FilterPanel: React.FC<FilterPanelProps> = ({
   filters,
   onFiltersChange,
   totalCount,
-  filteredCount
+  filteredCount,
+  // ★ プロップを受け取る
+  searchTerm,
+  onSearchTermChange,
+  sortType,
+  onSortTypeChange,
 }) => {
   const [isSkillFilterOpen, setIsSkillFilterOpen] = useState(false);
 
@@ -51,8 +61,33 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold text-gray-800">フィルター</h2>
+      <div className="flex flex-wrap justify-between items-center mb-4 gap-4">
+        <h2 className="text-xl font-bold text-gray-800">フィルター＆ソート</h2>
+        
+        {/* ★ 検索とソートのUIを追加 */}
+        <div className="flex-grow flex flex-wrap items-center gap-4">
+          <div className="flex-grow min-w-[200px]">
+            <input
+              type="text"
+              placeholder="キャラクター名で検索..."
+              value={searchTerm}
+              onChange={(e) => onSearchTermChange(e.target.value)}
+              className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm"
+            />
+          </div>
+          <div>
+            <select
+              value={sortType}
+              onChange={(e) => onSortTypeChange(e.target.value as SortType)}
+              className="px-3 py-1.5 border border-gray-300 rounded-md text-sm bg-white"
+            >
+              <option value="default">デフォルト</option>
+              <option value="name_asc">名前順 (昇順)</option>
+              <option value="position">隊列順</option>
+            </select>
+          </div>
+        </div>
+        
         <div className="flex items-center gap-4">
           <span className="text-sm text-gray-600">
             {filteredCount} / {totalCount} キャラクター

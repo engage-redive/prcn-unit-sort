@@ -77,6 +77,9 @@ export interface FilterOptions {
   skillFilters: SkillFilter[];
 }
 
+// ★ ソートタイプ用の型定義を追加
+export type SortType = 'default' | 'name_asc' | 'position';
+
 // ランキングの各項目を表す型
 export interface RankItem {
   characterId: string;
