@@ -11932,7 +11932,7 @@
                         },
                         {
                             "target": "目の前の敵1キャラ",
-                            "type": "物理防御力DOWN",
+                            "type": "物理攻撃力DOWN",
                             "formula": "(スキルLv+1)*11",
                             "duration": 12
                         },
@@ -26802,13 +26802,7 @@
                             "duration": null,
                             "condition": "Lv > 260"
                         },
-                        {
-                            "target": "魔法攻撃力が最も高い敵1キャラ",
-                            "type": "物理防御力DOWN",
-                            "formula": "(スキルLv+1)*0.9",
-                            "duration": 12,
-                            "condition": "Lv <= 260"
-                        },
+
                         {
                             "target": "魔法攻撃力が最も高い敵1キャラ",
                             "type": "物理防御力DOWN",

@@ -72,6 +72,7 @@ export const skillFilterOptions: FilterGroup[] = [
   {
     name: 'その他',
     filters: [
+      { id: 'type_taunt', label: '挑発', property: 'type', value: '挑発' },
       { id: 'type_barrier_phys', label: '物理バリア', property: 'type', value: '物理無効バリア' },
       { id: 'type_barrier_magic', label: '魔法バリア', property: 'type', value: '魔法無効バリア' },
       { id: 'type_barrier_absorb', label: '吸収バリア', property: 'type', value: '吸収バリア' },

@@ -77,4 +77,30 @@ export interface FilterOptions {
   skillFilters: SkillFilter[];
 }
 
-// (古いSkillCategoryは不要になります)
+// ランキングの各項目を表す型
+export interface RankItem {
+  characterId: string;
+  characterName: string;
+  characterFullName: string;
+  skillName: string;
+  skillIcon: string; // React.ReactNode から string へ変更
+  value: number;
+  details: string;
+  skillType: string; // スキルの種類 (UB, skill_1など)
+}
+
+// ランキング計算関数の型
+export type RankingCalculator = (
+  characters: Character[],
+  skills: UnitSkills,
+  level: number,
+  phyAtk: number,
+  magAtk: number
+) => RankItem[];
+
+// ランキングカテゴリの定義
+export interface RankingCategory {
+  id: string;
+  name: string;
+  calculator: RankingCalculator;
+}

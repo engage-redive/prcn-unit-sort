@@ -5699,10 +5699,10 @@
     }
   },
   {
-    "id": "rin_deremasu",
-    "name": "リン（デレマス）",
-    "version": "",
-    "fullName": "リン（デレマス）",
+    "id": "112531",
+    "name": "リン",
+    "version": "デレマス",
+    "fullName": "リン(デレマス)",
     "rarity": 3,
     "position": "前衛",
     "type": "物理",

@@ -5,10 +5,13 @@ import { filterCharacters } from './utils/characterUtils';
 import FilterPanel from './components/FilterPanel';
 import CharacterGrid from './components/CharacterGrid';
 import SkillDetails from './components/SkillDetails';
-import Modal from './components/Modal'; // ★ Modalをインポート
-import { BookOpen } from 'lucide-react';
+import Modal from './components/Modal';
+import RankingsPage from './pages/RankingsPage'; // ★ このパスが正しいか確認
+import { BookOpen, BarChart3 } from 'lucide-react';
 import charactersData from './data/unit_data.json';
 import skillsData from './data/unit_skills.json';
+
+type Tab = 'finder' | 'rankings';
 
 function App() {
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -22,8 +25,9 @@ function App() {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(null);
+  
+  const [activeTab, setActiveTab] = useState<Tab>('finder');
 
   useEffect(() => {
     try {
@@ -37,12 +41,10 @@ function App() {
     }
   }, []);
 
-  // ★ モーダルを開く（カードクリック時に呼ばれる）
   const handleCharacterSelect = (id: string) => {
     setSelectedCharacterId(id);
   };
 
-  // ★ モーダルを閉じる
   const handleCloseModal = () => {
     setSelectedCharacterId(null);
   }
@@ -56,7 +58,6 @@ function App() {
     ? skills[selectedCharacter.fullName] 
     : undefined;
   
-  // (if (loading) ... と if (error) ... の部分は変更なし)
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -84,46 +85,64 @@ function App() {
     );
   }
 
-
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center gap-3">
-            <BookOpen className="w-8 h-8 text-blue-600" />
-            <h1 className="text-2xl font-bold text-gray-900">
-              プリンセスコネクト キャラクター図鑑
-            </h1>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <BookOpen className="w-8 h-8 text-blue-600" />
+              <h1 className="text-2xl font-bold text-gray-900">
+                プリンセスコネクト キャラクター図鑑
+              </h1>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setActiveTab('finder')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${activeTab === 'finder' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+              >
+                <BookOpen className="w-5 h-5" />
+                <span>キャラ検索</span>
+              </button>
+              <button
+                onClick={() => setActiveTab('rankings')}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${activeTab === 'rankings' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+              >
+                <BarChart3 className="w-5 h-5" />
+                <span>スキルランキング</span>
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <FilterPanel
-          filters={filters}
-          onFiltersChange={setFilters}
-          totalCount={characters.length}
-          filteredCount={filteredCharacters.length}
-        />
+        {activeTab === 'finder' && (
+          <>
+            <FilterPanel
+              filters={filters}
+              onFiltersChange={setFilters}
+              totalCount={characters.length}
+              filteredCount={filteredCharacters.length}
+            />
+            <CharacterGrid 
+              characters={filteredCharacters}
+              selectedCharacterId={selectedCharacterId}
+              onCharacterSelect={handleCharacterSelect}
+            />
+            {filteredCharacters.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-gray-500 text-lg">フィルター条件に一致するキャラクターが見つかりませんでした</p>
+              </div>
+            )}
+          </>
+        )}
         
-        <CharacterGrid 
-          characters={filteredCharacters}
-          selectedCharacterId={selectedCharacterId}
-          onCharacterSelect={handleCharacterSelect} // ハンドラを渡す
-        />
-        
-        {/* ★ ページ下部の詳細表示は削除 */}
-
-        {filteredCharacters.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">
-              フィルター条件に一致するキャラクターが見つかりませんでした
-            </p>
-          </div>
+        {activeTab === 'rankings' && (
+          <RankingsPage characters={characters} skills={skills} />
         )}
       </main>
 
-      {/* ★ モーダルコンポーネントをここに追加 */}
       <Modal isOpen={!!selectedCharacter} onClose={handleCloseModal}>
         {selectedCharacter && (
             <SkillDetails 

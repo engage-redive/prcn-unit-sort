@@ -7,8 +7,13 @@ interface SkillDetailsProps {
   skillData: UnitSkills[string] | undefined;
 }
 
-// ★ 計算ロジックをここにまとめる
-const calculateEffectValue = (formula: string | null, level: number): number | null => {
+// ★ 計算ロジックを更新
+const calculateEffectValue = (
+  formula: string | null,
+  level: number,
+  phyAtk: number,
+  magAtk: number
+): number | null => {
   if (!formula) return null;
 
   // formulaが単なる数値の場合
@@ -16,47 +21,58 @@ const calculateEffectValue = (formula: string | null, level: number): number | n
     return Number(formula);
   }
 
-  // スキルLvを含む計算式の場合
-  if (formula.includes('スキルLv')) {
-    try {
-      // 'スキルLv'を実際のレベルに置き換える
-      const expression = formula.replace(/スキルLv/g, String(level));
-      
-      // 安全に計算式を評価するためにFunctionコンストラクタを使用
-      // 注意: この方法は単純な四則演算のみを想定しています。
-      // '物理攻撃力'などの他の変数が含まれる式はここでは計算できません。
-      return Math.floor(new Function('return ' + expression)());
-    } catch (e) {
-      // 計算できない複雑な式の場合はnullを返す
-      console.error("Formula calculation error:", e);
-      return null;
-    }
+  // 計算できないキーワードが含まれている場合は早期リターン
+  const uncalculableKeywords = ['HP減少量', '与ダメージ', '残りHP', '消費した【レイスボディ】', 'おともだち数'];
+  if (uncalculableKeywords.some(keyword => formula.includes(keyword))) {
+    return null;
   }
-
-  // 計算できない場合はnullを返す
-  return null;
+  
+  try {
+    // 変数を実際の数値に置き換える
+    const expression = formula
+      .replace(/スキルLv/g, String(level))
+      .replace(/物理攻撃力/g, String(phyAtk))
+      .replace(/魔法攻撃力/g, String(magAtk));
+    
+    // 安全に計算式を評価するためにFunctionコンストラクタを使用
+    return Math.floor(new Function('return ' + expression)());
+  } catch (e) {
+    // 計算できないその他の式の場合はnullを返す
+    console.error("Formula calculation error:", e, "Formula:", formula);
+    return null;
+  }
 };
 
 
 const SkillDetails: React.FC<SkillDetailsProps> = ({ character, skillData }) => {
-  // ★ レベルを管理するstateを追加
+  // ★ レベルと攻撃力のstateを追加
   const [level, setLevel] = useState(356);
+  const [phyAtk, setPhyAtk] = useState(0); // デフォルト値の例
+  const [magAtk, setMagAtk] = useState(0); // デフォルト値の例
 
+  // ★ ハンドラを追加
   const handleLevelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value, 10);
     setLevel(isNaN(value) ? 0 : value);
   };
+  const handlePhyAtkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value, 10);
+    setPhyAtk(isNaN(value) ? 0 : value);
+  };
+  const handleMagAtkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value, 10);
+    setMagAtk(isNaN(value) ? 0 : value);
+  };
   
   // ★ Effectの描画部分を更新
   const renderEffect = (effect: Effect, index: number) => {
-    const calculatedValue = calculateEffectValue(effect.formula, level);
+    const calculatedValue = calculateEffectValue(effect.formula, level, phyAtk, magAtk);
     
     return (
       <div key={index} className="text-sm text-gray-700 mb-2 pl-4 border-l-2 border-gray-200">
         <p>
           <span className="font-semibold text-indigo-600">{effect.target}</span> に 
           <span className="font-semibold text-emerald-700"> {effect.type}</span>
-          {/* ★ 計算結果を表示 */}
           {calculatedValue !== null && (
             <span className="font-bold text-blue-600 ml-2 text-base">[{calculatedValue.toLocaleString()}]</span>
           )}
@@ -104,18 +120,40 @@ const SkillDetails: React.FC<SkillDetailsProps> = ({ character, skillData }) => 
 
   return (
     <div className="bg-gray-100 p-6 rounded-lg">
-      <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-6 border-b-2 border-gray-300 pb-3">
-        <h3 className="text-2xl font-bold text-gray-900 mb-2 sm:mb-0">{character.fullName} - スキル詳細</h3>
-        {/* ★ レベル入力欄 */}
-        <div className="flex items-center gap-2">
-          <label htmlFor="level-input" className="font-semibold text-sm text-gray-700">Lv:</label>
-          <input
-            id="level-input"
-            type="number"
-            value={level}
-            onChange={handleLevelChange}
-            className="w-24 p-1 border border-gray-300 rounded-md text-center"
-          />
+      {/* ★ ヘッダー部分を更新 */}
+      <div className="flex flex-wrap justify-between items-center mb-6 border-b-2 border-gray-300 pb-3 gap-4">
+        <h3 className="text-2xl font-bold text-gray-900 w-full lg:w-auto">{character.fullName} - スキル詳細</h3>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <div className="flex items-center gap-2">
+            <label htmlFor="level-input" className="font-semibold text-sm text-gray-700">Lv:</label>
+            <input
+              id="level-input"
+              type="number"
+              value={level}
+              onChange={handleLevelChange}
+              className="w-24 p-1 border border-gray-300 rounded-md text-center"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <label htmlFor="phy-atk-input" className="font-semibold text-sm text-gray-700">物理攻撃力:</label>
+            <input
+              id="phy-atk-input"
+              type="number"
+              value={phyAtk}
+              onChange={handlePhyAtkChange}
+              className="w-28 p-1 border border-gray-300 rounded-md text-center"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <label htmlFor="mag-atk-input" className="font-semibold text-sm text-gray-700">魔法攻撃力:</label>
+            <input
+              id="mag-atk-input"
+              type="number"
+              value={magAtk}
+              onChange={handleMagAtkChange}
+              className="w-28 p-1 border border-gray-300 rounded-md text-center"
+            />
+          </div>
         </div>
       </div>
       

@@ -327,7 +327,7 @@ const unitData: UnitEntry[] = [
   { name: "アン＆グレア", idStar1: 181011, idStar3: 181031, idStar6: 181061 },
   { name: "シズル＆リノ", idStar1: 181111, idStar3: 181131, idStar6: 181161 },
   { name: "シェフィ（プリンセス）", idStar1: 181211, idStar3: 181231, idStar6: 181261 },
-  { name: "シェフィ（サマー）", idStar1: 135131, idStar3: 135131, idStar6: 135131 },
+　 { name: "シェフィ（サマー）", idStar1: 135131, idStar3: 135131, idStar6: 135131 },
   { name: "エリス（サマー）", idStar1: 135031, idStar3: 135031, idStar6: 135031 },
 ];
 
