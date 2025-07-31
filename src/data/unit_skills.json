@@ -28878,7 +28878,7 @@
                         },
                         {
                             "target": "目の前の敵1キャラ",
-                            "type": "TPDOWN",
+                            "type": "TP DOWN",
                             "formula": "250",
                             "duration": null
                         },
