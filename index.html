@@ -2,12 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <!-- ファビコンの指定 (ViteのデフォルトSVGから変更) -->
+    <link rel="icon" type="image/png" href="/icon/0001.png" />
+    <!-- Appleデバイス用のタッチアイコン -->
+    <link rel="apple-touch-icon" href="/icon/0001.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>React初期画面の表示</title>
+    <title>VGC.calc</title>
+    <link rel="manifest" href="/manifest.json">
+    <!-- テーマカラー (オプション: manifest.jsonのtheme_colorと合わせるなど) -->
+    <!-- <meta name="theme-color" content="#000000"> -->
   </head>
   <body>
     <div id="root"></div>
+    <div id="modal-root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

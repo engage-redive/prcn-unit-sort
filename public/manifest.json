@@ -1,0 +1,21 @@
+{
+  "name": "VGC.calc",
+  "short_name": "VGC.calc",
+  "description": "ポケモン ダメージ計算ツール",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1f2937",
+  "theme_color": "#1f2937",
+  "icons": [
+    {
+      "src": "/icon/0001.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon/0001.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

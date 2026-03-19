@@ -1,0 +1,20 @@
+{
+  "name": "VGCダメージ計算器",
+  "short_name": "VGC.calc",
+  "icons": [
+    {
+      "src": "/icon/ultraball.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon/ultraball.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000"
+}
