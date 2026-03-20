@@ -354,7 +354,7 @@ function App() {
             }
         });
         setDamageResults(newDamageResults);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         // attackers はオブジェクトの深い変化を検知するため JSON.stringify でシリアライズ
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -520,8 +520,8 @@ function App() {
                     </div>
                     <div className="flex justify-between items-center">
                         <div className="flex space-x-1 md:space-x-2">
-                            <button onClick={() => { setActiveTab('damage'); setMobileViewMode('attacker'); }} className={`flex items-center gap-1 md:gap-2 px-2 py-2 md:px-4 md:py-3 rounded-lg transition-colors text-xs sm:text-sm md:text-base ${activeTab === 'damage' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}><Calculator className="h-4 w-4 md:h-5 md:w-5" /> ダメージ計算</button>
-                            <button onClick={() => setActiveTab('team')} className={`flex items-center gap-1 md:gap-2 px-2 py-2 md:px-4 md:py-3 rounded-lg transition-colors text-xs sm:text-sm md:text-base ${activeTab === 'team' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}><Users className="h-4 w-4 md:h-5 md:w-5" /> チーム管理</button>
+                            <button onClick={() => { setActiveTab('damage'); setMobileViewMode('attacker'); }} className={`flex items-center gap-1 md:gap-2 px-2 py-2 md:px-4 md:py-3 rounded-lg transition-colors text-xs sm:text-sm md:text-base ${activeTab === 'damage' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}><Calculator className="h-4 w-4 md:h-5 md:w-5" /> ダメ計</button>
+                            <button onClick={() => setActiveTab('team')} className={`flex items-center gap-1 md:gap-2 px-2 py-2 md:px-4 md:py-3 rounded-lg transition-colors text-xs sm:text-sm md:text-base ${activeTab === 'team' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}><Users className="h-4 w-4 md:h-5 md:w-5" /> チーム</button>
                             <button onClick={() => setActiveTab('history')} className={`flex items-center gap-1 md:gap-2 px-2 py-2 md:px-4 md:py-3 rounded-lg transition-colors text-xs sm:text-sm md:text-base ${activeTab === 'history' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}><HistoryIcon className="h-4 w-4 md:h-5 md:w-5" /> 履歴</button>
                         </div>
                         <button

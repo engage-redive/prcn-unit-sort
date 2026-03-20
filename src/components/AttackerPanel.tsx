@@ -326,6 +326,7 @@ const AttackerSection: React.FC<AttackerSectionProps> = ({
             disabled={!attacker.isEnabled || !attacker.pokemon}
             loadedMoves={attacker.loadedMoves}
             currentAttackerPokemon={attacker.pokemon}
+            isMega={!!attacker.pokemon?.isMega}
           />
         </div>
         {showRankBasedPowerSelect && (<div className="mt-3 p-3 bg-gray-700/50 rounded-md"><label htmlFor={`rank-power-select-${index}`} className="block text-sm font-medium text-gray-300 mb-1">技威力 ({attacker.move?.name})</label><select id={`rank-power-select-${index}`} value={selectedRankBasedPower} onChange={(e) => handleRankBasedPowerChange(parseInt(e.target.value, 10), index)} className="w-full bg-gray-800 border border-gray-600 text-white py-1.5 px-2 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm" disabled={!attacker.isEnabled}>{rankBasedPowerOptions.map(powerValue => (<option key={powerValue} value={powerValue}>{powerValue}</option>))}</select></div>)}
@@ -447,6 +448,14 @@ const AttackerPanel: React.FC<AttackerPanelProps> = ({
   const handleToggleTera = useCallback((attackerIndex: number) => {
     const attacker = useAttackerStore.getState().attackers[attackerIndex];
     if (!attacker.pokemon || !attacker.move) return;
+
+    // 現在ステラがONなら「ステラOFF ＆ テラスタルON」に切り替える
+    if (attacker.isStellar) {
+       updateAttacker(attackerIndex, { teraType: attacker.move.type, isStellar: false });
+       return;
+    }
+
+    // 通常のテラスタルトグル挙ート
     const newTeraType = attacker.teraType === null ? attacker.move.type : null;
     updateAttacker(attackerIndex, { teraType: newTeraType, isStellar: false });
   }, [updateAttacker]);
@@ -454,6 +463,14 @@ const AttackerPanel: React.FC<AttackerPanelProps> = ({
   const handleToggleStellar = useCallback((attackerIndex: number) => {
     const attacker = useAttackerStore.getState().attackers[attackerIndex];
     if (!attacker.pokemon) return;
+
+    // 現在テラスタルがONなら「テラスタルOFF ＆ ステラON」に切り替える
+    if (attacker.teraType !== null) {
+        updateAttacker(attackerIndex, { isStellar: true, teraType: null });
+        return;
+    }
+
+    // 通常のステラトグル挙動
     const newIsStellar = !attacker.isStellar;
     updateAttacker(attackerIndex, { isStellar: newIsStellar, teraType: newIsStellar ? null : attacker.teraType });
   }, [updateAttacker]);

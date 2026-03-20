@@ -12,7 +12,63 @@ const toHiragana = (str: string): string => {
   });
 };
 
+// ─── ギミック切り替えアイコンボタン ───
+interface GimmickButtonProps {
+  id: string;
+  iconSrc: string;
+  label: string;
+  active: boolean;
+  disabled: boolean;
+  onClick: () => void;
+  glowColor?: string;
+}
 
+const GimmickButton: React.FC<GimmickButtonProps> = ({
+  id, iconSrc, label, active, disabled, onClick, glowColor = 'rgba(255,255,255,0.7)',
+}) => {
+  return (
+    <button
+      id={id}
+      type="button"
+      title={label}
+      aria-label={label}
+      aria-pressed={active}
+      disabled={disabled}
+      onClick={onClick}
+      className={[
+        'relative flex items-center justify-center w-7 h-7 rounded-md transition-all duration-150 select-none',
+        'focus:outline-none focus-visible:ring-2 focus-visible:ring-white',
+        disabled
+          ? 'opacity-30 cursor-not-allowed'
+          : 'cursor-pointer hover:scale-110 active:scale-95',
+        active && !disabled
+          ? 'bg-white/15'
+          : '',
+      ].join(' ')}
+      style={active && !disabled ? { boxShadow: `0 0 8px 2px ${glowColor}` } : undefined}
+    >
+      <img
+        src={iconSrc}
+        alt={label}
+        className={[
+          'w-6 h-6 object-contain transition-all duration-150',
+          !active || disabled ? 'grayscale opacity-60' : '',
+        ].join(' ')}
+        onError={(e) => {
+          const el = e.currentTarget;
+          el.style.display = 'none';
+          const parent = el.parentElement;
+          if (parent && !parent.querySelector('.icon-fallback')) {
+            const span = document.createElement('span');
+            span.className = 'icon-fallback text-[9px] text-gray-400 font-bold text-center leading-tight';
+            span.textContent = label;
+            parent.appendChild(span);
+          }
+        }}
+      />
+    </button>
+  );
+};
 
 interface MoveSelectProps {
   moves: Move[];
@@ -28,6 +84,8 @@ interface MoveSelectProps {
   placeholder?: string;
   loadedMoves?: (Move | null)[] | null; // チームからロードされた技
   currentAttackerPokemon?: Pokemon | null;
+  /** メガシンカ状態かどうか（true時はZ・テラ・ステラを無効化） */
+  isMega?: boolean;
 }
 
 const MoveSelect: React.FC<MoveSelectProps> = ({
@@ -43,6 +101,7 @@ const MoveSelect: React.FC<MoveSelectProps> = ({
   className,
   placeholder = "わざを検索または選択...",
   loadedMoves,
+  isMega = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -459,51 +518,65 @@ const MoveSelect: React.FC<MoveSelectProps> = ({
       </div>
 
       {selected && !disabled && (
-        <div className="mt-2 flex flex-wrap items-center justify-start gap-x-3 gap-y-1 text-xs text-gray-300">
-          <div className="flex items-center">
-            <span className="mr-1">威力:</span>
-            <span className="text-white font-medium mr-2">{selected.power === undefined || selected.power === null ? '—' : selected.power}</span>
-            <span className="mr-1">|</span>
-
+        <div className="mt-2 flex flex-wrap justify-between items-center gap-x-2 gap-y-1 w-full">
+          {/* 左: 威力・タイプ */}
+          <div className="flex items-center gap-2 text-xs text-gray-300 min-w-0">
+            <span>威力:</span>
+            <span className="text-white font-medium">{selected.power === undefined || selected.power === null ? '—' : selected.power}</span>
+            <span>|</span>
             <span
-              className="px-1.5 py-0.5 rounded-full text-xs font-medium text-white"
+              className="px-1.5 py-0.5 rounded-full text-xs font-medium text-white flex-shrink-0"
               style={{ backgroundColor: getTypeColor(selected.type) }}
             >
               {getTypeNameJp(selected.type)}
             </span>
+            {selected.isTeraBlast && isStellar && <span className="text-pink-400">（ステラ）</span>}
+            {selected.isTeraBlast && currentAttackerTeraType && !isStellar && (
+              <span className="text-blue-400">（{getTypeNameJp(currentAttackerTeraType)} テラバースト）</span>
+            )}
           </div>
 
-          <label htmlFor={`terastal-toggle-${baseId}`} className="flex items-center cursor-pointer whitespace-nowrap">
-            <input
-              type="checkbox"
+          {/* 右: ギミックアイコン群 (Z / ダイマ / テラ / ステラ) */}
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            <GimmickButton
+              id={`zmove-toggle-${baseId}`}
+              iconSrc="/images/z_move_icon.png"
+              label="Z技"
+              active={false}
+              disabled={true}
+              onClick={() => {}}
+              glowColor="rgba(255,220,50,0.7)"
+            />
+            <GimmickButton
+              id={`dmax-toggle-${baseId}`}
+              iconSrc="/images/Gigamax_icon.png"
+              label="ダイマックス"
+              active={false}
+              disabled={true}
+              onClick={() => {}}
+              glowColor="rgba(255,50,255,0.7)"
+            />
+            {/* テラスタル */}
+            <GimmickButton
               id={`terastal-toggle-${baseId}`}
-              checked={currentAttackerTeraType !== null && !isStellar}
-              onChange={() => !disabled && !isStellar && onToggleTera()}
-              disabled={disabled || isStellar}
-              className="w-3.5 h-3.5 rounded border-gray-500 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-800 disabled:opacity-50"
+              iconSrc="/images/Terastal_icon.png"
+              label="テラスタル"
+              active={currentAttackerTeraType !== null && !isStellar}
+              disabled={isMega}
+              onClick={() => !isMega && onToggleTera()}
+              glowColor="rgba(100,200,255,0.8)"
             />
-            <span className={`ml-1.5 ${disabled || isStellar ? 'text-gray-500 cursor-not-allowed' : 'text-gray-300'}`}>
-              テラスタル
-            </span>
-          </label>
-
-          <label htmlFor={`stellar-toggle-${baseId}`} className="flex items-center cursor-pointer whitespace-nowrap">
-            <input
-              type="checkbox"
+            {/* ステラ */}
+            <GimmickButton
               id={`stellar-toggle-${baseId}`}
-              checked={isStellar}
-              onChange={() => !disabled && onToggleStellar()}
-              disabled={disabled}
-              className="w-3.5 h-3.5 rounded border-gray-500 bg-gray-700 text-purple-500 focus:ring-purple-500 focus:ring-offset-gray-800 disabled:opacity-50"
+              iconSrc="/images/Stellar_icon.png"
+              label="ステラ"
+              active={isStellar}
+              disabled={isMega}
+              onClick={() => !isMega && onToggleStellar()}
+              glowColor="rgba(220,100,255,0.8)"
             />
-            <span className={`ml-1.5 ${disabled ? 'text-gray-500 cursor-not-allowed' : 'text-gray-300'}`}>
-              ステラ
-            </span>
-          </label>
-
-            {selected.isTeraBlast && isStellar && <span className="text-pink-400">(ステラ)</span>}
-            {selected.isTeraBlast && currentAttackerTeraType && !isStellar && <span className="text-blue-400">({getTypeNameJp(currentAttackerTeraType)} テラバースト)</span>}
-
+          </div>
         </div>
       )}
       {selected && selected.description && !disabled && (

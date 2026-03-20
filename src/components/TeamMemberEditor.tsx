@@ -361,7 +361,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
           {/* ── わざ ── */}
           <section>
             <label className="block text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-1.5">わざ</label>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 gap-2">
               {[0, 1, 2, 3].map(index => (
                 <Select
                   key={index}
