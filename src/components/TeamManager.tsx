@@ -223,7 +223,7 @@ const TeamManager: React.FC<TeamManagerProps> = ({
     setEditingMember(null);
     setIsNewMember(false);
   };
-  
+
   const handleCloseEditor = () => {
     setEditingMember(null);
     setIsNewMember(false);
@@ -253,8 +253,8 @@ const TeamManager: React.FC<TeamManagerProps> = ({
       return;
     }
     const teamText = selectedTeam.members
-  .map(member => formatTeamMemberToText(member))
-  .join('\n\n'); // ★ 修正点: joinの引数を改行2つに変更
+      .map(member => formatTeamMemberToText(member))
+      .join('\n\n'); // ★ 修正点: joinの引数を改行2つに変更
 
     navigator.clipboard.writeText(teamText)
       .then(() => {
@@ -276,7 +276,7 @@ const TeamManager: React.FC<TeamManagerProps> = ({
       const url = URL.createObjectURL(svgBlob);
 
       const img = new Image();
-      
+
       img.onload = () => {
         // requestAnimationFrame を使い、ブラウザの次の描画フレームで処理を実行する
         requestAnimationFrame(async () => {
@@ -288,34 +288,34 @@ const TeamManager: React.FC<TeamManagerProps> = ({
               // decode APIがない古いブラウザ向けのフォールバック
               await new Promise(resolve => setTimeout(resolve, 50)); // 念のためごく短い待機
             }
-            
+
             const canvas = document.createElement('canvas');
             const scale = 2; // 高解像度対応
             canvas.width = img.width * scale;
             canvas.height = img.height * scale;
             const ctx = canvas.getContext('2d');
             if (!ctx) {
-                setIsGeneratingImage(false);
-                URL.revokeObjectURL(url);
-                return;
+              setIsGeneratingImage(false);
+              URL.revokeObjectURL(url);
+              return;
             }
-            
+
             ctx.scale(scale, scale);
             ctx.drawImage(img, 0, 0);
-  
+
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  
+
             // モバイル端末で、Web Share APIが利用可能な場合
             if (isMobile && navigator.share) {
               canvas.toBlob(async (blob) => {
                 if (blob) {
                   const file = new File([blob], `${selectedTeam.name}.png`, { type: 'image/png' });
                   try {
-                      await navigator.share({
-                        files: [file],
-                        title: `${selectedTeam.name}`,
-                        text: 'チームの画像',
-                      });
+                    await navigator.share({
+                      files: [file],
+                      title: `${selectedTeam.name}`,
+                      text: 'チームの画像',
+                    });
                   } catch (err) {
                     // 共有がキャンセルされた場合など
                   }
@@ -370,15 +370,15 @@ const TeamManager: React.FC<TeamManagerProps> = ({
             <div key={team.id} className="bg-gray-800 rounded-lg p-3 border-2 border-gray-700 hover:border-blue-500 transition-colors cursor-pointer" onClick={() => handleSelectTeam(team)}>
               <div className="flex justify-between items-center mb-2">
                 <input
-                    type="text"
-                    value={team.name}
-                    onChange={(e) => {
-                        e.stopPropagation(); // 親要素へのクリックイベント伝播を防ぐ
-                        updateTeamName(team.id, e.target.value);
-                    }}
-                    onClick={(e) => e.stopPropagation()} // inputクリック時も伝播を防ぐ
-                    className="text-md font-semibold truncate bg-transparent border-none focus:ring-0 focus:outline-none text-white p-0 flex-grow mr-2"
-                    placeholder="チーム名"
+                  type="text"
+                  value={team.name}
+                  onChange={(e) => {
+                    e.stopPropagation(); // 親要素へのクリックイベント伝播を防ぐ
+                    updateTeamName(team.id, e.target.value);
+                  }}
+                  onClick={(e) => e.stopPropagation()} // inputクリック時も伝播を防ぐ
+                  className="text-md font-semibold truncate bg-transparent border-none focus:ring-0 focus:outline-none text-white p-0 flex-grow mr-2"
+                  placeholder="チーム名"
                 />
                 <div className="flex items-center space-x-1 flex-shrink-0">
                   {/* <button onClick={(e) => { e.stopPropagation(); alert('チーム全体のコピー機能は未実装です'); }} className="p-1 hover:bg-gray-700 rounded-full transition-colors"><CopyIcon className="h-3 w-3" /></button> */}
@@ -388,7 +388,7 @@ const TeamManager: React.FC<TeamManagerProps> = ({
               <div className="grid grid-cols-3 gap-1.5">
                 {team.members.slice(0, 6).map((member) => (
                   <div key={member.id} className="relative aspect-square bg-gray-700 rounded overflow-hidden">
-                    <img src={getPokemonIconPath(member.pokemon.id)} alt={member.pokemon.name} className="w-full h-full object-contain"/>
+                    <img src={getPokemonIconPath(member.pokemon.id)} alt={member.pokemon.name} className="w-full h-full object-contain" />
                   </div>
                 ))}
                 {Array.from({ length: Math.max(0, 6 - team.members.length) }).map((_, index) => (
@@ -422,7 +422,7 @@ const TeamManager: React.FC<TeamManagerProps> = ({
               title="チーム全体をShowdown形式でコピー"
             >
               <CopyIcon className="h-4 w-4" />
-              チームをコピー
+              コピー
             </button>
             <button
               onClick={handleGenerateImage}
@@ -448,19 +448,19 @@ const TeamManager: React.FC<TeamManagerProps> = ({
           </div>
           <div className="w-full md:w-auto flex-grow md:flex-grow-0 md:text-right"> {/* チーム名を右寄せまたは中央に */}
             <input
-                type="text"
-                value={selectedTeam.name}
-                onChange={(e) => updateTeamName(selectedTeam.id, e.target.value)}
-                className="text-xl font-bold bg-transparent border-none focus:ring-0 focus:outline-none text-white p-0 w-full md:w-auto text-center md:text-right"
-                placeholder="チーム名"
+              type="text"
+              value={selectedTeam.name}
+              onChange={(e) => updateTeamName(selectedTeam.id, e.target.value)}
+              className="text-xl font-bold bg-transparent border-none focus:ring-0 focus:outline-none text-white p-0 w-full md:w-auto text-center md:text-right"
+              placeholder="チーム名"
             />
           </div>
         </div>
         {/* コピー成功メッセージ表示 */}
         {copySuccessMessage && (
-            <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg z-50 text-sm">
-                {copySuccessMessage}
-            </div>
+          <div className="fixed top-20 left-1/2 -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg z-50 text-sm">
+            {copySuccessMessage}
+          </div>
         )}
 
         {selectedTeam.members.length < 6 && (

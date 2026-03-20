@@ -35,6 +35,24 @@ interface TeamMemberCardProps {
 
 type StatKey = 'hp' | 'attack' | 'defense' | 'specialAttack' | 'specialDefense' | 'speed';
 
+// 性格の英語→日本語マッピング
+const NATURE_NAME_JP: Record<string, string> = {
+  Hardy: 'がんばりや', Lonely: 'さみしがり', Brave: 'ゆうかん', Adamant: 'いじっぱり', Naughty: 'やんちゃ',
+  Bold: 'ずぶとい', Docile: 'すなお', Relaxed: 'のんき', Impish: 'わんぱく', Lax: 'のうてんき',
+  Timid: 'おくびょう', Hasty: 'せっかち', Serious: 'まじめ', Jolly: 'ようき', Naive: 'むじゃき',
+  Modest: 'ひかえめ', Mild: 'おっとり', Quiet: 'れいせい', Bashful: 'てれや', Rash: 'うっかりや',
+  Calm: 'おだやか', Gentle: 'おとなしい', Sassy: 'なまいき', Careful: 'しんちょう', Quirky: 'きまぐれ',
+};
+
+const STAT_LABELS: { key: StatKey; short: string }[] = [
+  { key: 'hp', short: 'H' },
+  { key: 'attack', short: 'A' },
+  { key: 'defense', short: 'B' },
+  { key: 'specialAttack', short: 'C' },
+  { key: 'specialDefense', short: 'D' },
+  { key: 'speed', short: 'S' },
+];
+
 const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member, onClick }) => {
   const pokemonData = pokedex.find(p => p.id === member.pokemon.id);
 
@@ -64,142 +82,229 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member, onClick }) => {
     return 1.0;
   };
 
-  const renderEffortValueRow = (statKey: StatKey, shortLabel: string, isCompact: boolean) => {
-    const pointValue = member.statPoints[statKey];
-    const actualStat = calculateActualStat(statKey);
-    const MAX_POINTS = 26;
-    const pointPercentage = Math.min((pointValue / MAX_POINTS) * 100, 100);
-
-    let labelColor = "text-gray-300";
-    let statIndicator = "";
-    if (member.nature) {
-        if (member.nature.increasedStat === statKey) {
-            labelColor = "text-green-400";
-            statIndicator = "↑";
-        }
-        if (member.nature.decreasedStat === statKey) {
-            labelColor = "text-red-400";
-            statIndicator = "↓";
-        }
-    }
-
-    const barBaseColor = isCompact ? "bg-gray-600" : "bg-gray-700";
-    const barFillColor = "bg-sky-500";
-
-    if (isCompact) {
-      return (
-        <div className="flex items-center text-xs mb-0.5">
-          <span className={`w-4 font-medium ${labelColor}`}>{shortLabel}{statIndicator}</span>
-          <div className={`w-8 text-right pr-1 text-white tabular-nums`}>{actualStat}</div>
-          <div className={`w-12 text-right pr-2 text-white tabular-nums`}>{pointValue > 0 ? pointValue : "-"}</div>
-          <div className={`flex-grow bg-gray-700 h-3 rounded-sm overflow-hidden`}>
-            <div style={{ width: `${pointPercentage}%` }} className={`h-full bg-sky-500`}></div>
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <div className="flex items-center text-xs mb-0.5">
-          <span className={`w-4 font-medium ${labelColor}`}>{shortLabel}{statIndicator}</span>
-          <div className={`w-8 text-right pr-1 text-white tabular-nums`}>{actualStat}</div>
-          <div className={`w-12 md:w-16 text-right pr-1 md:pr-2 text-white tabular-nums`}>{pointValue > 0 ? pointValue : "-"}</div>
-          <div className={`flex-grow ${barBaseColor} h-3 rounded-sm overflow-hidden`}>
-            <div style={{ width: `${pointPercentage}%` }} className={`h-full ${barFillColor}`}></div>
-          </div>
-        </div>
-      );
-    }
+  // 性格補正のヘッダー背景色を返す
+  const getNatureHeaderBg = (stat: StatKey): string => {
+    if (!member.nature) return '';
+    if (member.nature.increasedStat === stat) return 'bg-red-900/60';
+    if (member.nature.decreasedStat === stat) return 'bg-blue-900/60';
+    return '';
   };
 
+  const teraColor = PokemonTypeColors[member.teraType] || '#777';
+  const natureName = member.nature
+    ? (NATURE_NAME_JP[member.nature.nameEn ?? ''] || member.nature.name || member.nature.nameEn || '')
+    : null;
 
   return (
     <div
-      className="bg-gray-800 p-2 md:p-3 rounded-lg shadow text-sm w-full border border-gray-700 cursor-pointer hover:border-blue-500 transition-colors"
+      className="relative overflow-hidden rounded-xl cursor-pointer select-none group"
+      style={{
+        background: 'linear-gradient(135deg, #1a1f2e 0%, #0f1318 100%)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        boxShadow: '0 4px 24px rgba(0,0,0,0.5)',
+        transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+      }}
       onClick={onClick}
+      onMouseEnter={e => {
+        (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)';
+        (e.currentTarget as HTMLDivElement).style.boxShadow = '0 8px 32px rgba(0,0,0,0.7)';
+      }}
+      onMouseLeave={e => {
+        (e.currentTarget as HTMLDivElement).style.transform = '';
+        (e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 24px rgba(0,0,0,0.5)';
+      }}
     >
-      <div className="flex mb-2">
-        <div className="mr-2 md:mr-3 flex-shrink-0">
-          <img
-            src={getPokemonIconPath(member.pokemon.id)}
-            alt={member.pokemon.name}
-            className="w-12 h-12 md:w-16 md:h-16 object-contain"
-          />
-        </div>
+      {/* 背景グロー */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: `radial-gradient(ellipse at 85% 20%, ${teraColor}22 0%, transparent 60%)`,
+        }}
+      />
 
-        <div className="flex-grow min-w-0">
-          <h3 className="text-sm md:text-base font-bold text-white truncate">{member.pokemon.name}</h3>
-          {member.nature && (
-            <p className="text-xs text-gray-400 truncate mt-0.5 md:mt-0 md:mb-0.5">
-              性格: {member.nature.name}
-            </p>
-          )}
-          {member.item && (
-            <div className="flex items-center mt-0.5">
-              <span className="text-xs text-gray-400 mr-1 flex-shrink-0">持物:</span>
-              <img
-                src={`/itemsIcon/${member.item.id}.png`}
-                alt={member.item.name}
-                className="w-4 h-4 md:w-5 md:h-5 object-contain flex-shrink-0"
-                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-              />
-              <span className="text-gray-300 text-xs px-0.5 py-0.5 md:px-2 rounded truncate flex-1 min-w-0">
-                {member.item.name}
-              </span>
+      {/* ポケモン大画像（右側背景オーバーレイ） */}
+      <img
+        src={getPokemonIconPath(member.pokemon.id)}
+        alt={member.pokemon.name}
+        className="absolute pointer-events-none select-none"
+        style={{
+          right: '-8px',
+          top: '-4px',
+          width: '100px',
+          height: '100px',
+          objectFit: 'contain',
+          opacity: 0.18,
+          filter: 'drop-shadow(0 0 12px rgba(255,255,255,0.15))',
+        }}
+      />
+
+      <div className="relative z-10 p-2.5">
+        {/* ─── ヘッダー行 ─── */}
+        <div className="flex items-start gap-2 mb-2">
+          {/* ポケモンアイコン（メイン・鮮明） */}
+          <div className="flex-shrink-0 relative">
+            <img
+              src={getPokemonIconPath(member.pokemon.id)}
+              alt={member.pokemon.name}
+              className="object-contain rounded-lg"
+              style={{
+                width: '60px',
+                height: '60px',
+                filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.6))',
+              }}
+            />
+          </div>
+
+          {/* ポケモン名 + 性格 + テラスタル + 持ち物 */}
+          <div className="flex-grow min-w-0">
+            <div className="flex items-center gap-1.5 mb-0.5">
+              <h3 className="font-bold text-white truncate" style={{ fontSize: '0.92rem', lineHeight: 1.2 }}>
+                {member.pokemon.name}
+              </h3>
             </div>
-          )}
-          {member.ability && (
-            <p className="text-xs text-gray-400 mt-0.5 truncate">
-              特性: {member.ability.name}
-            </p>
-          )}
-           <p className="text-xs text-gray-400 mt-0.5">
-            テラス:
-            <span
-              style={{ backgroundColor: PokemonTypeColors[member.teraType] || '#777', color: 'white', padding: '1px 4px', borderRadius: '3px', fontSize: '0.65rem', fontWeight: 'bold' }}
-              className="ml-1 md:ml-1.5"
-            >
-              {POKEMON_TYPE_NAMES_JP[member.teraType] || member.teraType.toUpperCase()}
-            </span>
-          </p>
-        </div>
-      </div>
 
-      <div className="grid grid-cols-2 gap-x-2 md:gap-x-3">
-        <div className="space-y-1">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {/* テラスタルアイコン */}
+              <div className="flex items-center gap-0.5">
+                <img
+                  src={`/teraIcon/${member.teraType}.png`}
+                  alt={`テラス: ${POKEMON_TYPE_NAMES_JP[member.teraType] ?? member.teraType}`}
+                  title={`テラス: ${POKEMON_TYPE_NAMES_JP[member.teraType] ?? member.teraType}`}
+                  className="object-contain flex-shrink-0"
+                  style={{ width: '20px', height: '20px' }}
+                  onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                />
+              </div>
+
+              {/* 性格（日本語） */}
+              {natureName && (
+                <span
+                  className="text-gray-300 font-medium"
+                  style={{ fontSize: '0.72rem', background: 'rgba(255,255,255,0.07)', padding: '1px 5px', borderRadius: '4px' }}
+                >
+                  {natureName}
+                </span>
+              )}
+
+              {/* 特性 */}
+              {member.ability && (
+                <span
+                  className="text-yellow-300/80"
+                  style={{ fontSize: '0.68rem', background: 'rgba(255,220,50,0.08)', padding: '1px 5px', borderRadius: '4px' }}
+                >
+                  {member.ability.name}
+                </span>
+              )}
+            </div>
+
+            {/* 持ち物 */}
+            {member.item && (
+              <div className="flex items-center gap-1 mt-1">
+                <img
+                  src={`/itemsIcon/${member.item.id}.png`}
+                  alt={member.item.name}
+                  className="object-contain flex-shrink-0"
+                  style={{ width: '22px', height: '22px' }}
+                  onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                />
+                <span className="text-gray-300 truncate" style={{ fontSize: '0.70rem' }}>
+                  {member.item.name}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* ─── 区切り線 ─── */}
+        <div style={{ height: '1px', background: 'rgba(255,255,255,0.07)', marginBottom: '6px' }} />
+
+        {/* ─── 技 + ステータスグリッド（横並び） ─── */}
+        <div className="flex gap-2">
+          {/* 技リスト */}
+          <div className="flex flex-col gap-0.5" style={{ flex: '1 1 0', minWidth: 0 }}>
             {(member.moves.length > 0 ? member.moves : [null, null, null, null]).slice(0, 4).map((move, i) => (
-            <div key={i} className={`text-xs text-gray-200 bg-gray-700 px-1.5 py-1 rounded h-6 flex items-center truncate ${!move ? 'opacity-50' : ''}`}>
+              <div
+                key={i}
+                className="flex items-center gap-1 rounded"
+                style={{
+                  background: move ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.02)',
+                  padding: '2px 5px',
+                  minHeight: '22px',
+                  border: '1px solid rgba(255,255,255,0.04)',
+                }}
+              >
                 {move ? (
-                <>
+                  <>
                     <img
-                        src={`/typesIcon/${move.type}_icon_sv.png`}
-                        alt={move.type}
-                        className="w-4 h-4 md:w-5 md:h-5 mr-1.5 flex-shrink-0 object-contain"
-                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                      src={`/typesIcon/${move.type}_icon_sv.png`}
+                      alt={move.type}
+                      className="object-contain flex-shrink-0"
+                      style={{ width: '36px', height: '14px' }}
+                      onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
                     />
-                    <span className="truncate flex-grow">{move.name}</span>
-                </>
-                ) : <span className="text-gray-500 flex items-center h-full">-</span>}
-            </div>
+                    <span className="text-gray-200 truncate" style={{ fontSize: '0.68rem' }}>
+                      {move.name}
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-gray-600" style={{ fontSize: '0.68rem' }}>—</span>
+                )}
+              </div>
             ))}
-        </div>
+          </div>
 
-        <div className="space-y-0.5">
-            <div className="hidden md:block">
-                {renderEffortValueRow('hp', 'H', false)}
-                {renderEffortValueRow('attack', 'A', false)}
-                {renderEffortValueRow('defense', 'B', false)}
-                {renderEffortValueRow('specialAttack', 'C', false)}
-                {renderEffortValueRow('specialDefense', 'D', false)}
-                {renderEffortValueRow('speed', 'S', false)}
+          {/* ─── ステータスグリッド（3段×6列） ─── */}
+          <div style={{ flex: '0 0 auto' }}>
+            <div
+              className="grid"
+              style={{
+                gridTemplateColumns: 'repeat(6, 1fr)',
+                gap: '2px',
+                minWidth: '144px',
+              }}
+            >
+              {/* 1段目: ヘッダー H A B C D S */}
+              {STAT_LABELS.map(({ key, short }) => (
+                <div
+                  key={`header-${key}`}
+                  className={`flex items-center justify-center rounded-sm text-center font-bold ${getNatureHeaderBg(key)}`}
+                  style={{ fontSize: '0.65rem', padding: '1px 0', color: (() => {
+                    if (!member.nature) return '#9ca3af';
+                    if (member.nature.increasedStat === key) return '#fca5a5';
+                    if (member.nature.decreasedStat === key) return '#93c5fd';
+                    return '#9ca3af';
+                  })() }}
+                >
+                  {short}
+                </div>
+              ))}
+
+              {/* 2段目: 実数値 */}
+              {STAT_LABELS.map(({ key }) => (
+                <div
+                  key={`actual-${key}`}
+                  className="flex items-center justify-center text-white font-bold tabular-nums"
+                  style={{ fontSize: '0.72rem', lineHeight: 1.1 }}
+                >
+                  {calculateActualStat(key)}
+                </div>
+              ))}
+
+              {/* 3段目: ポイント */}
+              {STAT_LABELS.map(({ key }) => {
+                const pt = member.statPoints[key];
+                return (
+                  <div
+                    key={`pt-${key}`}
+                    className="flex items-center justify-center tabular-nums"
+                    style={{ fontSize: '0.60rem', color: pt > 0 ? '#6ee7b7' : '#4b5563' }}
+                  >
+                    {pt > 0 ? pt : '—'}
+                  </div>
+                );
+              })}
             </div>
-            <div className="block md:hidden">
-                {renderEffortValueRow('hp', 'H', true)}
-                {renderEffortValueRow('attack', 'A', true)}
-                {renderEffortValueRow('defense', 'B', true)}
-                {renderEffortValueRow('specialAttack', 'C', true)}
-                {renderEffortValueRow('specialDefense', 'D', true)}
-                {renderEffortValueRow('speed', 'S', true)}
-            </div>
+          </div>
         </div>
       </div>
     </div>
