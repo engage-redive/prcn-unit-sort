@@ -90,7 +90,7 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member, onClick }) => {
     return '';
   };
 
-  const teraColor = PokemonTypeColors[member.teraType] || '#777';
+  const teraColor = member.teraType === 'none' ? '#777' : (PokemonTypeColors[member.teraType as PokemonType] || '#777');
   const natureName = member.nature
     ? (NATURE_NAME_JP[member.nature.nameEn ?? ''] || member.nature.name || member.nature.nameEn || '')
     : null;
@@ -165,16 +165,18 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member, onClick }) => {
 
             <div className="flex items-center gap-1.5 flex-wrap">
               {/* テラスタルアイコン */}
-              <div className="flex items-center gap-0.5">
-                <img
-                  src={`/teraIcon/${member.teraType}.png`}
-                  alt={`テラス: ${POKEMON_TYPE_NAMES_JP[member.teraType] ?? member.teraType}`}
-                  title={`テラス: ${POKEMON_TYPE_NAMES_JP[member.teraType] ?? member.teraType}`}
-                  className="object-contain flex-shrink-0"
-                  style={{ width: '20px', height: '20px' }}
-                  onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                />
-              </div>
+              {member.teraType !== 'none' && (
+                <div className="flex items-center gap-0.5">
+                  <img
+                    src={`/teraIcon/${member.teraType}.png`}
+                    alt={`テラス: ${POKEMON_TYPE_NAMES_JP[member.teraType as PokemonType] ?? member.teraType}`}
+                    title={`テラス: ${POKEMON_TYPE_NAMES_JP[member.teraType as PokemonType] ?? member.teraType}`}
+                    className="object-contain flex-shrink-0"
+                    style={{ width: '20px', height: '20px' }}
+                    onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                  />
+                </div>
+              )}
 
               {/* 性格（日本語） */}
               {natureName && (

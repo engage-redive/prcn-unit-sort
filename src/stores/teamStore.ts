@@ -11,7 +11,7 @@ export interface TeamMember {
   level: number;
   item: Item | null;
   ability: Ability | null;
-  teraType: PokemonType;
+  teraType: PokemonType | 'none';
   nature: Nature | null;
   statPoints: { hp: number; attack: number; defense: number; specialAttack: number; specialDefense: number; speed: number; };
   moves: (Move | null)[];

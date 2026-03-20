@@ -11,7 +11,7 @@ interface TeamMember {
   level: number;
   item: Item | null;
   ability: Ability | null;
-  teraType: PokemonType;
+  teraType: PokemonType | 'none';
   nature: Nature | null;
   statPoints: {
     hp: number;
@@ -55,10 +55,13 @@ const customSelectFilter = (
   return katakanaOptionLabel.includes(katakanaInputValue);
 };
 
-const PokemonTypeOptions = (Object.keys(POKEMON_TYPE_NAMES_JP) as PokemonType[]).map(type => ({
-  value: type,
-  label: POKEMON_TYPE_NAMES_JP[type]
-}));
+const PokemonTypeOptions = [
+  { value: 'none', label: 'なし' },
+  ...(Object.keys(POKEMON_TYPE_NAMES_JP) as PokemonType[]).map(type => ({
+    value: type,
+    label: POKEMON_TYPE_NAMES_JP[type]
+  }))
+];
 
 const statKeys: (keyof TeamMember['statPoints'])[] = ['hp', 'attack', 'defense', 'specialAttack', 'specialDefense', 'speed'];
 
@@ -179,7 +182,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
         ability: newAbility,
         teraType: (prev.teraType === prev.pokemon.types[0] && newPokemon.types.length > 0)
           ? newPokemon.types[0]
-          : (newPokemon.types.includes(prev.teraType) ? prev.teraType : newPokemon.types[0] || prev.teraType),
+          : (prev.teraType === 'none' ? 'none' : (newPokemon.types.includes(prev.teraType as PokemonType) ? prev.teraType : newPokemon.types[0] || prev.teraType)),
       }));
     }
   };
@@ -254,7 +257,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
     lines.push(line1);
     if (ability) lines.push(`Ability: ${ability.nameEn || ability.name}`);
     lines.push(`Level: ${level}`);
-    lines.push(`Tera Type: ${capitalize(teraType)}`);
+    if (teraType && teraType !== 'none') lines.push(`Tera Type: ${capitalize(teraType)}`);
     const statPointStrings: string[] = [];
     statOrder.forEach(stat => {
       if (statPoints[stat] > 0) statPointStrings.push(`${statPoints[stat]} ${statShorthands[stat]}`);

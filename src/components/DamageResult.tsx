@@ -145,8 +145,31 @@ const DamageResult: React.FC<DamageResultProps> = ({
   const { normalDistMap, criticalDistMap, minMax } = useMemo(() => {
     if (!result) return { normalDistMap: new Map<number, number>(), criticalDistMap: new Map<number, number>(), minMax: null };
     const effectiveHitCount = (isVariablePowerMove || result.isMultiHitCombined) ? 1 : hitCount;
-    const nDist = getExactMultiHitDistribution(result.normalDamages, effectiveHitCount);
-    const cDist = getExactMultiHitDistribution(result.criticalDamages, effectiveHitCount);
+    let nDist = getExactMultiHitDistribution(result.normalDamages, effectiveHitCount);
+    let cDist = getExactMultiHitDistribution(result.criticalDamages, effectiveHitCount);
+
+    if (result.parentalBondChild) {
+      const childNDist = getExactMultiHitDistribution(result.parentalBondChild.normalDamages, 1);
+      
+      const combinedNDist = new Map<number, number>();
+      for (const [d1, p1] of nDist.entries()) {
+        for (const [d2, p2] of childNDist.entries()) {
+          const totalD = d1 + d2;
+          combinedNDist.set(totalD, (combinedNDist.get(totalD) || 0) + p1 * p2);
+        }
+      }
+      nDist = combinedNDist;
+
+      const combinedCDist = new Map<number, number>();
+      for (const [d1, p1] of cDist.entries()) {
+        for (const [d2, p2] of childNDist.entries()) {
+          const totalD = d1 + d2;
+          combinedCDist.set(totalD, (combinedCDist.get(totalD) || 0) + p1 * p2);
+        }
+      }
+      cDist = combinedCDist;
+    }
+
     const nDmgs = Array.from(nDist.keys());
     const cDmgs = Array.from(cDist.keys());
     return {
@@ -236,19 +259,31 @@ const DamageResult: React.FC<DamageResultProps> = ({
             
             <div className="space-y-3 mb-6">
               <div className="p-3 bg-gray-900 rounded border-l-4 border-gray-400">
-                <p className="text-xs text-gray-400 mb-1">通常</p>
+                {result.parentalBondChild ? (
+                  <p className="text-xs text-blue-300 mb-1 font-bold">
+                    おやこあい合計 <span className="ml-1 text-sm">{getKOInfo(normalDistMap, defenderHP)}</span>
+                  </p>
+                ) : (
+                  <p className="text-xs text-gray-400 mb-1">通常</p>
+                )}
                 <p className="font-bold text-white text-lg">
                   {minMax.nMin} - {minMax.nMax}
                   <span className="text-sm ml-2 text-gray-400">({formatPercentage((minMax.nMin / defenderHP) * 100)}% - {formatPercentage((minMax.nMax / defenderHP) * 100)}%)</span>
-                  <span className="ml-2 text-blue-300 text-sm font-medium">{getKOInfo(normalDistMap, defenderHP)}</span>
+                  {!result.parentalBondChild && <span className="ml-2 text-blue-300 text-sm font-medium">{getKOInfo(normalDistMap, defenderHP)}</span>}
                 </p>
               </div>
               <div className="p-3 bg-gray-900 rounded border-l-4 border-red-500">
-                <p className="text-xs text-red-400 mb-1">急所</p>
+                {result.parentalBondChild ? (
+                  <p className="text-xs text-red-400 mb-1 font-bold">
+                    おやこあい合計 <span className="ml-1 text-sm">{getKOInfo(criticalDistMap, defenderHP)}</span>
+                  </p>
+                ) : (
+                  <p className="text-xs text-red-400 mb-1">急所</p>
+                )}
                 <p className="font-bold text-white text-lg">
                   {minMax.cMin} - {minMax.cMax}
                   <span className="text-sm ml-2 text-gray-400">({formatPercentage((minMax.cMin / defenderHP) * 100)}% - {formatPercentage((minMax.cMax / defenderHP) * 100)}%)</span>
-                  <span className="ml-2 text-red-300 text-sm font-medium">{getKOInfo(criticalDistMap, defenderHP)}</span>
+                  {!result.parentalBondChild && <span className="ml-2 text-red-300 text-sm font-medium">{getKOInfo(criticalDistMap, defenderHP)}</span>}
                 </p>
               </div>
             </div>

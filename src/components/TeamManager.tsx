@@ -42,7 +42,7 @@ const formatTeamMemberToText = (member: TeamMember): string => {
 
   if (ability) lines.push(`Ability: ${ability.nameEn || ability.name}`);
   lines.push(`Level: ${level}`); // レベルは Showdown 形式で一般的
-  if (teraType) lines.push(`Tera Type: ${capitalize(teraType)}`);
+  if (teraType && teraType !== 'none') lines.push(`Tera Type: ${capitalize(teraType)}`);
 
   const statPointStrings: string[] = [];
   statOrder.forEach(stat => { if (statPoints[stat] > 0) statPointStrings.push(`${statPoints[stat]} ${statShorthands[stat]}`); });

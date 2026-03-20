@@ -188,15 +188,51 @@ const LogCard: React.FC<LogCardProps> = ({ logEntry }) => {
   const moveData = attackerStateSnapshot ? moves.find(m => m.id === attackerStateSnapshot.moveId) : null;
   const isVariablePowerMove = !!(moveData?.variablePowers && moveData.variablePowers.length > 0);
 
-  const displayHitCount = isVariablePowerMove ? 1 : hitCount;
-
+  const effectiveHitCount = (isVariablePowerMove || result.isMultiHitCombined) ? 1 : hitCount;
   const isDoubleBattle = globalStatesSnapshot?.isDoubleBattle || false;
 
-  const minDamageDisplay = (isCritical ? result.critMinDamage : result.minDamage) * displayHitCount;
-  const maxDamageDisplay = (isCritical ? result.critMaxDamage : result.maxDamage) * displayHitCount;
+  const { normalDistMap, criticalDistMap, minMax } = React.useMemo(() => {
+    let nDist = getExactMultiHitDistribution(result.normalDamages, effectiveHitCount);
+    let cDist = getExactMultiHitDistribution(result.criticalDamages, effectiveHitCount);
+
+    if (result.parentalBondChild) {
+      const childNDist = getExactMultiHitDistribution(result.parentalBondChild.normalDamages, 1);
+      
+      const combinedNDist = new Map<number, number>();
+      for (const [d1, p1] of nDist.entries()) {
+        for (const [d2, p2] of childNDist.entries()) {
+          const totalD = d1 + d2;
+          combinedNDist.set(totalD, (combinedNDist.get(totalD) || 0) + p1 * p2);
+        }
+      }
+      nDist = combinedNDist;
+
+      const combinedCDist = new Map<number, number>();
+      for (const [d1, p1] of cDist.entries()) {
+        for (const [d2, p2] of childNDist.entries()) {
+          const totalD = d1 + d2;
+          combinedCDist.set(totalD, (combinedCDist.get(totalD) || 0) + p1 * p2);
+        }
+      }
+      cDist = combinedCDist;
+    }
+
+    const nDmgs = Array.from(nDist.keys());
+    const cDmgs = Array.from(cDist.keys());
+    return {
+      normalDistMap: nDist, criticalDistMap: cDist,
+      minMax: {
+        nMin: Math.min(...nDmgs), nMax: Math.max(...nDmgs),
+        cMin: Math.min(...cDmgs), cMax: Math.max(...cDmgs),
+      }
+    };
+  }, [result, effectiveHitCount]);
+
+  const minDamageDisplay = isCritical ? minMax.cMin : minMax.nMin;
+  const maxDamageDisplay = isCritical ? minMax.cMax : minMax.nMax;
   
-  const minPercentageDisplay = isCritical ? result.critMinPercentage : result.minPercentage;
-  const maxPercentageDisplay = isCritical ? result.critMaxPercentage : result.maxPercentage;
+  const minPercentageDisplay = defenderOriginalHP > 0 ? (minDamageDisplay / defenderOriginalHP) * 100 : 0;
+  const maxPercentageDisplay = defenderOriginalHP > 0 ? (maxDamageDisplay / defenderOriginalHP) * 100 : 0;
 
   const clampedCurrentDisplayMinPercentageInLog = Math.min(100, minPercentageDisplay);
   const clampedCurrentDisplayMaxPercentageInLog = Math.min(100, maxPercentageDisplay);
@@ -204,21 +240,9 @@ const LogCard: React.FC<LogCardProps> = ({ logEntry }) => {
   const actualRemainingHPMinPercentageInLog = Math.max(0, 100 - clampedCurrentDisplayMaxPercentageInLog);
   const actualRemainingHPMaxPercentageInLog = Math.max(0, 100 - clampedCurrentDisplayMinPercentageInLog);
   
-  const effectiveHitCount = (isVariablePowerMove || result.isMultiHitCombined) ? 1 : hitCount;
-  const normalDistMap = React.useMemo(() => getExactMultiHitDistribution(result.normalDamages, effectiveHitCount), [result.normalDamages, effectiveHitCount]);
-  const criticalDistMap = React.useMemo(() => getExactMultiHitDistribution(result.criticalDamages, effectiveHitCount), [result.criticalDamages, effectiveHitCount]);
-  
-  const minMax = React.useMemo(() => {
-    const nDmgs = Array.from(normalDistMap.keys());
-    const cDmgs = Array.from(criticalDistMap.keys());
-    return {
-      nMin: Math.min(...nDmgs), nMax: Math.max(...nDmgs),
-      cMin: Math.min(...cDmgs), cMax: Math.max(...cDmgs),
-    };
-  }, [normalDistMap, criticalDistMap]);
-
   const damagesForKO = isCritical ? criticalDistMap : normalDistMap;
-  const koTextDisplay = getKOInfoHistory(damagesForKO, defenderOriginalHP);
+  const baseKOText = getKOInfoHistory(damagesForKO, defenderOriginalHP);
+  const koTextDisplay = result.parentalBondChild ? `おやこあい合計 ${baseKOText}` : baseKOText;
   
   const handleDeleteClick = () => {
     deleteLog(logEntry.id);
@@ -478,19 +502,31 @@ const LogCard: React.FC<LogCardProps> = ({ logEntry }) => {
                 {/* ダメージ結果 */}
                 <div className="space-y-3 mb-6">
                   <div className="p-3 bg-gray-900 rounded border-l-4 border-gray-400">
-                    <p className="text-xs text-gray-400 mb-1">通常</p>
+                    {result.parentalBondChild ? (
+                      <p className="text-xs text-blue-300 mb-1 font-bold">
+                        おやこあい合計 <span className="ml-1 text-sm">{getKOInfoHistory(normalDistMap, defenderOriginalHP)}</span>
+                      </p>
+                    ) : (
+                      <p className="text-xs text-gray-400 mb-1">通常</p>
+                    )}
                     <p className="font-bold text-white text-lg">
                       {minMax.nMin} - {minMax.nMax}
                       <span className="text-sm ml-2 text-gray-400">({formatPercentageHistory((minMax.nMin / defenderOriginalHP) * 100)}% - {formatPercentageHistory((minMax.nMax / defenderOriginalHP) * 100)}%)</span>
-                      <span className="ml-2 text-blue-300 text-sm font-medium">{getKOInfoHistory(normalDistMap, defenderOriginalHP)}</span>
+                      {!result.parentalBondChild && <span className="ml-2 text-blue-300 text-sm font-medium">{getKOInfoHistory(normalDistMap, defenderOriginalHP)}</span>}
                     </p>
                   </div>
                   <div className="p-3 bg-gray-900 rounded border-l-4 border-red-500">
-                    <p className="text-xs text-red-400 mb-1">急所</p>
+                    {result.parentalBondChild ? (
+                      <p className="text-xs text-red-400 mb-1 font-bold">
+                        おやこあい合計 <span className="ml-1 text-sm">{getKOInfoHistory(criticalDistMap, defenderOriginalHP)}</span>
+                      </p>
+                    ) : (
+                      <p className="text-xs text-red-400 mb-1">急所</p>
+                    )}
                     <p className="font-bold text-white text-lg">
                       {minMax.cMin} - {minMax.cMax}
                       <span className="text-sm ml-2 text-gray-400">({formatPercentageHistory((minMax.cMin / defenderOriginalHP) * 100)}% - {formatPercentageHistory((minMax.cMax / defenderOriginalHP) * 100)}%)</span>
-                      <span className="ml-2 text-red-300 text-sm font-medium">{getKOInfoHistory(criticalDistMap, defenderOriginalHP)}</span>
+                      {!result.parentalBondChild && <span className="ml-2 text-red-300 text-sm font-medium">{getKOInfoHistory(criticalDistMap, defenderOriginalHP)}</span>}
                     </p>
                   </div>
                 </div>
@@ -649,44 +685,84 @@ const LogCard: React.FC<LogCardProps> = ({ logEntry }) => {
                 {/* ダメージ分布 */}
                 <div className="space-y-4">
                     <div className="bg-slate-800/30 rounded-xl py-3 px-4 border border-slate-700/30">
-                      <h4 className="text-slate-300 font-semibold text-xs mb-3">通常ダメージ分布 {hitCount > 1 && `(1回あたり)`}</h4>
+                      <h4 className="text-slate-300 font-semibold text-xs mb-3">通常ダメージ分布 {!isVariablePowerMove && hitCount > 1 && `(1回あたり)`}</h4>
                       <div className="grid grid-cols-8 gap-1 text-[9px] sm:text-[10px]">
                         {result.normalDamages.map((damageValue, i) => {
                           const factor = 0.85 + i * 0.01;
-                          const totalDamage = isVariablePowerMove ? damageValue : (damageValue * hitCount);
-                          const percentage = defenderOriginalHP > 0 ? (totalDamage / defenderOriginalHP) * 100 : 0;
+                          const percentage = defenderOriginalHP > 0 ? (damageValue / defenderOriginalHP) * 100 : 0;
                           return (
                             <div
                               key={`modal-normal-dist-${i}`}
                               className="bg-slate-900/80 p-1.5 rounded-md text-center border border-slate-700/50"
                             >
                               <div className="text-slate-500 mb-0.5 text-[8px]">×{factor.toFixed(2)}</div>
-                              <div className={`${getDamageColorHistory(percentage)} font-bold`}>{totalDamage}</div>
+                              <div className={`${getDamageColorHistory(percentage)} font-bold`}>{damageValue}</div>
                             </div>
                           );
                         })}
                       </div>
                     </div>
 
-                    <div className="bg-red-900/10 rounded-xl py-3 px-4 border border-red-900/20">
-                      <h4 className="text-red-400 font-semibold text-xs mb-3">急所ダメージ分布 {hitCount > 1 && `(1回あたり)`}</h4>
+                    <div className={result.parentalBondChild ? "bg-red-900/10 rounded-xl py-3 px-4 border border-red-900/20" : "bg-red-900/10 rounded-xl py-3 px-4 border border-red-900/20 mb-6"}>
+                      <h4 className="text-red-400 font-semibold text-xs mb-3">急所ダメージ分布 {!isVariablePowerMove && hitCount > 1 && `(1回あたり)`}</h4>
                       <div className="grid grid-cols-8 gap-1 text-[9px] sm:text-[10px]">
                         {result.criticalDamages.map((damageValue, i) => {
                            const factor = 0.85 + i * 0.01;
-                           const totalDamage = isVariablePowerMove ? damageValue : (damageValue * hitCount);
-                          const percentage = defenderOriginalHP > 0 ? (totalDamage / defenderOriginalHP) * 100 : 0;
+                          const percentage = defenderOriginalHP > 0 ? (damageValue / defenderOriginalHP) * 100 : 0;
                           return (
                             <div
                               key={`modal-crit-dist-${i}`}
                               className="bg-slate-900/80 p-1.5 rounded-md text-center border border-red-900/30"
                             >
                               <div className="text-slate-500 mb-0.5 text-[8px]">×{factor.toFixed(2)}</div>
-                              <div className={`${getDamageColorHistory(percentage)} font-bold`}>{totalDamage}</div>
+                              <div className={`${getDamageColorHistory(percentage)} font-bold`}>{damageValue}</div>
                             </div>
                           );
                         })}
                       </div>
                     </div>
+
+                    {result.parentalBondChild && (
+                      <>
+                        <div className="bg-slate-800/30 rounded-xl py-3 px-4 border border-slate-700/30">
+                          <h4 className="text-slate-300 font-semibold text-xs mb-3">通常ダメージ分布 (おやこあい子)</h4>
+                          <div className="grid grid-cols-8 gap-1 text-[9px] sm:text-[10px]">
+                            {result.parentalBondChild.normalDamages.map((damageValue, i) => {
+                              const factor = 0.85 + i * 0.01;
+                              const percentage = defenderOriginalHP > 0 ? (damageValue / defenderOriginalHP) * 100 : 0;
+                              return (
+                                <div
+                                  key={`modal-bond-normal-dist-${i}`}
+                                  className="bg-slate-900/80 p-1.5 rounded-md text-center border border-slate-700/50"
+                                >
+                                  <div className="text-slate-500 mb-0.5 text-[8px]">×{factor.toFixed(2)}</div>
+                                  <div className={`${getDamageColorHistory(percentage)} font-bold`}>{damageValue}</div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        <div className="bg-red-900/10 rounded-xl py-3 px-4 border border-red-900/20 mb-6">
+                          <h4 className="text-red-400 font-semibold text-xs mb-3">急所ダメージ分布 (おやこあい子)</h4>
+                          <div className="grid grid-cols-8 gap-1 text-[9px] sm:text-[10px]">
+                            {result.parentalBondChild.criticalDamages.map((damageValue, i) => {
+                              const factor = 0.85 + i * 0.01;
+                              const percentage = defenderOriginalHP > 0 ? (damageValue / defenderOriginalHP) * 100 : 0;
+                              return (
+                                <div
+                                  key={`modal-bond-crit-dist-${i}`}
+                                  className="bg-slate-900/80 p-1.5 rounded-md text-center border border-red-900/30"
+                                >
+                                  <div className="text-slate-500 mb-0.5 text-[8px]">×{factor.toFixed(2)}</div>
+                                  <div className={`${getDamageColorHistory(percentage)} font-bold`}>{damageValue}</div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </>
+                    )}
                 </div>
             </div>
 
