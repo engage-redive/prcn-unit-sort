@@ -1,7 +1,6 @@
 
 
 import React from 'react';
-import { LoggedDamageEntry } from '../types';
 import LogCard from './LogCard';
 import { useHistoryStore } from '../stores/historyStore';
 import { FileText, Trash } from 'lucide-react';

@@ -6,9 +6,10 @@ import {
   DisasterState,
 } from '../types';
 import { useHistoryStore } from '../stores/historyStore';
-import { X, Trash2, Info, RotateCcw, Package, Sparkles } from 'lucide-react';
+import { X, Trash2, Info, RotateCcw } from 'lucide-react';
 
 import { moves } from '../data/moves';
+import { items } from '../data/items';
 import { getPokemonIconPath } from '../utils/uiHelpers';
 
 const TYPE_NAME_JP_HISTORY: Record<string, string> = {
@@ -121,6 +122,25 @@ const getHpRangeBarColorByRemainingHp = (remainingPercentage: number) => {
   if (remainingPercentage <= 25) return 'bg-red-700';
   if (remainingPercentage <= 50) return 'bg-yellow-700';
   return 'bg-green-700';
+};
+
+const getItemIdFromName = (itemName: string): string | null => {
+  const item = items.find(i => i.name === itemName);
+  return item ? item.id : null;
+};
+
+const renderItemIcon = (itemName: string | null, snapshotItemId?: string | null) => {
+  if (!itemName) return null;
+  const itemId = snapshotItemId || getItemIdFromName(itemName);
+  if (!itemId) return null;
+  return (
+    <img 
+      src={`/itemsIcon/${itemId}.png`} 
+      alt={itemName} 
+      className="w-4 h-4 shrink-0 object-contain drop-shadow-sm" 
+      onError={(e) => { e.currentTarget.style.display = 'none'; }} 
+    />
+  );
 };
 
 interface LogCardProps {
@@ -260,17 +280,19 @@ const LogCard: React.FC<LogCardProps> = ({ logEntry }) => {
               </span>
               <div className="flex flex-col space-y-0.5 mt-1 text-[11px] text-slate-300">
                 {attackerDetails.item && (
-                  <div className="flex items-center gap-1 truncate w-full">
-                    <Package size={10} className="shrink-0 text-amber-400" />
+                  <div className="flex items-center gap-1.5 truncate w-full">
+                    {renderItemIcon(attackerDetails.item, logEntry.attackerStateSnapshot?.itemId)}
                     <span className="truncate">{attackerDetails.item}</span>
                   </div>
                 )}
                 {attackerDetails.ability && (
                   <div className="flex items-center gap-1 truncate w-full">
-                    <Sparkles size={10} className="shrink-0 text-emerald-400" />
-                    <span className="truncate">{attackerDetails.ability}</span>
+                    <span className="truncate">特性: {attackerDetails.ability}</span>
                   </div>
                 )}
+                <div className="flex items-center gap-1 truncate w-full text-[10px] text-slate-400 mt-0.5">
+                  <span className="truncate">攻/特攻: <span className="text-slate-300">{attackerDetails.offensiveStatValue}</span></span>
+                </div>
               </div>
             </div>
           </div>
@@ -278,11 +300,25 @@ const LogCard: React.FC<LogCardProps> = ({ logEntry }) => {
 
         {/* 中央: ダメージ＆技情報 */}
         <div className="flex-1 w-full flex flex-col items-center justify-center py-2 md:py-0">
-            <div className="text-center mb-2 w-full">
+            <div className="text-center mb-2 w-full flex flex-col items-center">
                 <p className="font-bold text-sm text-white bg-slate-700/50 py-1 px-3 rounded-full inline-block border border-slate-600/50 shadow-sm truncate max-w-full">
                     {attackerMoveName}
                     {hitCount > 1 && <span className="text-[11px] text-slate-300 ml-1">({hitCount}回)</span>}
                 </p>
+                <div className="flex items-center justify-center gap-2 mt-1.5 text-[10px] text-slate-400 flex-wrap">
+                  {moveData?.type && (
+                    <span className="flex items-center gap-1">
+                      <img src={`/typesIcon/${moveData.type}_icon_sv.png`} alt={moveData.type} className="w-3 h-3 drop-shadow-sm" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                      <span className="text-slate-300">{getTypeNameJpFromHistory(moveData.type)}</span>
+                    </span>
+                  )}
+                  {attackerDetails.moveCategory && (
+                    <span className="bg-slate-800 px-1 py-0.5 rounded border border-slate-700/50 text-slate-300 leading-none">
+                      {attackerDetails.moveCategory === 'physical' ? '物理' : attackerDetails.moveCategory === 'special' ? '特殊' : '変化'}
+                    </span>
+                  )}
+                  <span className="truncate">威力: <span className="text-slate-200">{attackerDetails.movePower ?? '-'}</span></span>
+                </div>
             </div>
             
             <p className="text-xl font-bold my-1 drop-shadow-md text-center shrink-0">
@@ -326,19 +362,19 @@ const LogCard: React.FC<LogCardProps> = ({ logEntry }) => {
               </span>
               <div className="flex flex-col space-y-0.5 mt-1 text-[11px] text-slate-300 items-end md:items-start">
                 {defenderDetails.item && (
-                  <div className="flex items-center gap-1 truncate w-full justify-end md:justify-start">
-                    <Package size={10} className="shrink-0 text-amber-400 hidden md:block" />
+                  <div className="flex items-center gap-1.5 truncate w-full justify-end md:justify-start">
+                    {renderItemIcon(defenderDetails.item, logEntry.defenderStateSnapshot?.itemId)}
                     <span className="truncate">{defenderDetails.item}</span>
-                    <Package size={10} className="shrink-0 text-amber-400 md:hidden block" />
                   </div>
                 )}
                 {defenderDetails.ability && (
                   <div className="flex items-center gap-1 truncate w-full justify-end md:justify-start">
-                    <Sparkles size={10} className="shrink-0 text-emerald-400 hidden md:block" />
-                    <span className="truncate">{defenderDetails.ability}</span>
-                    <Sparkles size={10} className="shrink-0 text-emerald-400 md:hidden block" />
+                    <span className="truncate">特性: {defenderDetails.ability}</span>
                   </div>
                 )}
+                <div className="flex items-center gap-1 truncate w-full justify-end md:justify-start text-[10px] text-slate-400 mt-0.5">
+                  <span className="truncate">防/特防: <span className="text-slate-300">{defenderDetails.defensiveStatValue}</span></span>
+                </div>
               </div>
             </div>
           </div>
@@ -347,8 +383,7 @@ const LogCard: React.FC<LogCardProps> = ({ logEntry }) => {
       
       {/* HPバーエリア */}
       <div className="px-5 pb-4 relative z-10 w-[95%] mx-auto">
-        <div className="flex justify-between text-[10px] text-slate-400 mb-1 px-1 font-mono">
-          <span>HP {Math.max(0, defenderOriginalHP - maxDamageDisplay)} ~ {Math.max(0, defenderOriginalHP - minDamageDisplay)}</span>
+        <div className="flex justify-end text-[10px] text-slate-400 mb-1 px-1 font-mono">
           <span>Max {defenderOriginalHP}</span>
         </div>
         <div className="w-full h-2.5 bg-slate-950 rounded-full overflow-hidden shadow-inner border border-slate-800">
@@ -506,18 +541,21 @@ const LogCard: React.FC<LogCardProps> = ({ logEntry }) => {
                       {attackerDetails.isStellar && <li className="flex justify-between">テラスタル: <span className="font-semibold text-pink-400">{getTypeNameJpFromHistory('stellar')}</span></li>}
                       {attackerDetails.item && (
                         <li className="flex justify-between items-center">
-                          <span className="flex items-center"><Package size={11} className="mr-1 text-amber-400" />持ち物:</span>
-                          <span className="font-semibold text-white truncate max-w-[120px]" title={attackerDetails.item || undefined}>{attackerDetails.item}</span>
+                          <span className="flex items-center">持ち物:</span>
+                          <div className="flex items-center gap-1.5">
+                            {renderItemIcon(attackerDetails.item, logEntry.attackerStateSnapshot?.itemId)}
+                            <span className="font-semibold text-white truncate max-w-[120px]" title={attackerDetails.item || undefined}>{attackerDetails.item}</span>
+                          </div>
                         </li>
                       )}
                       {attackerDetails.ability && (
                         <li className="flex justify-between items-center">
-                          <span className="flex items-center"><Sparkles size={11} className="mr-1 text-emerald-400" />特性:</span>
+                          <span className="flex items-center">特性:</span>
                           <span className="font-semibold text-white truncate max-w-[120px]" title={attackerDetails.ability || undefined}>{attackerDetails.ability}</span>
                         </li>
                       )}
-                      {attackerDetails.isBurned && <li className="text-red-400 font-bold border-t border-slate-700/50 pt-1.5 mt-1.5">🔥 火傷状態</li>}
-                      {attackerDetails.hasHelpingHand && <li className="text-emerald-400 font-bold border-t border-slate-700/50 pt-1.5 mt-1.5">👏 てだすけ</li>}
+                      {attackerDetails.isBurned && <li className="text-red-400 font-bold border-t border-slate-700/50 pt-1.5 mt-1.5">火傷状態</li>}
+                      {attackerDetails.hasHelpingHand && <li className="text-emerald-400 font-bold border-t border-slate-700/50 pt-1.5 mt-1.5">てだすけ</li>}
                     </ul>
                   </div>
 
@@ -559,19 +597,22 @@ const LogCard: React.FC<LogCardProps> = ({ logEntry }) => {
                       <li className="flex justify-between">タイプ相性: <span className="font-semibold text-white bg-slate-700/50 px-1.5 rounded">×{result.effectiveness.toFixed(2)}</span></li>
                       {defenderDetails.item && (
                         <li className="flex justify-between items-center">
-                          <span className="flex items-center"><Package size={11} className="mr-1 text-amber-400" />持ち物:</span>
-                          <span className="font-semibold text-white truncate max-w-[120px]" title={defenderDetails.item || undefined}>{defenderDetails.item}</span>
+                          <span className="flex items-center">持ち物:</span>
+                          <div className="flex items-center gap-1.5">
+                            {renderItemIcon(defenderDetails.item, logEntry.defenderStateSnapshot?.itemId)}
+                            <span className="font-semibold text-white truncate max-w-[120px]" title={defenderDetails.item || undefined}>{defenderDetails.item}</span>
+                          </div>
                         </li>
                       )}
                       {defenderDetails.ability && (
                         <li className="flex justify-between items-center">
-                          <span className="flex items-center"><Sparkles size={11} className="mr-1 text-emerald-400" />特性:</span>
+                          <span className="flex items-center">特性:</span>
                           <span className="font-semibold text-white truncate max-w-[120px]" title={defenderDetails.ability || undefined}>{defenderDetails.ability}</span>
                         </li>
                       )}
-                      {defenderDetails.hasReflect && <li className="text-blue-300 border-t border-slate-700/50 pt-1.5 mt-1.5">🛡️ リフレクター</li>}
-                      {defenderDetails.hasLightScreen && <li className="text-yellow-300 border-t border-slate-700/50 pt-1.5 mt-1.5">🔆 ひかりのかべ</li>}
-                      {defenderDetails.hasFriendGuard && <li className="text-purple-300 border-t border-slate-700/50 pt-1.5 mt-1.5">🤝 フレンドガード</li>}
+                      {defenderDetails.hasReflect && <li className="text-blue-300 border-t border-slate-700/50 pt-1.5 mt-1.5">リフレクター</li>}
+                      {defenderDetails.hasLightScreen && <li className="text-yellow-300 border-t border-slate-700/50 pt-1.5 mt-1.5">ひかりのかべ</li>}
+                      {defenderDetails.hasFriendGuard && <li className="text-purple-300 border-t border-slate-700/50 pt-1.5 mt-1.5">フレンドガード</li>}
                     </ul>
                   </div>
                 </div>

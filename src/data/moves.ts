@@ -1,4 +1,4 @@
-import type { Move, PokemonType, MoveCategory, } from '../types';
+import { Move, PokemonType, MoveCategory, } from '../types';
 export const moves: Move[] = [
   {
     id: "terablast",

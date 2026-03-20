@@ -11,8 +11,9 @@ import {
 } from '../types';
 import { useGlobalStateStore } from '../stores/globalStateStore';
 import { useAttackerStore } from '../stores/attackerStore';
-import { X, ChevronUp, ChevronDown } from 'lucide-react';
+import { X, ChevronUp, ChevronDown, Info } from 'lucide-react';
 import { getPokemonIconPath } from '../utils/uiHelpers';
+import { items } from '../data/items';
 
 interface DamageResultProps {
   attackerIndex: number;
@@ -74,6 +75,25 @@ const formatPercentage = (percentage: number): string => {
   if (fixed === '100.00' && percentage < 100) return '99.99';
   if (fixed === '0.00' && percentage > 0) return '0.01';
   return fixed;
+};
+
+const getItemIdFromName = (itemName: string): string | null => {
+  const item = items.find(i => i.name === itemName);
+  return item ? item.id : null;
+};
+
+const renderItemIcon = (itemName: string | null) => {
+  if (!itemName) return null;
+  const itemId = getItemIdFromName(itemName);
+  if (!itemId) return null;
+  return (
+    <img 
+      src={`/itemsIcon/${itemId}.png`} 
+      alt={itemName} 
+      className="w-4 h-4 shrink-0 object-contain drop-shadow-sm" 
+      onError={(e) => { e.currentTarget.style.display = 'none'; }} 
+    />
+  );
 };
 
 // --- ダメージ乱数確定分布ロジック ---
@@ -176,146 +196,302 @@ const DamageResult: React.FC<DamageResultProps> = ({
   const getTypeColor = (type: PokemonType | string | undefined) => type ? (TYPE_COLORS_MODAL[type.toLowerCase()] || '#777777') : '#777777';
 
   const ModalComponent = (
-    <div className="fixed inset-0 bg-black bg-opacity-70 z-[1000] flex items-center justify-center p-4">
-      <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 relative">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-white text-center flex-grow">ダメージ計算詳細</h2>
-          <button className="text-gray-400 hover:text-white" onClick={() => setIsModalOpen(false)}><X className="w-6 h-6" /></button>
+    <div className="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-[1000] flex items-center justify-center p-3 sm:p-6" onClick={(e) => { if (e.target === e.currentTarget) setIsModalOpen(false); }}>
+      <div className="bg-slate-900 border border-slate-700/60 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[92vh] flex flex-col overflow-hidden relative">
+        <div className="sticky top-0 bg-slate-900/95 backdrop-blur-lg px-5 py-4 flex justify-between items-center border-b border-slate-800 z-30 shrink-0">
+            <h2 className="text-lg font-bold text-white flex items-center">
+              <Info size={20} className="mr-2 text-blue-400" />
+              ダメージ計算詳細
+            </h2>
+            <button
+              className="text-slate-400 hover:text-white transition-colors bg-slate-800 hover:bg-slate-700 p-2 rounded-full"
+              onClick={() => setIsModalOpen(false)}
+              aria-label="閉じる"
+            >
+              <X className="w-5 h-5" />
+            </button>
         </div>
 
-        <div className="mb-4 text-sm space-y-1 text-gray-300 border-b border-gray-700 pb-2">
-          <p>攻: <span className="text-white font-medium">{attackerPokemonName}</span> / {attackerMoveNameForDisplay || attackerMoveName} {!isVariablePowerMove && hitCount > 1 && `(${hitCount}回)`}</p>
-          <p>防: <span className="text-white font-medium">{defenderPokemonName}</span> (HP: {defenderHP})</p>
-        </div>
-
-        <div className="space-y-3 mb-6">
-          <div className="p-3 bg-gray-900 rounded border-l-4 border-gray-400">
-            <p className="text-xs text-gray-400 mb-1">通常</p>
-            <p className="font-bold text-white text-lg">
-              {minMax.nMin} - {minMax.nMax}
-              <span className="text-sm ml-2 text-gray-400">({formatPercentage((minMax.nMin / defenderHP) * 100)}% - {formatPercentage((minMax.nMax / defenderHP) * 100)}%)</span>
-              <span className="ml-2 text-blue-300 text-sm font-medium">{getKOInfo(normalDistMap, defenderHP)}</span>
-            </p>
-          </div>
-          <div className="p-3 bg-gray-900 rounded border-l-4 border-red-500">
-            <p className="text-xs text-red-400 mb-1">急所</p>
-            <p className="font-bold text-white text-lg">
-              {minMax.cMin} - {minMax.cMax}
-              <span className="text-sm ml-2 text-gray-400">({formatPercentage((minMax.cMin / defenderHP) * 100)}% - {formatPercentage((minMax.cMax / defenderHP) * 100)}%)</span>
-              <span className="ml-2 text-red-300 text-sm font-medium">{getKOInfo(criticalDistMap, defenderHP)}</span>
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-6 text-sm mb-6 border-b border-gray-700 pb-4">
-          <div>
-            <h3 className="font-bold text-red-400 mb-2 flex items-center">
-              {attackerDetails && <img src={getPokemonIconPath(attackerDetails.pokemonId)} className="w-8 h-8 mr-2" alt="" />}
-              攻撃側: {attackerPokemonName}
-            </h3>
-            <div className="flex gap-1 mb-2">
-              {attackerDetails?.displayTypes?.map((t, i) => (
-                <span key={i} className="px-2 py-0.5 rounded text-[10px] text-white" style={{ backgroundColor: getTypeColor(t) }}>{getTypeNameJp(t)}</span>
-              ))}
-            </div>
-            <ul className="space-y-1 text-gray-300 text-xs">
-              <li>技の威力: <span className="text-white">{attackerDetails?.movePower}</span></li>
-              <li>技カテゴリ: <span className="text-white">{attackerDetails?.moveCategory === 'physical' ? '物理' : '特殊'}</span></li>
-              <li>攻撃/特攻: <span className="text-white">{attackerDetails?.offensiveStatValue}</span> (ランク:{attackerDetails?.offensiveStatRank})</li>
-              <li>特性: <span className="text-white">{attackerDetails?.ability || 'なし'}</span></li>
-              <li>持ち物: <span className="text-white">{attackerDetails?.item || 'なし'}</span></li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="font-bold text-blue-400 mb-2 flex items-center">
-              {defenderDetails && <img src={getPokemonIconPath(defenderDetails.pokemonId)} className="w-8 h-8 mr-2" alt="" />}
-              防御側: {defenderPokemonName}
-            </h3>
-            <div className="flex gap-1 mb-2">
-              {defenderDetails?.displayTypes?.map((t, i) => (
-                <span key={i} className="px-2 py-0.5 rounded text-[10px] text-white" style={{ backgroundColor: getTypeColor(t) }}>{getTypeNameJp(t)}</span>
-              ))}
-            </div>
-            <ul className="space-y-1 text-gray-300 text-xs">
-              <li>防御/特防: <span className="text-white">{defenderDetails?.defensiveStatValue}</span> (ランク:{defenderDetails?.defensiveStatRank})</li>
-              <li>相性: <span className="text-white font-bold">{result.effectiveness}</span></li>
-              {defenderDetails?.hasReflect && <li className="text-blue-300">リフレクター</li>}
-              {defenderDetails?.hasLightScreen && <li className="text-yellow-300">ひかりのかべ</li>}
-              <li>特性: <span className="text-white">{defenderDetails?.ability || 'なし'}</span></li>
-              <li>持ち物: <span className="text-white">{defenderDetails?.item || 'なし'}</span></li>
-            </ul>
-          </div>
-        </div>
-
-        {/* 16乱数ダメージ分布 */}
-        <div className="mb-4">
-          <h4 className="text-white font-medium text-xs mb-2">各ダメージ分布 (1ヒットあたり)</h4>
-          <div className="grid grid-cols-8 gap-1 text-[10px]">
-            {result.normalDamages.map((dmg, i) => (
-              <div key={i} className="bg-gray-700 p-1 rounded text-center">
-                <div className="text-gray-400">{(0.85 + i * 0.01).toFixed(2)}</div>
-                <div className="text-white">{dmg}</div>
+        <div className="flex-1 overflow-y-auto overscroll-contain p-5 space-y-5">
+            <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="space-y-1">
+                <p className="text-sm font-medium text-slate-200 flex items-center">
+                  <span className="w-5 h-5 rounded bg-red-500/20 text-red-400 font-bold text-[11px] flex items-center justify-center mr-2 shrink-0">攻</span>
+                  {attackerDetails && <img src={getPokemonIconPath(attackerDetails.pokemonId)} alt="" className="w-6 h-6 mr-1.5 shrink-0" />}
+                  {attackerPokemonName} → {attackerMoveNameForDisplay || attackerMoveName}
+                  {!isVariablePowerMove && hitCount > 1 && <span className="text-slate-400 ml-1 text-xs">({hitCount}回)</span>}
+                </p>
+                <p className="text-sm font-medium text-slate-200 flex items-center">
+                  <span className="w-5 h-5 rounded bg-blue-500/20 text-blue-400 font-bold text-[11px] flex items-center justify-center mr-2 shrink-0">防</span>
+                  {defenderDetails && <img src={getPokemonIconPath(defenderDetails.pokemonId)} alt="" className="w-6 h-6 mr-1.5 shrink-0" />}
+                  {defenderPokemonName}
+                  <span className="text-slate-400 ml-1.5 text-xs">(HP: {defenderHP})</span>
+                </p>
               </div>
-            ))}
-          </div>
-        </div>
-        <div className={result.parentalBondChild ? "mb-4" : "mb-6"}>
-          <h4 className="text-red-400 font-medium text-xs mb-2">各ダメージ分布 (1ヒットあたり・急所)</h4>
-          <div className="grid grid-cols-8 gap-1 text-[10px]">
-            {result.criticalDamages.map((dmg, i) => (
-              <div key={i} className="bg-gray-700 p-1 rounded text-center">
-                <div className="text-gray-400">{(0.85 + i * 0.01).toFixed(2)}</div>
-                <div className="text-red-400">{dmg}</div>
+              <div className="flex gap-2 shrink-0">
+                {isDoubleBattle && <span className="px-2 py-0.5 text-[10px] bg-blue-500/80 text-white rounded font-medium border border-blue-400/50">ダブル</span>}
+                {isCriticalModeActive && <span className="px-2 py-0.5 text-[10px] bg-red-500/80 text-white rounded font-medium border border-red-400/50">急所モード</span>}
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
+            
+            <div className="space-y-3 mb-6">
+              <div className="p-3 bg-gray-900 rounded border-l-4 border-gray-400">
+                <p className="text-xs text-gray-400 mb-1">通常</p>
+                <p className="font-bold text-white text-lg">
+                  {minMax.nMin} - {minMax.nMax}
+                  <span className="text-sm ml-2 text-gray-400">({formatPercentage((minMax.nMin / defenderHP) * 100)}% - {formatPercentage((minMax.nMax / defenderHP) * 100)}%)</span>
+                  <span className="ml-2 text-blue-300 text-sm font-medium">{getKOInfo(normalDistMap, defenderHP)}</span>
+                </p>
+              </div>
+              <div className="p-3 bg-gray-900 rounded border-l-4 border-red-500">
+                <p className="text-xs text-red-400 mb-1">急所</p>
+                <p className="font-bold text-white text-lg">
+                  {minMax.cMin} - {minMax.cMax}
+                  <span className="text-sm ml-2 text-gray-400">({formatPercentage((minMax.cMin / defenderHP) * 100)}% - {formatPercentage((minMax.cMax / defenderHP) * 100)}%)</span>
+                  <span className="ml-2 text-red-300 text-sm font-medium">{getKOInfo(criticalDistMap, defenderHP)}</span>
+                </p>
+              </div>
+            </div>
 
-        {result.parentalBondChild && (
-          <>
-            <div className="mb-4">
-              <h4 className="text-white font-medium text-xs mb-2">各ダメージ分布 (1ヒットあたり・おやこあい子)</h4>
-              <div className="grid grid-cols-8 gap-1 text-[10px]">
-                {result.parentalBondChild.normalDamages.map((dmg, i) => (
-                  <div key={i} className="bg-gray-700 p-1 rounded text-center">
-                    <div className="text-gray-400">{(0.85 + i * 0.01).toFixed(2)}</div>
-                    <div className="text-white">{dmg}</div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-slate-800/30 rounded-xl p-4 border border-slate-700/30">
+                <h3 className="text-sm font-bold text-red-400 mb-3 border-b border-slate-700/50 pb-2 flex items-center">
+                    <span className="w-1.5 h-5 bg-red-500 rounded-sm mr-2 inline-block"></span>
+                    攻撃側: {attackerPokemonName}
+                </h3>
+                <div className="flex items-center mb-3">
+                    <div className="relative mr-3">
+                        {attackerDetails && (
+                          <>
+                            <img 
+                              src={getPokemonIconPath(attackerDetails.pokemonId)} 
+                              alt={attackerPokemonName} 
+                              className="w-12 h-12 drop-shadow-md" 
+                            />
+                            {attackerDetails.isStellar ? (
+                                <img src="/images/Stellar_icon.png" className="absolute -bottom-1 -right-1 w-5 h-5 z-20 drop-shadow" alt="ステラ" />
+                            ) : attackerDetails.teraType ? (
+                                <img src="/images/Terastal_icon.png" className="absolute -bottom-1 -right-1 w-5 h-5 z-20 drop-shadow" alt="テラスタル" />
+                            ) : null}
+                          </>
+                        )}
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                        {attackerDetails?.displayTypes && attackerDetails.displayTypes.map((type, idx) => (
+                            type && <span 
+                                key={`modal-attacker-type-${idx}`}
+                                className="px-2 py-0.5 rounded text-[10px] font-medium text-white shadow-sm"
+                                style={{ backgroundColor: getTypeColor(type) }}
+                            >
+                                {getTypeNameJp(type)}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+                <ul className="space-y-2 text-xs text-slate-300">
+                  <li className="flex justify-between">技の威力: <span className="font-semibold text-white">{attackerDetails?.movePower ?? '-'}</span></li>
+                  {attackerDetails?.moveCategory && (
+                    <li className="flex justify-between">技カテゴリ: <span className="font-semibold text-white">
+                        {attackerDetails.moveCategory === 'physical' ? '物理' : attackerDetails.moveCategory === 'special' ? '特殊' : '変化'}
+                    </span></li>
+                  )}
+                  <li className="flex justify-between">攻撃/特攻: <span className="font-semibold text-white">{attackerDetails?.offensiveStatValue ?? '-'}</span></li>
+                  <li className="flex justify-between">ランク補正: <span className="font-semibold text-white">{(attackerDetails?.offensiveStatRank ?? 0) >= 0 ? `+${attackerDetails?.offensiveStatRank ?? 0}` : attackerDetails?.offensiveStatRank}</span></li>
+                  {attackerDetails?.teraType && !attackerDetails.isStellar && <li className="flex justify-between">テラスタル: <span className="font-semibold text-white">{getTypeNameJp(attackerDetails.teraType)}</span></li>}
+                  {attackerDetails?.isStellar && <li className="flex justify-between">テラスタル: <span className="font-semibold text-pink-400">{getTypeNameJp('stellar')}</span></li>}
+                  {attackerDetails?.item && (
+                    <li className="flex justify-between items-center">
+                      <span className="flex items-center">持ち物:</span>
+                      <div className="flex items-center gap-1.5">
+                        {renderItemIcon(attackerDetails.item)}
+                        <span className="font-semibold text-white truncate max-w-[120px]" title={attackerDetails.item}>{attackerDetails.item}</span>
+                      </div>
+                    </li>
+                  )}
+                  {attackerDetails?.ability && (
+                    <li className="flex justify-between items-center">
+                      <span className="flex items-center">特性:</span>
+                      <span className="font-semibold text-white truncate max-w-[120px]" title={attackerDetails.ability}>{attackerDetails.ability}</span>
+                    </li>
+                  )}
+                  {attackerDetails?.isBurned && <li className="text-red-400 font-bold border-t border-slate-700/50 pt-1.5 mt-1.5">火傷状態</li>}
+                  {attackerDetails?.hasHelpingHand && <li className="text-emerald-400 font-bold border-t border-slate-700/50 pt-1.5 mt-1.5">てだすけ</li>}
+                </ul>
+              </div>
+
+              <div className="bg-slate-800/30 rounded-xl p-4 border border-slate-700/30">
+                <h3 className="text-sm font-bold text-blue-400 mb-3 border-b border-slate-700/50 pb-2 flex items-center">
+                    <span className="w-1.5 h-5 bg-blue-500 rounded-sm mr-2 inline-block"></span>
+                    防御側: {defenderPokemonName}
+                </h3>
+                <div className="flex items-center mb-3">
+                    <div className="relative mr-3">
+                        {defenderDetails && (
+                            <img 
+                                src={getPokemonIconPath(defenderDetails.pokemonId)} 
+                                alt={defenderPokemonName} 
+                                className="w-12 h-12 drop-shadow-md"
+                            />
+                        )}
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                        {defenderDetails?.displayTypes && defenderDetails.displayTypes.map((type, idx) => (
+                            type && <span 
+                                key={`modal-defender-type-${idx}`}
+                                className="px-2 py-0.5 rounded text-[10px] font-medium text-white shadow-sm"
+                                style={{ backgroundColor: getTypeColor(type) }}
+                            >
+                                {getTypeNameJp(type)}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+                <ul className="space-y-2 text-xs text-slate-300">
+                  {defenderDetails?.maxHp && <li className="flex justify-between">最大HP: <span className="font-semibold text-white">{defenderDetails.maxHp}</span></li>}
+                  <li className="flex justify-between">防御/特防: <span className="font-semibold text-white">{defenderDetails?.defensiveStatValue ?? '-'}</span></li>
+                  <li className="flex justify-between">ランク補正: <span className="font-semibold text-white">{(defenderDetails?.defensiveStatRank ?? 0) >= 0 ? `+${defenderDetails?.defensiveStatRank ?? 0}` : defenderDetails?.defensiveStatRank}</span></li>
+                  <li className="flex justify-between">タイプ相性: <span className="font-semibold text-white bg-slate-700/50 px-1.5 rounded">×{result.effectiveness?.toFixed(2) ?? '-'}</span></li>
+                  {defenderDetails?.item && (
+                    <li className="flex justify-between items-center">
+                      <span className="flex items-center">持ち物:</span>
+                      <div className="flex items-center gap-1.5">
+                        {renderItemIcon(defenderDetails.item)}
+                        <span className="font-semibold text-white truncate max-w-[120px]" title={defenderDetails.item}>{defenderDetails.item}</span>
+                      </div>
+                    </li>
+                  )}
+                  {defenderDetails?.ability && (
+                    <li className="flex justify-between items-center">
+                      <span className="flex items-center">特性:</span>
+                      <span className="font-semibold text-white truncate max-w-[120px]" title={defenderDetails.ability}>{defenderDetails.ability}</span>
+                    </li>
+                  )}
+                  {defenderDetails?.hasReflect && <li className="text-blue-300 border-t border-slate-700/50 pt-1.5 mt-1.5">リフレクター</li>}
+                  {defenderDetails?.hasLightScreen && <li className="text-yellow-300 border-t border-slate-700/50 pt-1.5 mt-1.5">ひかりのかべ</li>}
+                  {defenderDetails?.hasFriendGuard && <li className="text-purple-300 border-t border-slate-700/50 pt-1.5 mt-1.5">フレンドガード</li>}
+                </ul>
+              </div>
+            </div>
+            
+            {((weather && weather !== 'none') || (field && field !== 'none') || (disasters && Object.values(disasters).some(d => d))) && (
+              <div className="bg-slate-800/30 rounded-xl p-4 border border-slate-700/30">
+                <h3 className="text-sm font-bold text-indigo-400 mb-2 border-b border-slate-700/50 pb-2 flex items-center">
+                    <span className="w-1.5 h-5 bg-indigo-500 rounded-sm mr-2 inline-block"></span>
+                    バトルフィールド状態
+                </h3>
+                <div className="flex flex-wrap gap-2 text-xs">
+                  {weather && weather !== 'none' && (
+                      <span className="bg-slate-700/80 px-2.5 py-1.5 rounded-lg text-slate-200 border border-slate-600/50">
+                          天候: <span className="font-bold text-white ml-1">{WEATHER_NAME_JP[weather] || weather}</span>
+                      </span>
+                  )}
+                  {field && field !== 'none' && (
+                      <span className="bg-slate-700/80 px-2.5 py-1.5 rounded-lg text-slate-200 border border-slate-600/50">
+                          フィールド: <span className="font-bold text-white ml-1">{FIELD_NAME_JP[field] || field}</span>
+                      </span>
+                  )}
+                  {disasters && Object.entries(disasters).map(([key, value]) => 
+                    value && (
+                        <span key={key} className="bg-red-900/40 text-red-300 px-2.5 py-1.5 rounded-lg border border-red-800/50">
+                            災い: <span className="font-bold text-red-400 ml-1">{disasterMap[key as keyof DisasterState]}</span>
+                        </span>
+                    )
+                  )}
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-4">
+                <div className="bg-slate-800/30 rounded-xl py-3 px-4 border border-slate-700/30">
+                  <h4 className="text-slate-300 font-semibold text-xs mb-3">通常ダメージ分布 {!isVariablePowerMove && hitCount > 1 && `(1回あたり)`}</h4>
+                  <div className="grid grid-cols-8 gap-1 text-[9px] sm:text-[10px]">
+                    {result.normalDamages.map((damageValue, i) => {
+                      const factor = 0.85 + i * 0.01;
+                      const percentage = defenderHP > 0 ? (damageValue / defenderHP) * 100 : 0;
+                      return (
+                        <div
+                          key={`modal-normal-dist-${i}`}
+                          className="bg-slate-900/80 p-1.5 rounded-md text-center border border-slate-700/50"
+                        >
+                          <div className="text-slate-500 mb-0.5 text-[8px]">×{factor.toFixed(2)}</div>
+                          <div className={`${getDamageColor(percentage)} font-bold`}>{damageValue}</div>
+                        </div>
+                      );
+                    })}
                   </div>
-                ))}
-              </div>
-            </div>
-            <div className="mb-6">
-              <h4 className="text-red-400 font-medium text-xs mb-2">各ダメージ分布 (1ヒットあたり・急所・おやこあい子)</h4>
-              <div className="grid grid-cols-8 gap-1 text-[10px]">
-                {result.parentalBondChild.criticalDamages.map((dmg, i) => (
-                  <div key={i} className="bg-gray-700 p-1 rounded text-center">
-                    <div className="text-gray-400">{(0.85 + i * 0.01).toFixed(2)}</div>
-                    <div className="text-red-400">{dmg}</div>
+                </div>
+
+                <div className={result.parentalBondChild ? "bg-red-900/10 rounded-xl py-3 px-4 border border-red-900/20" : "bg-red-900/10 rounded-xl py-3 px-4 border border-red-900/20 mb-6"}>
+                  <h4 className="text-red-400 font-semibold text-xs mb-3">急所ダメージ分布 {!isVariablePowerMove && hitCount > 1 && `(1回あたり)`}</h4>
+                  <div className="grid grid-cols-8 gap-1 text-[9px] sm:text-[10px]">
+                    {result.criticalDamages.map((damageValue, i) => {
+                       const factor = 0.85 + i * 0.01;
+                      const percentage = defenderHP > 0 ? (damageValue / defenderHP) * 100 : 0;
+                      return (
+                        <div
+                          key={`modal-crit-dist-${i}`}
+                          className="bg-slate-900/80 p-1.5 rounded-md text-center border border-red-900/30"
+                        >
+                          <div className="text-slate-500 mb-0.5 text-[8px]">×{factor.toFixed(2)}</div>
+                          <div className={`${getDamageColor(percentage)} font-bold`}>{damageValue}</div>
+                        </div>
+                      );
+                    })}
                   </div>
-                ))}
-              </div>
-            </div>
-          </>
-        )}
+                </div>
 
-        {/* フィールド情報 */}
-        {(() => {
-          const hasFieldInfo = (weather && weather !== 'none') || (field && field !== 'none') || (disasters && Object.values(disasters).some(v => v));
-          return hasFieldInfo && (
-            <div className="mt-4 p-3 bg-gray-900 rounded text-xs text-gray-300 mb-6">
-              <h4 className="font-bold text-indigo-400 mb-1">フィールド情報</h4>
-              <div className="grid grid-cols-2 gap-x-4">
-                {weather && weather !== 'none' && <p>天気: {WEATHER_NAME_JP[weather] || weather}</p>}
-                {field && field !== 'none' && <p>場所: {FIELD_NAME_JP[field] || field}</p>}
-                {disasters && Object.entries(disasters).map(([k, v]) => v && (
-                  <p key={k} className="text-red-400">災: {disasterMap[k as keyof DisasterState]}</p>
-                ))}
-              </div>
-            </div>
-          );
-        })()}
+                {result.parentalBondChild && (
+                  <>
+                    <div className="bg-slate-800/30 rounded-xl py-3 px-4 border border-slate-700/30">
+                      <h4 className="text-slate-300 font-semibold text-xs mb-3">通常ダメージ分布 (おやこあい子)</h4>
+                      <div className="grid grid-cols-8 gap-1 text-[9px] sm:text-[10px]">
+                        {result.parentalBondChild.normalDamages.map((damageValue, i) => {
+                          const factor = 0.85 + i * 0.01;
+                          const percentage = defenderHP > 0 ? (damageValue / defenderHP) * 100 : 0;
+                          return (
+                            <div
+                              key={`modal-bond-normal-dist-${i}`}
+                              className="bg-slate-900/80 p-1.5 rounded-md text-center border border-slate-700/50"
+                            >
+                              <div className="text-slate-500 mb-0.5 text-[8px]">×{factor.toFixed(2)}</div>
+                              <div className={`${getDamageColor(percentage)} font-bold`}>{damageValue}</div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
 
-        <button onClick={() => setIsModalOpen(false)} className="w-full bg-blue-600 hover:bg-blue-700 py-2.5 rounded font-bold text-white transition-colors">閉じる</button>
+                    <div className="bg-red-900/10 rounded-xl py-3 px-4 border border-red-900/20 mb-6">
+                      <h4 className="text-red-400 font-semibold text-xs mb-3">急所ダメージ分布 (おやこあい子)</h4>
+                      <div className="grid grid-cols-8 gap-1 text-[9px] sm:text-[10px]">
+                        {result.parentalBondChild.criticalDamages.map((damageValue, i) => {
+                          const factor = 0.85 + i * 0.01;
+                          const percentage = defenderHP > 0 ? (damageValue / defenderHP) * 100 : 0;
+                          return (
+                            <div
+                              key={`modal-bond-crit-dist-${i}`}
+                              className="bg-slate-900/80 p-1.5 rounded-md text-center border border-red-900/30"
+                            >
+                              <div className="text-slate-500 mb-0.5 text-[8px]">×{factor.toFixed(2)}</div>
+                              <div className={`${getDamageColor(percentage)} font-bold`}>{damageValue}</div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </>
+                )}
+            </div>
+        </div>
+
+        <div className="sticky bottom-0 bg-slate-900/95 backdrop-blur-lg px-5 py-4 flex gap-3 border-t border-slate-800 z-30 shrink-0">
+            <button
+                onClick={() => setIsModalOpen(false)}
+                className="w-full bg-slate-800 hover:bg-slate-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors border border-slate-700"
+            >
+                閉じる
+            </button>
+        </div>
       </div>
     </div>
   );
