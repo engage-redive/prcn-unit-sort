@@ -1,4 +1,4 @@
-﻿import { Pokemon, Move, Item, Ability, PokemonType, Field, Weather } from '../types';
+import { Pokemon, Move, Item, Ability, PokemonType, Field, Weather } from '../types';
 
 // 五捨五超入 (0.5を超える場合に切り上げ)
 function multiplyByQ12AndRound(baseValue: number, q12Multiplier: number): number {
@@ -114,7 +114,7 @@ const powerCorrectionEffects: {
         id: 'iron fist',
         name: 'てつのこぶし',
         q12Value: 4915,
-        condition: (ctx) => ctx.attackerAbility?.id === 'ironfist' && ctx.move.isPunch === true // 'iron fist' -> 'iron_fist' (idはスネークケースが多いと仮定)
+        condition: (ctx) => ctx.attackerAbility?.id === 'ironfist' && ctx.move.flags?.punch === true
     },
   {
         id: 'reckless',
@@ -132,32 +132,32 @@ const powerCorrectionEffects: {
         id: 'tough_claws',
         name: 'かたいツメ',
         q12Value: 5325,
-        condition: (ctx) => ctx.attackerAbility?.id === 'tough_claws' && ctx.move.makesContact === true
+        condition: (ctx) => ctx.attackerAbility?.id === 'tough_claws' && ctx.move.flags?.contact === true
     },
     {
         id: 'punk_rock',
         name: 'パンクロック',
         q12Value: 5325,
-        condition: (ctx) => ctx.attackerAbility?.id === 'punkrock' && ctx.move.isSoundBased === true
+        condition: (ctx) => ctx.attackerAbility?.id === 'punkrock' && ctx.move.flags?.sound === true
     },
     {
         id: 'strong_jaw',
         name: 'がんじょうあご',
         q12Value: 6144,
-        condition: (ctx) => ctx.attackerAbility?.id === 'strong_jaw' && ctx.move.isBiting === true
+        condition: (ctx) => ctx.attackerAbility?.id === 'strong_jaw' && ctx.move.flags?.bite === true
     },
     {
         id: 'mega_launcher',
         name: 'メガランチャー',
         q12Value: 6144,
-        condition: (ctx) => ctx.attackerAbility?.id === 'mega_launcher' && ctx.move.isPulseAura === true
+        condition: (ctx) => ctx.attackerAbility?.id === 'mega_launcher' && ctx.move.flags?.pulse === true
     },
 
       {
         id: 'Sharpness',
         name: 'きれあじ',
         q12Value: 6144,
-        condition: (ctx) => ctx.attackerAbility?.id === 'sharpness' && ctx.move.isSlash === true
+        condition: (ctx) => ctx.attackerAbility?.id === 'sharpness' && ctx.move.flags?.slicing === true
     },  
     {
         id: 'technician',

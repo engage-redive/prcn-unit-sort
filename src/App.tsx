@@ -516,7 +516,7 @@ function App() {
             <header className={`w-full ${activeTab !== 'damage' ? 'pt-0' : (mobileViewMode === 'attacker' || mobileViewMode === 'defender' ? 'pt-[56px] md:pt-0' : 'pt-0')}`}>
                 <div className="max-w-7xl mx-auto py-2 md:py-4 px-2 md:px-8">
                     <div className="hidden md:flex justify-between items-center mb-6">
-                        <h1 className="text-3xl font-bold text-white">VGC.calc</h1>
+                        <h1 className="text-3xl font-bold text-white">Champ.VGC.calc</h1>
                     </div>
                     <div className="flex justify-between items-center">
                         <div className="flex space-x-1 md:space-x-2">

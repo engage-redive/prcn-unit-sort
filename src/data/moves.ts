@@ -1,4 +1,4 @@
-﻿import { Move, PokemonType, MoveCategory, } from '../types';
+import type { Move, PokemonType, MoveCategory, } from '../types';
 export const moves: Move[] = [
   {
     id: "terablast",
@@ -10,6 +10,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     isTeraBlast: true, // ★ テラバースト専用フラグ
+    flags: { protect: true },
   },
   {
     id: "psychic",
@@ -20,7 +21,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "terastarstorm",
@@ -32,7 +34,8 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 5,
     isSpread: false, // 基本は単体攻撃
-    dynamicEffectId: "terastarstormEffects" // ★ 専用効果ID
+    dynamicEffectId: "terastarstormEffects", // ★ 専用効果ID
+    flags: { protect: true },
   },
   {
     id: "closecombat",
@@ -42,7 +45,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 120,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "expandingforce",
@@ -53,7 +57,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    dynamicEffectId: 'expandingForceEffect' // 追加
+    dynamicEffectId: 'expandingForceEffect', // 追加
+    flags: { protect: true },
   },
   {
     id: "bodypress",
@@ -63,7 +68,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 80,
     accuracy: 90,
-    contact: true,
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "hammerarm",
@@ -74,8 +80,9 @@ export const moves: Move[] = [
     power: 100,
     accuracy: 90,
     pp: 10,
-    contact: true,
+
     isPunch: true,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "darkpulse",
@@ -88,6 +95,7 @@ export const moves: Move[] = [
     pp: 15,
     hasSecondaryEffect: true,
     isPulseAura: true,
+    flags: { pulse: true, protect: true },
   },
   {
     id: "foulplay",
@@ -98,7 +106,8 @@ export const moves: Move[] = [
     power: 95,
     accuracy: 100,
     pp: 15,
-    contact: true,
+
+    flags: { contact: true, protect: true },
   },
   {
     id: "thunderbolt",
@@ -109,7 +118,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "lightning_drive",
@@ -120,7 +130,8 @@ export const moves: Move[] = [
     power: 100,
     accuracy: 100,
     pp: 5,
-    contact: false,
+
+    flags: { contact: true, protect: true },
   },
   {
     id: "sludgebomb",
@@ -131,7 +142,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "leafstorm",
@@ -141,7 +153,8 @@ export const moves: Move[] = [
     category: "special",
     power: 130,
     accuracy: 90,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "woodhammer",
@@ -153,6 +166,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 15,
     recoil: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "hurricane",
@@ -163,7 +177,8 @@ export const moves: Move[] = [
     power: 110,
     accuracy: 70,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, wind: true },
   },
   {
     id: "earthquake",
@@ -174,7 +189,8 @@ export const moves: Move[] = [
     power: 100,
     accuracy: 100,
     pp: 10,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "absorb",
@@ -184,7 +200,8 @@ export const moves: Move[] = [
     category: "special",
     power: 20,
     accuracy: 100,
-    pp: 25
+    pp: 25,
+    flags: { protect: true },
   },
   {
     id: "rockslide",
@@ -196,7 +213,8 @@ export const moves: Move[] = [
     accuracy: 90,
     pp: 10,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "uturn",
@@ -206,7 +224,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 70,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "accelerock",
@@ -216,7 +235,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 40,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "ironhead",
@@ -227,7 +247,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "acid",
@@ -239,7 +260,8 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 30,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "shadowball",
@@ -250,7 +272,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "acidarmor",
@@ -272,7 +295,8 @@ export const moves: Move[] = [
     power: 40,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "acrobatics",
@@ -287,8 +311,9 @@ export const moves: Move[] = [
     uiOption: {               // 追加
       type: "checkbox",
       label: "持ち物を持っていない場合、威力が2倍",
-      key: "TargetStatused", // 
+      key: "TargetStatused",
     },
+    flags: { contact: true, protect: true },
   },
   {
     id: "overheat",
@@ -298,7 +323,8 @@ export const moves: Move[] = [
     category: "special",
     power: 130,
     accuracy: 90,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "dracometeor",
@@ -308,7 +334,8 @@ export const moves: Move[] = [
     category: "special",
     power: 130,
     accuracy: 90,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "hydropump",
@@ -318,7 +345,8 @@ export const moves: Move[] = [
     category: "special",
     power: 110,
     accuracy: 80,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "icebeam",
@@ -329,7 +357,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "moonblast",
@@ -340,7 +369,8 @@ export const moves: Move[] = [
     power: 95,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "acupressure",
@@ -362,6 +392,7 @@ export const moves: Move[] = [
     accuracy: true,
     pp: 20,
     isSlash: true,
+    flags: { contact: true, slicing: true, protect: true },
   },
   {
     id: "aeroblast",
@@ -371,7 +402,8 @@ export const moves: Move[] = [
     category: "special",
     power: 100,
     accuracy: 95,
-    pp: 5
+    pp: 5,
+    flags: { protect: true, wind: true },
   },
   {
     id: "afteryou",
@@ -404,6 +436,7 @@ export const moves: Move[] = [
     pp: 25,
     isSpread: true,
     isSlash: true,
+    flags: { slicing: true, protect: true, wind: true },
   },
   {
     id: "airslash",
@@ -416,6 +449,7 @@ export const moves: Move[] = [
     pp: 15,
     hasSecondaryEffect: true,
     isSlash: true,
+    flags: { slicing: true, protect: true },
   },
   {
     id: "alluringvoice",
@@ -426,7 +460,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { sound: true, protect: true },
   },
   {
     id: "allyswitch",
@@ -457,7 +492,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "ancientpower",
@@ -468,7 +504,8 @@ export const moves: Move[] = [
     power: 60,
     accuracy: 100,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "appleacid",
@@ -479,7 +516,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "aquacutter",
@@ -491,6 +529,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 20,
     isSlash: true,
+    flags: { slicing: true, protect: true },
   },
   {
     id: "aquajet",
@@ -500,7 +539,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 40,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "aquaring",
@@ -521,7 +561,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "aquatail",
@@ -531,7 +572,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 90,
     accuracy: 90,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "armorcannon",
@@ -541,7 +583,8 @@ export const moves: Move[] = [
     category: "special",
     power: 120,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "armthrust",
@@ -553,6 +596,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 20,
     multihit: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "aromatherapy",
@@ -597,8 +641,9 @@ export const moves: Move[] = [
     uiOption: {               // 追加
       type: "checkbox",
       label: "相手がそのターンダメージを受けていた時、威力が2倍",
-      key: "TargetStatused", // 
+      key: "TargetStatused",
     },
+    flags: { contact: true, protect: true },
   },
   {
     id: "astonish",
@@ -609,7 +654,8 @@ export const moves: Move[] = [
     power: 30,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "astralbarrage",
@@ -620,7 +666,8 @@ export const moves: Move[] = [
     power: 120,
     accuracy: 100,
     pp: 5,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "attackorder",
@@ -630,7 +677,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 90,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "attract",
@@ -640,7 +688,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "aurasphere",
@@ -652,6 +701,7 @@ export const moves: Move[] = [
     accuracy: true,
     pp: 20,
     isPulseAura: true,
+    flags: { pulse: true, protect: true, bullet: true },
   },
   {
     id: "aurawheel",
@@ -662,7 +712,8 @@ export const moves: Move[] = [
     power: 110,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "aurorabeam",
@@ -673,7 +724,8 @@ export const moves: Move[] = [
     power: 65,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "auroraveil",
@@ -703,7 +755,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 60,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "axekick",
@@ -716,6 +769,7 @@ export const moves: Move[] = [
     pp: 10,
     hasSecondaryEffect: true,
     recoil: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "babydolleyes",
@@ -725,7 +779,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 30
+    pp: 30,
+    flags: { protect: true },
   },
   {
     id: "banefulbunker",
@@ -746,7 +801,8 @@ export const moves: Move[] = [
     power: 60,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "barrage",
@@ -758,6 +814,7 @@ export const moves: Move[] = [
     accuracy: 85,
     pp: 20,
     multihit: 5,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "barrier",
@@ -787,7 +844,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 100,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "beatup",
@@ -797,7 +855,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "behemothbash",
@@ -807,7 +866,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 100,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "behemothblade",
@@ -819,6 +879,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 5,
     isSlash: true,
+    flags: { contact: true, slicing: true, protect: true },
   },
   {
     id: "belch",
@@ -828,7 +889,8 @@ export const moves: Move[] = [
     category: "special",
     power: 120,
     accuracy: 90,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "bellydrum",
@@ -858,7 +920,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: true,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "bind",
@@ -868,7 +931,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 15,
     accuracy: 85,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "bite",
@@ -881,6 +945,7 @@ export const moves: Move[] = [
     pp: 25,
     hasSecondaryEffect: true,
     isBiting: true,
+    flags: { contact: true, bite: true, protect: true },
   },
   {
     id: "bitterblade",
@@ -892,6 +957,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     isSlash: true,
+    flags: { contact: true, slicing: true, protect: true },
   },
   {
     id: "bittermalice",
@@ -902,7 +968,8 @@ export const moves: Move[] = [
     power: 75,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "blastburn",
@@ -912,7 +979,8 @@ export const moves: Move[] = [
     category: "special",
     power: 150,
     accuracy: 90,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "blazekick",
@@ -923,7 +991,8 @@ export const moves: Move[] = [
     power: 85,
     accuracy: 90,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "blazingtorque",
@@ -934,7 +1003,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "bleakwindstorm",
@@ -946,7 +1016,8 @@ export const moves: Move[] = [
     accuracy: 80,
     pp: 10,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, wind: true },
   },
   {
     id: "blizzard",
@@ -958,7 +1029,8 @@ export const moves: Move[] = [
     accuracy: 70,
     pp: 5,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, wind: true },
   },
   {
     id: "block",
@@ -978,7 +1050,8 @@ export const moves: Move[] = [
     category: "special",
     power: 140,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "blueflare",
@@ -989,7 +1062,8 @@ export const moves: Move[] = [
     power: 130,
     accuracy: 85,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
 
   {
@@ -1001,7 +1075,8 @@ export const moves: Move[] = [
     power: 85,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "boltbeak",
@@ -1017,6 +1092,7 @@ export const moves: Move[] = [
       type: "checkbox",
       label: "まだ行動していないポケモンに威力が2倍",
       key: "TargetStatused", // 
+    flags: { contact: true, protect: true },
     },
   },
   {
@@ -1028,7 +1104,8 @@ export const moves: Move[] = [
     power: 130,
     accuracy: 85,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "boneclub",
@@ -1039,7 +1116,8 @@ export const moves: Move[] = [
     power: 65,
     accuracy: 85,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "bonemerang",
@@ -1051,6 +1129,7 @@ export const moves: Move[] = [
     accuracy: 90,
     pp: 10,
     multihit: 2,
+    flags: { protect: true },
   },
   {
     id: "bonerush",
@@ -1062,6 +1141,7 @@ export const moves: Move[] = [
     accuracy: 90,
     pp: 10,
     multihit: 5,
+    flags: { protect: true },
   },
   {
     id: "boomburst",
@@ -1072,7 +1152,8 @@ export const moves: Move[] = [
     power: 140,
     accuracy: 100,
     pp: 10,
-    isSpread: true
+    isSpread: true,
+    flags: { sound: true, protect: true },
   },
   {
     id: "bounce",
@@ -1083,7 +1164,8 @@ export const moves: Move[] = [
     power: 85,
     accuracy: 85,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "branchpoke",
@@ -1093,7 +1175,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 40,
     accuracy: 100,
-    pp: 40
+    pp: 40,
+    flags: { contact: true, protect: true },
   },
   {
     id: "bravebird",
@@ -1105,6 +1188,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 15,
     recoil: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "breakingswipe",
@@ -1116,7 +1200,8 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 15,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "brickbreak",
@@ -1126,7 +1211,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 75,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { contact: true, protect: true },
   },
   {
     id: "brine",
@@ -1142,6 +1228,7 @@ export const moves: Move[] = [
       type: "checkbox",
       label: "相手のHPが最大HPの1/2以下の場合、威力が2倍",
       key: "TargetStatused", // AttackerStateで管理するキー
+    flags: { protect: true },
     },
   },
   {
@@ -1153,7 +1240,8 @@ export const moves: Move[] = [
     power: 60,
     accuracy: 100,
     pp: 20,
-    isSpread: true
+    isSpread: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "bubble",
@@ -1165,7 +1253,8 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 30,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "bubblebeam",
@@ -1176,7 +1265,8 @@ export const moves: Move[] = [
     power: 65,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "bugbite",
@@ -1186,7 +1276,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 60,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "bugbuzz",
@@ -1197,7 +1288,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { sound: true, protect: true },
   },
   {
     id: "bulkup",
@@ -1219,7 +1311,8 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 20,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "bulletpunch",
@@ -1231,6 +1324,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 30,
     isPunch: true,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "bulletseed",
@@ -1242,6 +1336,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 30,
     multihit: 5,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "burningbulwark",
@@ -1263,7 +1358,8 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 5,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "burnup",
@@ -1273,7 +1369,8 @@ export const moves: Move[] = [
     category: "special",
     power: 130,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "calmmind",
@@ -1304,7 +1401,8 @@ export const moves: Move[] = [
     power: 0,
     accuracy: 100,
     pp: 20,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "ceaselessedge",
@@ -1317,6 +1415,7 @@ export const moves: Move[] = [
     pp: 15,
     hasSecondaryEffect: true,
     isSlash: true,
+    flags: { contact: true, slicing: true, protect: true },
   },
   {
     id: "celebrate",
@@ -1347,7 +1446,8 @@ export const moves: Move[] = [
     power: 50,
     accuracy: 90,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "charm",
@@ -1357,7 +1457,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "chatter",
@@ -1368,7 +1469,8 @@ export const moves: Move[] = [
     power: 65,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { sound: true, protect: true },
   },
   {
     id: "chillingwater",
@@ -1379,7 +1481,8 @@ export const moves: Move[] = [
     power: 50,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "chillyreception",
@@ -1399,7 +1502,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 70,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "chloroblast",
@@ -1409,7 +1513,8 @@ export const moves: Move[] = [
     category: "special",
     power: 150,
     accuracy: 95,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "circlethrow",
@@ -1419,7 +1524,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 60,
     accuracy: 90,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "clamp",
@@ -1429,7 +1535,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 35,
     accuracy: 85,
-    pp: 15
+    pp: 15,
+    flags: { contact: true, protect: true },
   },
   {
     id: "clangingscales",
@@ -1440,7 +1547,8 @@ export const moves: Move[] = [
     power: 110,
     accuracy: 100,
     pp: 5,
-    isSpread: true
+    isSpread: true,
+    flags: { sound: true, protect: true },
   },
   {
     id: "clangoroussoul",
@@ -1450,7 +1558,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { sound: true },
   },
   {
     id: "clearsmog",
@@ -1460,7 +1569,8 @@ export const moves: Move[] = [
     category: "special",
     power: 50,
     accuracy: true,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
 
   {
@@ -1491,7 +1601,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 100,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "combattorque",
@@ -1502,7 +1613,8 @@ export const moves: Move[] = [
     power: 100,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "cometpunch",
@@ -1515,6 +1627,7 @@ export const moves: Move[] = [
     pp: 15,
     isPunch: true,
     multihit: 5,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "comeuppance",
@@ -1524,7 +1637,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "confide",
@@ -1534,7 +1648,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 20
+    pp: 20,
+    flags: { sound: true },
   },
   {
     id: "confuseray",
@@ -1544,7 +1659,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "confusion",
@@ -1555,7 +1671,8 @@ export const moves: Move[] = [
     power: 50,
     accuracy: 100,
     pp: 25,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "constrict",
@@ -1566,7 +1683,8 @@ export const moves: Move[] = [
     power: 10,
     accuracy: 100,
     pp: 35,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "conversion",
@@ -1607,7 +1725,8 @@ export const moves: Move[] = [
     power: 100,
     accuracy: 100,
     pp: 10,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "corrosivegas",
@@ -1618,7 +1737,8 @@ export const moves: Move[] = [
     power: 0,
     accuracy: 100,
     pp: 40,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "cosmicpower",
@@ -1649,7 +1769,8 @@ export const moves: Move[] = [
     power: 0,
     accuracy: 100,
     pp: 40,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "counter",
@@ -1659,7 +1780,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "courtchange",
@@ -1679,7 +1801,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 60,
     accuracy: 100,
-    pp: 25
+    pp: 25,
+    flags: { contact: true, protect: true },
   },
   {
     id: "crabhammer",
@@ -1689,7 +1812,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 100,
     accuracy: 90,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "craftyshield",
@@ -1709,7 +1833,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 100,
     accuracy: 80,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "crosspoison",
@@ -1722,6 +1847,7 @@ export const moves: Move[] = [
     pp: 20,
     hasSecondaryEffect: true,
     isSlash: true,
+    flags: { contact: true, slicing: true, protect: true },
   },
   {
     id: "crunch",
@@ -1734,6 +1860,7 @@ export const moves: Move[] = [
     pp: 15,
     hasSecondaryEffect: true,
     isBiting: true,
+    flags: { contact: true, bite: true, protect: true },
   },
   {
     id: "crushclaw",
@@ -1744,7 +1871,8 @@ export const moves: Move[] = [
     power: 75,
     accuracy: 95,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "crushgrip",
@@ -1755,7 +1883,8 @@ export const moves: Move[] = [
     power: 0,
     dynamicEffectId: "crushGripPower",
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "curse",
@@ -1777,6 +1906,7 @@ export const moves: Move[] = [
     accuracy: 95,
     pp: 30,
     isSlash: true,
+    flags: { contact: true, slicing: true, protect: true },
   },
   {
     id: "darkestlariat",
@@ -1786,7 +1916,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 85,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "darkvoid",
@@ -1797,7 +1928,8 @@ export const moves: Move[] = [
     power: 0,
     accuracy: 50,
     pp: 10,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "dazzlinggleam",
@@ -1808,7 +1940,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "decorate",
@@ -1848,7 +1981,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "destinybond",
@@ -1880,7 +2014,8 @@ export const moves: Move[] = [
     accuracy: 95,
     pp: 5,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "dig",
@@ -1890,7 +2025,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 80,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "disable",
@@ -1900,7 +2036,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "disarmingvoice",
@@ -1911,7 +2048,8 @@ export const moves: Move[] = [
     power: 40,
     accuracy: true,
     pp: 15,
-    isSpread: true
+    isSpread: true,
+    flags: { sound: true, protect: true },
   },
   {
     id: "discharge",
@@ -1923,7 +2061,8 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 15,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "direclaw",
@@ -1934,7 +2073,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "dive",
@@ -1944,7 +2084,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 80,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "dizzypunch",
@@ -1957,6 +2098,7 @@ export const moves: Move[] = [
     pp: 10,
     hasSecondaryEffect: true,
     isPunch: true,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "doodle",
@@ -1988,6 +2130,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 15,
     recoil: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "doublehit",
@@ -1999,6 +2142,7 @@ export const moves: Move[] = [
     accuracy: 90,
     pp: 10,
     multihit: 2,
+    flags: { contact: true, protect: true },
   },
   {
     id: "doubleironbash",
@@ -2012,6 +2156,7 @@ export const moves: Move[] = [
     hasSecondaryEffect: true,
     isPunch: true,
     multihit: 2,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "doublekick",
@@ -2023,6 +2168,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 30,
     multihit: 2,
+    flags: { contact: true, protect: true },
   },
   {
     id: "doubleshock",
@@ -2032,7 +2178,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 120,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "doubleslap",
@@ -2044,6 +2191,7 @@ export const moves: Move[] = [
     accuracy: 85,
     pp: 10,
     multihit: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "doubleteam",
@@ -2064,7 +2212,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 120,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "dragonbreath",
@@ -2075,7 +2224,8 @@ export const moves: Move[] = [
     power: 60,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "dragoncheer",
@@ -2095,7 +2245,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 80,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { contact: true, protect: true },
   },
   {
     id: "dragondance",
@@ -2117,6 +2268,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     multihit: 2,
+    flags: { protect: true },
   },
   {
     id: "dragonenergy",
@@ -2127,7 +2279,8 @@ export const moves: Move[] = [
     power: 150,
     accuracy: 100,
     pp: 5,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "dragonhammer",
@@ -2137,7 +2290,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 90,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { contact: true, protect: true },
   },
   {
     id: "dragonpulse",
@@ -2149,6 +2303,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     isPulseAura: true,
+    flags: { pulse: true, protect: true },
   },
   {
     id: "dragonrage",
@@ -2158,7 +2313,8 @@ export const moves: Move[] = [
     category: "special",
     power: 0,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "dragonrush",
@@ -2169,7 +2325,8 @@ export const moves: Move[] = [
     power: 100,
     accuracy: 75,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "dragontail",
@@ -2179,7 +2336,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 60,
     accuracy: 90,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "drainingkiss",
@@ -2189,7 +2347,8 @@ export const moves: Move[] = [
     category: "special",
     power: 50,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "drainpunch",
@@ -2201,6 +2360,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     isPunch: true,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "dreameater",
@@ -2210,7 +2370,8 @@ export const moves: Move[] = [
     category: "special",
     power: 100,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "drillpeck",
@@ -2220,7 +2381,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 80,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "drillrun",
@@ -2230,7 +2392,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 80,
     accuracy: 95,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "drumbeating",
@@ -2241,7 +2404,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "dualchop",
@@ -2253,6 +2417,7 @@ export const moves: Move[] = [
     accuracy: 90,
     pp: 15,
     multihit: 2,
+    flags: { contact: true, protect: true },
   },
   {
     id: "dualwingbeat",
@@ -2264,6 +2429,7 @@ export const moves: Move[] = [
     accuracy: 90,
     pp: 10,
     multihit: 2,
+    flags: { contact: true, protect: true },
   },
   {
     id: "dynamaxcannon",
@@ -2273,7 +2439,8 @@ export const moves: Move[] = [
     category: "special",
     power: 100,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "dynamicpunch",
@@ -2286,6 +2453,7 @@ export const moves: Move[] = [
     pp: 5,
     hasSecondaryEffect: true,
     isPunch: true,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "earthpower",
@@ -2296,7 +2464,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
 
   {
@@ -2307,7 +2476,8 @@ export const moves: Move[] = [
     category: "special",
     power: 40,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { sound: true, protect: true },
   },
   {
     id: "eerieimpulse",
@@ -2317,7 +2487,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "eeriespell",
@@ -2328,7 +2499,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { sound: true, protect: true },
   },
   {
     id: "eggbomb",
@@ -2338,7 +2510,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 100,
     accuracy: 75,
-    pp: 10
+    pp: 10,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "electricterrain",
@@ -2358,7 +2531,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "electroball",
@@ -2368,7 +2542,8 @@ export const moves: Move[] = [
     category: "special",
     power: 0,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "electroshot",
@@ -2378,7 +2553,8 @@ export const moves: Move[] = [
     category: "special",
     power: 130,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "electroweb",
@@ -2390,7 +2566,8 @@ export const moves: Move[] = [
     accuracy: 95,
     pp: 15,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "embargo",
@@ -2400,7 +2577,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "ember",
@@ -2411,7 +2589,8 @@ export const moves: Move[] = [
     power: 40,
     accuracy: 100,
     pp: 25,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "encore",
@@ -2421,7 +2600,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "endeavor",
@@ -2431,7 +2611,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "endure",
@@ -2452,7 +2633,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "entrainment",
@@ -2462,7 +2644,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "eruption",
@@ -2473,7 +2656,8 @@ export const moves: Move[] = [
     power: 150,
     accuracy: 100,
     pp: 5,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "esperwing",
@@ -2484,7 +2668,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "eternabeam",
@@ -2494,7 +2679,8 @@ export const moves: Move[] = [
     category: "special",
     power: 160,
     accuracy: 90,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
 
   {
@@ -2506,7 +2692,8 @@ export const moves: Move[] = [
     power: 250,
     accuracy: 100,
     pp: 5,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "extrasensory",
@@ -2517,7 +2704,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "extremespeed",
@@ -2527,7 +2715,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 80,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "facade",
@@ -2544,6 +2733,7 @@ export const moves: Move[] = [
       label: "状態異常の場合、威力が2倍",
       key: "TargetStatused", // 計算間違ってるから後で直す
     },
+    flags: { contact: true, protect: true },
   },
   {
     id: "fairylock",
@@ -2563,7 +2753,8 @@ export const moves: Move[] = [
     category: "special",
     power: 40,
     accuracy: 100,
-    pp: 30
+    pp: 30,
+    flags: { protect: true, wind: true },
   },
   {
     id: "fakeout",
@@ -2574,7 +2765,8 @@ export const moves: Move[] = [
     power: 40,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "faketears",
@@ -2584,7 +2776,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "falsesurrender",
@@ -2594,7 +2787,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 80,
     accuracy: true,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "falseswipe",
@@ -2604,7 +2798,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 40,
     accuracy: 100,
-    pp: 40
+    pp: 40,
+    flags: { contact: true, protect: true },
   },
   {
     id: "featherdance",
@@ -2614,7 +2809,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "feint",
@@ -2634,7 +2830,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 60,
     accuracy: true,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "fellstinger",
@@ -2644,7 +2841,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 50,
     accuracy: 100,
-    pp: 25
+    pp: 25,
+    flags: { contact: true, protect: true },
   },
   {
     id: "ficklebeam",
@@ -2654,7 +2852,8 @@ export const moves: Move[] = [
     category: "special",
     power: 80,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "fierydance",
@@ -2665,7 +2864,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "fierywrath",
@@ -2677,7 +2877,8 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "filletaway",
@@ -2697,7 +2898,8 @@ export const moves: Move[] = [
     category: "special",
     power: 0,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "fireblast",
@@ -2708,7 +2910,8 @@ export const moves: Move[] = [
     power: 110,
     accuracy: 85,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "firefang",
@@ -2721,6 +2924,7 @@ export const moves: Move[] = [
     pp: 15,
     hasSecondaryEffect: true,
     isBiting: true,
+    flags: { contact: true, bite: true, protect: true },
   },
   {
     id: "firelash",
@@ -2731,7 +2935,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "firepledge",
@@ -2741,7 +2946,8 @@ export const moves: Move[] = [
     category: "special",
     power: 80,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "firepunch",
@@ -2754,6 +2960,7 @@ export const moves: Move[] = [
     pp: 15,
     hasSecondaryEffect: true,
     isPunch: true,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "firespin",
@@ -2763,7 +2970,8 @@ export const moves: Move[] = [
     category: "special",
     power: 35,
     accuracy: 85,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "firstimpression",
@@ -2773,7 +2981,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 90,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "fishiousrend",
@@ -2790,6 +2999,7 @@ export const moves: Move[] = [
       type: "checkbox",
       label: "まだ行動していないポケモンに威力が2倍",
       key: "TargetStatused", // 
+    flags: { contact: true, bite: true, protect: true },
     },
   },
   {
@@ -2800,7 +3010,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 30,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "flail",
@@ -2810,7 +3021,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { contact: true, protect: true },
   },
   {
     id: "flameburst",
@@ -2820,7 +3032,8 @@ export const moves: Move[] = [
     category: "special",
     power: 70,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "flamecharge",
@@ -2831,7 +3044,8 @@ export const moves: Move[] = [
     power: 50,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "flamewheel",
@@ -2842,7 +3056,8 @@ export const moves: Move[] = [
     power: 60,
     accuracy: 100,
     pp: 25,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "flamethrower",
@@ -2853,7 +3068,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "flareblitz",
@@ -2866,6 +3082,7 @@ export const moves: Move[] = [
     pp: 15,
     hasSecondaryEffect: true,
     recoil: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "flash",
@@ -2875,7 +3092,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "flashcannon",
@@ -2886,7 +3104,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "flatter",
@@ -2896,7 +3115,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "fleurcannon",
@@ -2906,7 +3126,8 @@ export const moves: Move[] = [
     category: "special",
     power: 130,
     accuracy: 90,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "fling",
@@ -2916,7 +3137,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "flipturn",
@@ -2926,7 +3148,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 60,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "floralhealing",
@@ -2936,7 +3159,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "flowershield",
@@ -2958,6 +3182,7 @@ export const moves: Move[] = [
     accuracy: true,
     pp: 10,
     alwaysCrit: true,
+    flags: { protect: true },
   },
   {
     id: "fly",
@@ -2967,7 +3192,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 90,
     accuracy: 95,
-    pp: 15
+    pp: 15,
+    flags: { contact: true, protect: true },
   },
   {
     id: "flyingpress",
@@ -2977,7 +3203,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 100,
     accuracy: 95,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "focusblast",
@@ -2988,7 +3215,8 @@ export const moves: Move[] = [
     power: 120,
     accuracy: 70,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "focusenergy",
@@ -3009,7 +3237,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 150,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "followme",
@@ -3030,7 +3259,8 @@ export const moves: Move[] = [
     power: 60,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "foresight",
@@ -3040,7 +3270,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 40
+    pp: 40,
+    flags: { protect: true },
   },
   {
     id: "forestscurse",
@@ -3050,7 +3281,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "freezedry",
@@ -3061,7 +3293,8 @@ export const moves: Move[] = [
     power: 70,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "freezeshock",
@@ -3072,7 +3305,8 @@ export const moves: Move[] = [
     power: 140,
     accuracy: 90,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "freezingglare",
@@ -3083,7 +3317,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "frenzyplant",
@@ -3093,7 +3328,8 @@ export const moves: Move[] = [
     category: "special",
     power: 150,
     accuracy: 90,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "frostbreath",
@@ -3105,6 +3341,7 @@ export const moves: Move[] = [
     accuracy: 90,
     pp: 10,
     alwaysCrit: true,
+    flags: { protect: true },
   },
   {
     id: "frustration",
@@ -3114,7 +3351,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "furyattack",
@@ -3126,6 +3364,7 @@ export const moves: Move[] = [
     accuracy: 85,
     pp: 20,
     multihit: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "furycutter",
@@ -3137,6 +3376,7 @@ export const moves: Move[] = [
     accuracy: 95,
     pp: 20,
     isSlash: true,
+    flags: { contact: true, slicing: true, protect: true },
   },
   {
     id: "furyswipes",
@@ -3148,6 +3388,7 @@ export const moves: Move[] = [
     accuracy: 80,
     pp: 15,
     multihit: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "fusionbolt",
@@ -3157,7 +3398,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 100,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "fusionflare",
@@ -3167,7 +3409,8 @@ export const moves: Move[] = [
     category: "special",
     power: 100,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "futuresight",
@@ -3187,7 +3430,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "geargrind",
@@ -3199,6 +3443,7 @@ export const moves: Move[] = [
     accuracy: 85,
     pp: 15,
     multihit: 2,
+    flags: { contact: true, protect: true },
   },
   {
     id: "gearup",
@@ -3228,7 +3473,8 @@ export const moves: Move[] = [
     category: "special",
     power: 75,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "gigaimpact",
@@ -3238,7 +3484,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 150,
     accuracy: 90,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "gigatonhammer",
@@ -3248,7 +3495,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 160,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "glaciallance",
@@ -3259,7 +3507,8 @@ export const moves: Move[] = [
     power: 120,
     accuracy: 100,
     pp: 5,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "glaciate",
@@ -3271,7 +3520,8 @@ export const moves: Move[] = [
     accuracy: 95,
     pp: 10,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "glaiverush",
@@ -3281,7 +3531,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 120,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "glare",
@@ -3291,7 +3542,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 30
+    pp: 30,
+    flags: { protect: true },
   },
   {
     id: "grasspledge",
@@ -3301,7 +3553,8 @@ export const moves: Move[] = [
     category: "special",
     power: 80,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "grasswhistle",
@@ -3311,7 +3564,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 55,
-    pp: 15
+    pp: 15,
+    flags: { sound: true, protect: true },
   },
   {
     id: "grassyglide",
@@ -3321,7 +3575,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 55,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "grassyterrain",
@@ -3342,7 +3597,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "gravity",
@@ -3363,7 +3619,8 @@ export const moves: Move[] = [
     power: 0,
     accuracy: 100,
     pp: 40,
-    isSpread: true
+    isSpread: true,
+    flags: { sound: true, protect: true },
   },
   {
     id: "growth",
@@ -3393,7 +3650,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "guardswap",
@@ -3403,7 +3661,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "guillotine",
@@ -3413,7 +3672,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 30,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "gunkshot",
@@ -3424,7 +3684,8 @@ export const moves: Move[] = [
     power: 120,
     accuracy: 80,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "gust",
@@ -3434,7 +3695,8 @@ export const moves: Move[] = [
     category: "special",
     power: 40,
     accuracy: 100,
-    pp: 35
+    pp: 35,
+    flags: { protect: true, wind: true },
   },
   {
     id: "gyroball",
@@ -3444,7 +3706,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true, bullet: true },
   },
   {
     id: "hail",
@@ -3484,7 +3747,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "haze",
@@ -3505,7 +3769,8 @@ export const moves: Move[] = [
     power: 70,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "headcharge",
@@ -3517,6 +3782,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 15,
     recoil: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "headlongrush",
@@ -3528,6 +3794,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 5,
     isPunch: true,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "headsmash",
@@ -3539,6 +3806,7 @@ export const moves: Move[] = [
     accuracy: 80,
     pp: 5,
     recoil: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "healbell",
@@ -3548,7 +3816,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 5
+    pp: 5,
+    flags: { sound: true },
   },
   {
     id: "healblock",
@@ -3559,7 +3828,8 @@ export const moves: Move[] = [
     power: 0,
     accuracy: 100,
     pp: 15,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "healingwish",
@@ -3589,7 +3859,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 10
+    pp: 10,
+    flags: { pulse: true, protect: true },
   },
   {
     id: "heartstamp",
@@ -3600,7 +3871,8 @@ export const moves: Move[] = [
     power: 60,
     accuracy: 100,
     pp: 25,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "heartswap",
@@ -3610,7 +3882,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "heatcrash",
@@ -3621,7 +3894,8 @@ export const moves: Move[] = [
     power: 0, // 基本威力は0とし、動的に決定
     accuracy: 100,
     pp: 10,
-    dynamicEffectId: "attackerWeightRatioPower" // 追加
+    dynamicEffectId: "attackerWeightRatioPower", // 追加
+    flags: { contact: true, protect: true },
   },
   {
     id: "heatwave",
@@ -3633,7 +3907,8 @@ export const moves: Move[] = [
     accuracy: 90,
     pp: 10,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, wind: true },
   },
   {
     id: "heavyslam",
@@ -3644,7 +3919,8 @@ export const moves: Move[] = [
     power: 0, // 基本威力は0とし、動的に決定
     accuracy: 100,
     pp: 10,
-    dynamicEffectId: "attackerWeightRatioPower" // 追加
+    dynamicEffectId: "attackerWeightRatioPower", // 追加
+    flags: { contact: true, protect: true },
   },
   {
     id: "helpinghand",
@@ -3664,7 +3940,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "hiddenpowerbug",
@@ -3674,7 +3951,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "hiddenpowerdark",
@@ -3684,7 +3962,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "hiddenpowerdragon",
@@ -3694,7 +3973,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "hiddenpowerelectric",
@@ -3704,7 +3984,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "hiddenpowerfighting",
@@ -3714,7 +3995,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "hiddenpowerfire",
@@ -3724,7 +4006,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "hiddenpowerflying",
@@ -3734,7 +4017,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "hiddenpowerghost",
@@ -3744,7 +4028,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "hiddenpowergrass",
@@ -3754,7 +4039,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "hiddenpowerground",
@@ -3764,7 +4050,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "hiddenpowerice",
@@ -3774,7 +4061,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "hiddenpowerpoison",
@@ -3784,7 +4072,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "hiddenpowerpsychic",
@@ -3794,7 +4083,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "hiddenpowerrock",
@@ -3804,7 +4094,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "hiddenpowersteel",
@@ -3814,7 +4105,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "hiddenpowerwater",
@@ -3824,7 +4116,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "highhorsepower",
@@ -3834,7 +4127,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 95,
     accuracy: 95,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "highjumpkick",
@@ -3846,6 +4140,7 @@ export const moves: Move[] = [
     accuracy: 90,
     pp: 10,
     recoil: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "holdback",
@@ -3855,7 +4150,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 40,
     accuracy: 100,
-    pp: 40
+    pp: 40,
+    flags: { contact: true, protect: true },
   },
   {
     id: "holdhands",
@@ -3885,7 +4181,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 65,
     accuracy: 100,
-    pp: 25
+    pp: 25,
+    flags: { contact: true, protect: true },
   },
   {
     id: "horndrill",
@@ -3895,7 +4192,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 30,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "hornleech",
@@ -3905,7 +4203,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 75,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "howl",
@@ -3915,7 +4214,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 40
+    pp: 40,
+    flags: { sound: true },
   },
 
   {
@@ -3926,7 +4226,8 @@ export const moves: Move[] = [
     category: "special",
     power: 150,
     accuracy: 90,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
 
   {
@@ -3937,7 +4238,8 @@ export const moves: Move[] = [
     category: "special",
     power: 80,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "hyperbeam",
@@ -3947,7 +4249,8 @@ export const moves: Move[] = [
     category: "special",
     power: 150,
     accuracy: 90,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "hyperdrill",
@@ -3957,7 +4260,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 100,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true },
   },
   {
     id: "hyperfang",
@@ -3968,7 +4272,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 90,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, bite: true, protect: true },
   },
   {
     id: "hyperspacefury",
@@ -3999,7 +4304,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 100,
     pp: 10,
-    isSpread: true
+    isSpread: true,
+    flags: { sound: true, protect: true },
   },
   {
     id: "hypnosis",
@@ -4009,7 +4315,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 60,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "iceball",
@@ -4019,7 +4326,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 30,
     accuracy: 90,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true, bullet: true },
   },
 
   {
@@ -4031,7 +4339,8 @@ export const moves: Move[] = [
     power: 140,
     accuracy: 90,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "icefang",
@@ -4044,6 +4353,7 @@ export const moves: Move[] = [
     pp: 15,
     hasSecondaryEffect: true,
     isBiting: true,
+    flags: { contact: true, bite: true, protect: true },
   },
   {
     id: "icehammer",
@@ -4055,6 +4365,7 @@ export const moves: Move[] = [
     accuracy: 90,
     pp: 10,
     isPunch: true,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "icepunch",
@@ -4067,6 +4378,7 @@ export const moves: Move[] = [
     pp: 15,
     hasSecondaryEffect: true,
     isPunch: true,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "iceshard",
@@ -4076,7 +4388,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 40,
     accuracy: 100,
-    pp: 30
+    pp: 30,
+    flags: { protect: true },
   },
   {
     id: "icespinner",
@@ -4086,7 +4399,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 80,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { contact: true, protect: true },
   },
   {
     id: "iciclecrash",
@@ -4097,7 +4411,8 @@ export const moves: Move[] = [
     power: 85,
     accuracy: 90,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "iciclespear",
@@ -4109,6 +4424,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 30,
     multihit: 5,
+    flags: { protect: true },
   },
   {
     id: "icywind",
@@ -4120,7 +4436,8 @@ export const moves: Move[] = [
     accuracy: 95,
     pp: 15,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, wind: true },
   },
   {
     id: "imprison",
@@ -4141,7 +4458,8 @@ export const moves: Move[] = [
     power: 60,
     accuracy: 100,
     pp: 15,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "infernalparade",
@@ -4152,7 +4470,8 @@ export const moves: Move[] = [
     power: 60,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "inferno",
@@ -4163,7 +4482,8 @@ export const moves: Move[] = [
     power: 100,
     accuracy: 50,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "infestation",
@@ -4173,7 +4493,8 @@ export const moves: Move[] = [
     category: "special",
     power: 20,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "ingrain",
@@ -4193,7 +4514,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "iondeluge",
@@ -4225,7 +4547,8 @@ export const moves: Move[] = [
     power: 100,
     accuracy: 75,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "jawlock",
@@ -4237,6 +4560,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     isBiting: true,
+    flags: { contact: true, bite: true, protect: true },
   },
   {
     id: "jetpunch",
@@ -4248,6 +4572,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 15,
     isPunch: true,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "judgment",
@@ -4257,7 +4582,8 @@ export const moves: Move[] = [
     category: "special",
     power: 100,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "jumpkick",
@@ -4267,7 +4593,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 100,
     accuracy: 95,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "junglehealing",
@@ -4287,7 +4614,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 50,
     accuracy: 100,
-    pp: 25
+    pp: 25,
+    flags: { contact: true, protect: true },
   },
   {
     id: "kinesis",
@@ -4297,7 +4625,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 80,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "kingsshield",
@@ -4321,8 +4650,9 @@ export const moves: Move[] = [
     uiOption: { // For the checkbox UI
       type: 'checkbox',
       label: '相手が持ち物を持っている (威力1.5倍)',
-      key: 'knockOffBoostEnabled' // Key for AttackerState.moveUiOptionStates
-    }
+      key: 'knockOffBoostEnabled', // Key for AttackerState.moveUiOptionStates
+    },
+    flags: { contact: true, protect: true },
   },
   {
     id: "kowtowcleave",
@@ -4334,6 +4664,7 @@ export const moves: Move[] = [
     accuracy: true,
     pp: 10,
     isSlash: true,
+    flags: { contact: true, slicing: true, protect: true },
   },
   {
     id: "landswrath",
@@ -4344,7 +4675,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 100,
     pp: 10,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "laserfocus",
@@ -4364,7 +4696,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 75,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "lastresort",
@@ -4374,7 +4707,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 140,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "lastrespects",
@@ -4386,6 +4720,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     isRankBasedPower: true,
+    flags: { protect: true },
   },
   {
     id: "lavaplume",
@@ -4397,7 +4732,8 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 15,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "leafage",
@@ -4407,7 +4743,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 40,
     accuracy: 100,
-    pp: 40
+    pp: 40,
+    flags: { protect: true },
   },
   {
     id: "leafblade",
@@ -4419,6 +4756,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 15,
     isSlash: true,
+    flags: { contact: true, slicing: true, protect: true },
   },
 
   {
@@ -4430,7 +4768,8 @@ export const moves: Move[] = [
     power: 65,
     accuracy: 90,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "leechlife",
@@ -4440,7 +4779,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 80,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "leechseed",
@@ -4450,7 +4790,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 90,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "leer",
@@ -4461,7 +4802,8 @@ export const moves: Move[] = [
     power: 0,
     accuracy: 100,
     pp: 30,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "lick",
@@ -4472,7 +4814,8 @@ export const moves: Move[] = [
     power: 30,
     accuracy: 100,
     pp: 30,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "lifedew",
@@ -4494,6 +4837,7 @@ export const moves: Move[] = [
     accuracy: 90,
     pp: 5,
     recoil: true,
+    flags: { protect: true },
   },
   {
     id: "lightscreen",
@@ -4514,7 +4858,8 @@ export const moves: Move[] = [
     power: 85,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "lockon",
@@ -4524,7 +4869,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "lovelykiss",
@@ -4534,7 +4880,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 75,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
 
   {
@@ -4546,7 +4893,8 @@ export const moves: Move[] = [
     power: 65,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "luckychant",
@@ -4567,7 +4915,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "lunarblessing",
@@ -4598,7 +4947,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "lusterpurge",
@@ -4609,7 +4959,8 @@ export const moves: Move[] = [
     power: 95,
     accuracy: 100,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "machpunch",
@@ -4621,6 +4972,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 30,
     isPunch: true,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "magicalleaf",
@@ -4630,7 +4982,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: true,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "magicaltorque",
@@ -4641,7 +4994,8 @@ export const moves: Move[] = [
     power: 100,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "magiccoat",
@@ -4661,7 +5015,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "magicroom",
@@ -4681,7 +5036,8 @@ export const moves: Move[] = [
     category: "special",
     power: 100,
     accuracy: 75,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "magnetbomb",
@@ -4691,7 +5047,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 60,
     accuracy: true,
-    pp: 20
+    pp: 20,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "magneticflux",
@@ -4722,7 +5079,8 @@ export const moves: Move[] = [
     power: 0,
     accuracy: 100,
     pp: 30,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "makeitrain",
@@ -4733,7 +5091,8 @@ export const moves: Move[] = [
     power: 120,
     accuracy: 100,
     pp: 5,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "malignantchain",
@@ -4744,7 +5103,8 @@ export const moves: Move[] = [
     power: 100,
     accuracy: 100,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "matblock",
@@ -4766,7 +5126,8 @@ export const moves: Move[] = [
     accuracy: 90,
     pp: 15,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "meanlook",
@@ -4796,7 +5157,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "megadrain",
@@ -4806,7 +5168,8 @@ export const moves: Move[] = [
     category: "special",
     power: 40,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "megahorn",
@@ -4816,7 +5179,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 120,
     accuracy: 85,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "megakick",
@@ -4828,6 +5192,7 @@ export const moves: Move[] = [
     accuracy: 75,
     pp: 5,
     isPunch: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "megapunch",
@@ -4837,7 +5202,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 80,
     accuracy: 85,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "memento",
@@ -4847,7 +5213,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "metalburst",
@@ -4857,7 +5224,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "metalclaw",
@@ -4868,7 +5236,8 @@ export const moves: Move[] = [
     power: 50,
     accuracy: 95,
     pp: 35,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "metalsound",
@@ -4878,7 +5247,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 85,
-    pp: 40
+    pp: 40,
+    flags: { sound: true, protect: true },
   },
   {
     id: "meteorassault",
@@ -4888,7 +5258,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 150,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "meteorbeam",
@@ -4900,6 +5271,7 @@ export const moves: Move[] = [
     accuracy: 90,
     pp: 10,
     isPunch: true,
+    flags: { protect: true },
   },
   {
     id: "meteormash",
@@ -4910,7 +5282,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 90,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "metronome",
@@ -4932,6 +5305,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 5,
     isSlash: true,
+    flags: { contact: true, slicing: true },
   },
   {
     id: "milkdrink",
@@ -4951,7 +5325,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "mindblown",
@@ -4962,7 +5337,8 @@ export const moves: Move[] = [
     power: 150,
     accuracy: 100,
     pp: 5,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "mindreader",
@@ -4972,7 +5348,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "minimize",
@@ -4992,7 +5369,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 40
+    pp: 40,
+    flags: { protect: true },
   },
   {
     id: "mirrorcoat",
@@ -5002,7 +5380,8 @@ export const moves: Move[] = [
     category: "special",
     power: 0,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "mirrormove",
@@ -5023,7 +5402,8 @@ export const moves: Move[] = [
     power: 65,
     accuracy: 85,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "mist",
@@ -5044,7 +5424,8 @@ export const moves: Move[] = [
     power: 95,
     accuracy: 100,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "mistyexplosion",
@@ -5055,7 +5436,8 @@ export const moves: Move[] = [
     power: 100,
     accuracy: 100,
     pp: 5,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "mistyterrain",
@@ -5076,7 +5458,8 @@ export const moves: Move[] = [
     category: "special",
     power: 100,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "moonlight",
@@ -5108,7 +5491,8 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 15,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "mountaingale",
@@ -5119,7 +5503,8 @@ export const moves: Move[] = [
     power: 100,
     accuracy: 85,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "mudbomb",
@@ -5130,7 +5515,8 @@ export const moves: Move[] = [
     power: 65,
     accuracy: 85,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "mudshot",
@@ -5141,7 +5527,8 @@ export const moves: Move[] = [
     power: 55,
     accuracy: 95,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "mudslap",
@@ -5152,7 +5539,8 @@ export const moves: Move[] = [
     power: 20,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "mudsport",
@@ -5174,7 +5562,8 @@ export const moves: Move[] = [
     accuracy: 85,
     pp: 10,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "multiattack",
@@ -5184,7 +5573,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 120,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "mysticalfire",
@@ -5195,7 +5585,8 @@ export const moves: Move[] = [
     power: 75,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "mysticalpower",
@@ -5206,7 +5597,8 @@ export const moves: Move[] = [
     power: 70,
     accuracy: 90,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "nastyplot",
@@ -5226,7 +5618,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "naturepower",
@@ -5246,7 +5639,8 @@ export const moves: Move[] = [
     category: "special",
     power: 0,
     accuracy: 90,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "needlearm",
@@ -5257,7 +5651,8 @@ export const moves: Move[] = [
     power: 60,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "nightdaze",
@@ -5268,7 +5663,8 @@ export const moves: Move[] = [
     power: 85,
     accuracy: 95,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "nightmare",
@@ -5278,7 +5674,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "nightshade",
@@ -5288,7 +5685,8 @@ export const moves: Move[] = [
     category: "special",
     power: 0,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "nightslash",
@@ -5300,6 +5698,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 15,
     isSlash: true,
+    flags: { contact: true, slicing: true, protect: true },
   },
   {
     id: "nobleroar",
@@ -5309,7 +5708,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 30
+    pp: 30,
+    flags: { sound: true, protect: true },
   },
   {
     id: "noretreat",
@@ -5330,7 +5730,8 @@ export const moves: Move[] = [
     power: 100,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "nuzzle",
@@ -5341,7 +5742,8 @@ export const moves: Move[] = [
     power: 20,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "oblivionwing",
@@ -5351,7 +5753,8 @@ export const moves: Move[] = [
     category: "special",
     power: 80,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "obstruct",
@@ -5382,7 +5785,8 @@ export const moves: Move[] = [
     power: 65,
     accuracy: 85,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "octolock",
@@ -5392,7 +5796,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "odorsleuth",
@@ -5402,7 +5807,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 40
+    pp: 40,
+    flags: { protect: true },
   },
   {
     id: "ominouswind",
@@ -5413,7 +5819,8 @@ export const moves: Move[] = [
     power: 60,
     accuracy: 100,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "orderup",
@@ -5423,7 +5830,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 80,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "originpulse",
@@ -5436,6 +5844,7 @@ export const moves: Move[] = [
     pp: 10,
     isSpread: true,
     isPulseAura: true,
+    flags: { pulse: true, protect: true },
   },
   {
     id: "outrage",
@@ -5445,7 +5854,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 120,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "overdrive",
@@ -5456,7 +5866,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    isSpread: true
+    isSpread: true,
+    flags: { sound: true, protect: true },
   },
   {
     id: "painsplit",
@@ -5466,7 +5877,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "paraboliccharge",
@@ -5477,7 +5889,8 @@ export const moves: Move[] = [
     power: 65,
     accuracy: 100,
     pp: 20,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "partingshot",
@@ -5487,7 +5900,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { sound: true, protect: true },
   },
   {
     id: "payback",
@@ -5497,7 +5911,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 50,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "payday",
@@ -5507,7 +5922,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 40,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "peck",
@@ -5517,7 +5933,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 35,
     accuracy: 100,
-    pp: 35
+    pp: 35,
+    flags: { contact: true, protect: true },
   },
   {
     id: "perishsong",
@@ -5527,7 +5944,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 5
+    pp: 5,
+    flags: { sound: true },
   },
   {
     id: "petalblizzard",
@@ -5538,7 +5956,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 100,
     pp: 15,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true, wind: true },
   },
   {
     id: "petaldance",
@@ -5548,7 +5967,8 @@ export const moves: Move[] = [
     category: "special",
     power: 120,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "phantomforce",
@@ -5558,7 +5978,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 90,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true },
   },
   {
     id: "photongeyser",
@@ -5570,6 +5991,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 5,
     dynamicEffectId: "photonGeyserEffect", // ★ 効果識別用ID
+    flags: { protect: true },
   },
   {
     id: "pinmissile",
@@ -5581,6 +6003,7 @@ export const moves: Move[] = [
     accuracy: 95,
     pp: 20,
     multihit: 5,
+    flags: { protect: true },
   },
   {
     id: "plasmafists",
@@ -5592,6 +6015,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 15,
     isPunch: true,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "playnice",
@@ -5612,7 +6036,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 90,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "pluck",
@@ -5622,7 +6047,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 60,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "poisonfang",
@@ -5635,6 +6061,7 @@ export const moves: Move[] = [
     pp: 15,
     hasSecondaryEffect: true,
     isBiting: true,
+    flags: { contact: true, bite: true, protect: true },
   },
   {
     id: "poisongas",
@@ -5645,7 +6072,8 @@ export const moves: Move[] = [
     power: 0,
     accuracy: 90,
     pp: 40,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "poisonjab",
@@ -5656,7 +6084,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "poisonpowder",
@@ -5666,7 +6095,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 75,
-    pp: 35
+    pp: 35,
+    flags: { protect: true },
   },
   {
     id: "poisonsting",
@@ -5677,7 +6107,8 @@ export const moves: Move[] = [
     power: 15,
     accuracy: 100,
     pp: 35,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "poisontail",
@@ -5688,7 +6119,8 @@ export const moves: Move[] = [
     power: 50,
     accuracy: 100,
     pp: 25,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "pollenpuff",
@@ -5698,7 +6130,8 @@ export const moves: Move[] = [
     category: "special",
     power: 90,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "poltergeist",
@@ -5708,7 +6141,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 110,
     accuracy: 90,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "populationbomb",
@@ -5721,7 +6155,8 @@ export const moves: Move[] = [
     pp: 10,
     isSlash: true,
     multihit: 10,
-    contact: true,
+
+    flags: { contact: true, slicing: true, protect: true },
   },
   {
     id: "pounce",
@@ -5732,7 +6167,8 @@ export const moves: Move[] = [
     power: 50,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "pound",
@@ -5742,7 +6178,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 40,
     accuracy: 100,
-    pp: 35
+    pp: 35,
+    flags: { contact: true, protect: true },
   },
   {
     id: "powder",
@@ -5752,7 +6189,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "powdersnow",
@@ -5764,7 +6202,8 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 25,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "powergem",
@@ -5774,7 +6213,8 @@ export const moves: Move[] = [
     category: "special",
     power: 80,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "powershift",
@@ -5794,7 +6234,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "powerswap",
@@ -5804,7 +6245,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "powertrick",
@@ -5828,6 +6270,7 @@ export const moves: Move[] = [
     pp: 20,
     hasSecondaryEffect: true,
     isPunch: true,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "powerwhip",
@@ -5837,7 +6280,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 120,
     accuracy: 85,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "precipiceblades",
@@ -5848,7 +6292,8 @@ export const moves: Move[] = [
     power: 120,
     accuracy: 85,
     pp: 10,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "present",
@@ -5858,7 +6303,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 90,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "prismaticlaser",
@@ -5868,7 +6314,8 @@ export const moves: Move[] = [
     category: "special",
     power: 160,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "protect",
@@ -5889,7 +6336,8 @@ export const moves: Move[] = [
     power: 65,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "psyblade",
@@ -5901,6 +6349,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 15,
     isSlash: true,
+    flags: { contact: true, slicing: true, protect: true },
   },
   {
     id: "psychup",
@@ -5922,6 +6371,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     isBiting: true,
+    flags: { contact: true, bite: true, protect: true },
   },
   {
     id: "psychicnoise",
@@ -5932,7 +6382,8 @@ export const moves: Move[] = [
     power: 75,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { sound: true, protect: true },
   },
   {
     id: "psychicterrain",
@@ -5952,7 +6403,8 @@ export const moves: Move[] = [
     category: "special",
     power: 140,
     accuracy: 90,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "psychocut",
@@ -5964,6 +6416,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 20,
     isSlash: true,
+    flags: { slicing: true, protect: true },
   },
   {
     id: "psychoshift",
@@ -5973,7 +6426,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "psyshieldbash",
@@ -5984,7 +6438,8 @@ export const moves: Move[] = [
     power: 70,
     accuracy: 90,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "psyshock",
@@ -5995,7 +6450,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    dynamicEffectId: "calcDefForSpecial" // 追加
+    dynamicEffectId: "calcDefForSpecial", // 追加
+    flags: { protect: true },
   },
   {
     id: "psystrike",
@@ -6006,7 +6462,8 @@ export const moves: Move[] = [
     power: 100,
     accuracy: 100,
     pp: 10,
-    dynamicEffectId: "calcDefForSpecial" // 追加
+    dynamicEffectId: "calcDefForSpecial", // 追加
+    flags: { protect: true },
   },
   {
     id: "psywave",
@@ -6016,7 +6473,8 @@ export const moves: Move[] = [
     category: "special",
     power: 0,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "punishment",
@@ -6026,7 +6484,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "purify",
@@ -6036,7 +6495,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "pursuit",
@@ -6051,8 +6511,9 @@ export const moves: Move[] = [
     uiOption: {               // 追加
       type: "checkbox",
       label: "交代しようとした場合、威力を2倍",
-      key: "TargetStatused", // 
+      key: "TargetStatused",
     },
+    flags: { contact: true, protect: true },
   },
   {
     id: "pyroball",
@@ -6063,7 +6524,8 @@ export const moves: Move[] = [
     power: 120,
     accuracy: 90,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "quash",
@@ -6073,7 +6535,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "quickattack",
@@ -6083,7 +6546,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 40,
     accuracy: 100,
-    pp: 30
+    pp: 30,
+    flags: { contact: true, protect: true },
   },
   {
     id: "quickguard",
@@ -6113,7 +6577,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 20,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "ragefist",
@@ -6125,6 +6590,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     isRankBasedPower: true,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "ragepowder",
@@ -6144,7 +6610,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 90,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "ragingfury",
@@ -6154,7 +6621,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 120,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "raindance",
@@ -6175,7 +6643,8 @@ export const moves: Move[] = [
     power: 50,
     accuracy: 100,
     pp: 40,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "razorleaf",
@@ -6188,6 +6657,7 @@ export const moves: Move[] = [
     pp: 25,
     isSpread: true,
     isSlash: true,
+    flags: { slicing: true, protect: true },
   },
   {
     id: "razorshell",
@@ -6200,6 +6670,7 @@ export const moves: Move[] = [
     pp: 10,
     hasSecondaryEffect: true,
     isSlash: true,
+    flags: { contact: true, slicing: true, protect: true },
   },
   {
     id: "razorwind",
@@ -6210,7 +6681,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "recover",
@@ -6250,7 +6722,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "refresh",
@@ -6272,7 +6745,8 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { sound: true, protect: true },
   },
   {
     id: "rest",
@@ -6292,7 +6766,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 70,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "return",
@@ -6302,7 +6777,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "revelationdance",
@@ -6312,7 +6788,8 @@ export const moves: Move[] = [
     category: "special",
     power: 90,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "revenge",
@@ -6322,7 +6799,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 60,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "reversal",
@@ -6332,7 +6810,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { contact: true, protect: true },
   },
   {
     id: "revivalblessing",
@@ -6352,7 +6831,8 @@ export const moves: Move[] = [
     category: "special",
     power: 70,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "roar",
@@ -6362,7 +6842,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 20
+    pp: 20,
+    flags: { sound: true },
   },
   {
     id: "roaroftime",
@@ -6372,7 +6853,8 @@ export const moves: Move[] = [
     category: "special",
     power: 150,
     accuracy: 90,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "rockblast",
@@ -6384,6 +6866,7 @@ export const moves: Move[] = [
     accuracy: 90,
     pp: 10,
     multihit: 5,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "rockclimb",
@@ -6394,7 +6877,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 85,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "rockpolish",
@@ -6416,7 +6900,8 @@ export const moves: Move[] = [
     power: 40,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "rockthrow",
@@ -6426,7 +6911,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 50,
     accuracy: 90,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "rocktomb",
@@ -6437,7 +6923,8 @@ export const moves: Move[] = [
     power: 60,
     accuracy: 95,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "rockwrecker",
@@ -6447,7 +6934,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 150,
     accuracy: 90,
-    pp: 5
+    pp: 5,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "roleplay",
@@ -6468,7 +6956,8 @@ export const moves: Move[] = [
     power: 60,
     accuracy: 85,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "rollout",
@@ -6478,7 +6967,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 30,
     accuracy: 90,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "roost",
@@ -6508,7 +6998,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { sound: true, protect: true },
   },
   {
     id: "ruination",
@@ -6518,7 +7009,8 @@ export const moves: Move[] = [
     category: "special",
     power: 0,
     accuracy: 90,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "sacredfire",
@@ -6529,7 +7021,8 @@ export const moves: Move[] = [
     power: 100,
     accuracy: 95,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "sacredsword",
@@ -6541,6 +7034,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 15,
     isSlash: true,
+    flags: { contact: true, slicing: true, protect: true },
   },
   {
     id: "safeguard",
@@ -6561,7 +7055,8 @@ export const moves: Move[] = [
     power: 40,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "sandattack",
@@ -6571,7 +7066,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "sandsearstorm",
@@ -6583,7 +7079,8 @@ export const moves: Move[] = [
     accuracy: 80,
     pp: 10,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, wind: true },
   },
   {
     id: "sandstorm",
@@ -6593,7 +7090,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 10
+    pp: 10,
+    flags: { wind: true },
   },
   {
     id: "sandtomb",
@@ -6603,7 +7101,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 35,
     accuracy: 85,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "scald",
@@ -6614,7 +7113,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "scaleshot",
@@ -6626,6 +7126,7 @@ export const moves: Move[] = [
     accuracy: 90,
     pp: 20,
     multihit: 5,
+    flags: { protect: true },
   },
   {
     id: "scaryface",
@@ -6635,7 +7136,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "scorchingsands",
@@ -6646,7 +7148,8 @@ export const moves: Move[] = [
     power: 70,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "scratch",
@@ -6656,7 +7159,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 40,
     accuracy: 100,
-    pp: 35
+    pp: 35,
+    flags: { contact: true, protect: true },
   },
   {
     id: "screech",
@@ -6666,7 +7170,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 85,
-    pp: 40
+    pp: 40,
+    flags: { sound: true, protect: true },
   },
   {
     id: "searingshot",
@@ -6678,7 +7183,8 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 5,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "secretpower",
@@ -6689,7 +7195,8 @@ export const moves: Move[] = [
     power: 70,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "secretsword",
@@ -6701,6 +7208,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     isSlash: true,
+    flags: { slicing: true, protect: true },
   },
   {
     id: "seedbomb",
@@ -6710,7 +7218,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 80,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "seedflare",
@@ -6721,7 +7230,8 @@ export const moves: Move[] = [
     power: 120,
     accuracy: 85,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "seismictoss",
@@ -6731,7 +7241,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "selfdestruct",
@@ -6742,7 +7253,8 @@ export const moves: Move[] = [
     power: 200,
     accuracy: 100,
     pp: 5,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "shadowbone",
@@ -6753,7 +7265,8 @@ export const moves: Move[] = [
     power: 85,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "shadowclaw",
@@ -6763,7 +7276,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 70,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { contact: true, protect: true },
   },
   {
     id: "shadowforce",
@@ -6773,7 +7287,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 120,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true },
   },
   {
     id: "shadowpunch",
@@ -6785,6 +7300,7 @@ export const moves: Move[] = [
     accuracy: true,
     pp: 20,
     isPunch: true,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "shadowsneak",
@@ -6794,7 +7310,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 40,
     accuracy: 100,
-    pp: 30
+    pp: 30,
+    flags: { contact: true, protect: true },
   },
   {
     id: "sharpen",
@@ -6824,7 +7341,8 @@ export const moves: Move[] = [
     category: "special",
     power: 0,
     accuracy: 30,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "shellsidearm",
@@ -6835,7 +7353,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "shellsmash",
@@ -6856,7 +7375,8 @@ export const moves: Move[] = [
     power: 150,
     accuracy: 100,
     pp: 5,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "shelter",
@@ -6886,7 +7406,8 @@ export const moves: Move[] = [
     category: "special",
     power: 60,
     accuracy: true,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "shoreup",
@@ -6907,7 +7428,8 @@ export const moves: Move[] = [
     power: 75,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "silktrap",
@@ -6928,7 +7450,8 @@ export const moves: Move[] = [
     power: 60,
     accuracy: 100,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "simplebeam",
@@ -6938,7 +7461,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "sing",
@@ -6948,7 +7472,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 55,
-    pp: 15
+    pp: 15,
+    flags: { sound: true, protect: true },
   },
   {
     id: "sketch",
@@ -6968,7 +7493,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "skittersmack",
@@ -6979,7 +7505,8 @@ export const moves: Move[] = [
     power: 70,
     accuracy: 90,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "skullbash",
@@ -6989,7 +7516,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 130,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "skyattack",
@@ -7000,7 +7528,8 @@ export const moves: Move[] = [
     power: 140,
     accuracy: 90,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "skydrop",
@@ -7010,7 +7539,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 60,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "skyuppercut",
@@ -7022,6 +7552,7 @@ export const moves: Move[] = [
     accuracy: 90,
     pp: 15,
     isPunch: true,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "slackoff",
@@ -7041,7 +7572,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 80,
     accuracy: 75,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "slash",
@@ -7053,6 +7585,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 20,
     isSlash: true,
+    flags: { contact: true, slicing: true, protect: true },
   },
   {
     id: "sleeppowder",
@@ -7062,7 +7595,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 75,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "sleeptalk",
@@ -7083,7 +7617,8 @@ export const moves: Move[] = [
     power: 65,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
 
   {
@@ -7096,7 +7631,8 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "smackdown",
@@ -7106,7 +7642,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 50,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "smartstrike",
@@ -7116,7 +7653,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 70,
     accuracy: true,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "smellingsalts",
@@ -7126,7 +7664,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 70,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "smog",
@@ -7137,7 +7676,8 @@ export const moves: Move[] = [
     power: 30,
     accuracy: 70,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "smokescreen",
@@ -7147,7 +7687,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "snaptrap",
@@ -7157,7 +7698,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 35,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { contact: true, protect: true },
   },
   {
     id: "snarl",
@@ -7169,7 +7711,8 @@ export const moves: Move[] = [
     accuracy: 95,
     pp: 15,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { sound: true, protect: true },
   },
   {
     id: "snatch",
@@ -7189,7 +7732,8 @@ export const moves: Move[] = [
     category: "special",
     power: 80,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "snore",
@@ -7200,7 +7744,8 @@ export const moves: Move[] = [
     power: 50,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { sound: true, protect: true },
   },
   {
     id: "snowscape",
@@ -7220,7 +7765,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "softboiled",
@@ -7240,7 +7786,8 @@ export const moves: Move[] = [
     category: "special",
     power: 120,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "solarblade",
@@ -7252,6 +7799,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     isSlash: true,
+    flags: { contact: true, slicing: true, protect: true },
   },
   {
     id: "sonicboom",
@@ -7261,7 +7809,8 @@ export const moves: Move[] = [
     category: "special",
     power: 0,
     accuracy: 90,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "spacialrend",
@@ -7271,7 +7820,8 @@ export const moves: Move[] = [
     category: "special",
     power: 100,
     accuracy: 95,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "spark",
@@ -7282,7 +7832,8 @@ export const moves: Move[] = [
     power: 65,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "sparklingaria",
@@ -7294,7 +7845,8 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { sound: true, protect: true },
   },
   {
     id: "spectralthief",
@@ -7304,7 +7856,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 90,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "speedswap",
@@ -7314,7 +7867,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "spicyextract",
@@ -7324,7 +7878,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "spiderweb",
@@ -7334,7 +7889,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "spikecannon",
@@ -7346,6 +7902,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 15,
     multihit: 5,
+    flags: { protect: true },
   },
   {
     id: "spikes",
@@ -7375,7 +7932,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 100,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "spiritbreak",
@@ -7386,7 +7944,8 @@ export const moves: Move[] = [
     power: 75,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "spiritshackle",
@@ -7397,7 +7956,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "spitup",
@@ -7407,7 +7967,8 @@ export const moves: Move[] = [
     category: "special",
     power: 0,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "spite",
@@ -7417,7 +7978,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "splash",
@@ -7437,7 +7999,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "spotlight",
@@ -7447,7 +8010,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "springtidestorm",
@@ -7459,7 +8023,8 @@ export const moves: Move[] = [
     accuracy: 80,
     pp: 5,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, wind: true },
   },
   {
     id: "stealthrock",
@@ -7480,7 +8045,8 @@ export const moves: Move[] = [
     power: 110,
     accuracy: 95,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "steamroller",
@@ -7491,7 +8057,8 @@ export const moves: Move[] = [
     power: 65,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "steelbeam",
@@ -7501,7 +8068,8 @@ export const moves: Move[] = [
     category: "special",
     power: 140,
     accuracy: 95,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "steelroller",
@@ -7511,7 +8079,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 130,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "steelwing",
@@ -7522,7 +8091,8 @@ export const moves: Move[] = [
     power: 70,
     accuracy: 90,
     pp: 25,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "stickyweb",
@@ -7553,7 +8123,8 @@ export const moves: Move[] = [
     power: 65,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "stompingtantrum",
@@ -7563,7 +8134,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 75,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "stoneaxe",
@@ -7576,6 +8148,7 @@ export const moves: Move[] = [
     pp: 15,
     hasSecondaryEffect: true,
     isSlash: true,
+    flags: { contact: true, slicing: true, protect: true },
   },
   {
     id: "stoneedge",
@@ -7585,7 +8158,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 100,
     accuracy: 80,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "stormthrow",
@@ -7597,6 +8171,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     alwaysCrit: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "strangesteam",
@@ -7607,7 +8182,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 95,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "strength",
@@ -7617,7 +8193,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 80,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { contact: true, protect: true },
   },
   {
     id: "strengthsap",
@@ -7627,7 +8204,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "stringshot",
@@ -7638,7 +8216,8 @@ export const moves: Move[] = [
     power: 0,
     accuracy: 95,
     pp: 40,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "struggle",
@@ -7648,7 +8227,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 50,
     accuracy: true,
-    pp: 1
+    pp: 1,
+    flags: { contact: true, protect: true },
   },
   {
     id: "strugglebug",
@@ -7660,7 +8240,8 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 20,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "stuffcheeks",
@@ -7680,7 +8261,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 75,
-    pp: 30
+    pp: 30,
+    flags: { protect: true },
   },
   {
     id: "submission",
@@ -7692,6 +8274,7 @@ export const moves: Move[] = [
     accuracy: 80,
     pp: 20,
     recoil: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "substitute",
@@ -7711,7 +8294,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 70,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "sunnyday",
@@ -7731,7 +8315,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 100,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "supercellslam",
@@ -7743,6 +8328,7 @@ export const moves: Move[] = [
     accuracy: 95,
     pp: 15,
     recoil: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "superfang",
@@ -7752,7 +8338,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 0,
     accuracy: 90,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "superpower",
@@ -7762,7 +8349,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 120,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "supersonic",
@@ -7772,7 +8360,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 55,
-    pp: 20
+    pp: 20,
+    flags: { sound: true, protect: true },
   },
   {
     id: "surf",
@@ -7783,7 +8372,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 100,
     pp: 15,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "surgingstrikes",
@@ -7797,6 +8387,7 @@ export const moves: Move[] = [
     multihit: 3,
     isPunch: true,
     alwaysCrit: true,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "swagger",
@@ -7806,7 +8397,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 85,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "swallow",
@@ -7826,7 +8418,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 75,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "sweetscent",
@@ -7837,7 +8430,8 @@ export const moves: Move[] = [
     power: 0,
     accuracy: 100,
     pp: 20,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "swift",
@@ -7848,7 +8442,8 @@ export const moves: Move[] = [
     power: 60,
     accuracy: true,
     pp: 20,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "switcheroo",
@@ -7858,7 +8453,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "swordsdance",
@@ -7879,7 +8475,8 @@ export const moves: Move[] = [
     power: 120,
     accuracy: 100,
     pp: 10,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "synthesis",
@@ -7900,7 +8497,8 @@ export const moves: Move[] = [
     power: 60,
     accuracy: 85,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "tachyoncutter",
@@ -7913,6 +8511,7 @@ export const moves: Move[] = [
     pp: 10,
     multihit: 2,
     isSlash: true,
+    flags: { slicing: true, protect: true },
   },
   {
     id: "tackle",
@@ -7922,7 +8521,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 40,
     accuracy: 100,
-    pp: 35
+    pp: 35,
+    flags: { contact: true, protect: true },
   },
   {
     id: "tailglow",
@@ -7944,6 +8544,7 @@ export const moves: Move[] = [
     accuracy: 85,
     pp: 10,
     multihit: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "tailwhip",
@@ -7954,7 +8555,8 @@ export const moves: Move[] = [
     power: 0,
     accuracy: 100,
     pp: 30,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "tailwind",
@@ -7964,7 +8566,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 15
+    pp: 15,
+    flags: { wind: true },
   },
   {
     id: "takedown",
@@ -7976,6 +8579,7 @@ export const moves: Move[] = [
     accuracy: 85,
     pp: 20,
     recoil: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "tarshot",
@@ -7985,7 +8589,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "taunt",
@@ -7995,7 +8600,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "tearfullook",
@@ -8025,7 +8631,8 @@ export const moves: Move[] = [
     category: "special",
     power: 120,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "teeterdance",
@@ -8036,7 +8643,8 @@ export const moves: Move[] = [
     power: 0,
     accuracy: 100,
     pp: 20,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "telekinesis",
@@ -8046,7 +8654,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "teleport",
@@ -8066,7 +8675,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 75,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "terrainpulse",
@@ -8078,6 +8688,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     isPulseAura: true,
+    flags: { pulse: true, protect: true },
   },
   {
     id: "thief",
@@ -8087,7 +8698,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 60,
     accuracy: 100,
-    pp: 25
+    pp: 25,
+    flags: { contact: true, protect: true },
   },
   {
     id: "thousandarrows",
@@ -8098,7 +8710,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 100,
     pp: 10,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "thousandwaves",
@@ -8109,7 +8722,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 100,
     pp: 10,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "thrash",
@@ -8119,7 +8733,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 120,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "throatchop",
@@ -8130,7 +8745,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "thunder",
@@ -8141,7 +8757,8 @@ export const moves: Move[] = [
     power: 110,
     accuracy: 70,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
 
   {
@@ -8152,7 +8769,8 @@ export const moves: Move[] = [
     category: "special",
     power: 80,
     accuracy: 90,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "thunderclap",
@@ -8162,7 +8780,8 @@ export const moves: Move[] = [
     category: "special",
     power: 70,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { protect: true },
   },
   {
     id: "thunderfang",
@@ -8175,6 +8794,7 @@ export const moves: Move[] = [
     pp: 15,
     hasSecondaryEffect: true,
     isBiting: true,
+    flags: { contact: true, bite: true, protect: true },
   },
   {
     id: "thunderouskick",
@@ -8185,7 +8805,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "thunderpunch",
@@ -8198,6 +8819,7 @@ export const moves: Move[] = [
     pp: 15,
     hasSecondaryEffect: true,
     isPunch: true,
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "thundershock",
@@ -8208,7 +8830,8 @@ export const moves: Move[] = [
     power: 40,
     accuracy: 100,
     pp: 30,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "thunderwave",
@@ -8218,7 +8841,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 90,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "tickle",
@@ -8228,7 +8852,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "tidyup",
@@ -8248,7 +8873,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "torchsong",
@@ -8259,7 +8885,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { sound: true, protect: true },
   },
   {
     id: "torment",
@@ -8269,7 +8896,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "toxic",
@@ -8279,7 +8907,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 90,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "toxicspikes",
@@ -8299,7 +8928,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "trailblaze",
@@ -8310,7 +8940,8 @@ export const moves: Move[] = [
     power: 50,
     accuracy: 100,
     pp: 20,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "transform",
@@ -8331,7 +8962,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "trick",
@@ -8341,7 +8973,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "trickortreat",
@@ -8351,7 +8984,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "trickroom",
@@ -8372,7 +9006,8 @@ export const moves: Move[] = [
     power: 90,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "tripledive",
@@ -8384,6 +9019,7 @@ export const moves: Move[] = [
     accuracy: 95,
     pp: 10,
     multihit: 3,
+    flags: { contact: true, protect: true },
   },
   {
     id: "triplekick",
@@ -8396,6 +9032,7 @@ export const moves: Move[] = [
     pp: 10,
     multihit: 3,
     variablePowers: [10, 20, 30], // ★追加: 各ヒットの威力
+    flags: { contact: true, protect: true },
   },
   {
     id: "tripleaxel",
@@ -8407,6 +9044,7 @@ export const moves: Move[] = [
     accuracy: 90,
     pp: 10,
     variablePowers: [20, 40, 60], // ★追加: 各ヒットの威力
+    flags: { contact: true, protect: true },
   },
   {
     id: "tropkick",
@@ -8419,6 +9057,7 @@ export const moves: Move[] = [
     pp: 15,
     hasSecondaryEffect: true,
     multihit: 3,
+    flags: { contact: true, protect: true },
   },
   {
     id: "trumpcard",
@@ -8428,7 +9067,8 @@ export const moves: Move[] = [
     category: "special",
     power: 0,
     accuracy: true,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "twinbeam",
@@ -8440,6 +9080,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     multihit: 2,
+    flags: { protect: true },
   },
   {
     id: "twineedle",
@@ -8452,6 +9093,7 @@ export const moves: Move[] = [
     pp: 20,
     hasSecondaryEffect: true,
     multihit: 2,
+    flags: { protect: true },
   },
   {
     id: "twister",
@@ -8463,7 +9105,8 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 20,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, wind: true },
   },
 
   {
@@ -8475,7 +9118,8 @@ export const moves: Move[] = [
     power: 65,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "uproar",
@@ -8485,7 +9129,8 @@ export const moves: Move[] = [
     category: "special",
     power: 90,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { sound: true, protect: true },
   },
   {
     id: "vacuumwave",
@@ -8495,7 +9140,8 @@ export const moves: Move[] = [
     category: "special",
     power: 40,
     accuracy: 100,
-    pp: 30
+    pp: 30,
+    flags: { protect: true },
   },
   {
     id: "vcreate",
@@ -8505,7 +9151,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 180,
     accuracy: 95,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "venomdrench",
@@ -8516,7 +9163,8 @@ export const moves: Move[] = [
     power: 0,
     accuracy: 100,
     pp: 20,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "venoshock",
@@ -8526,7 +9174,8 @@ export const moves: Move[] = [
     category: "special",
     power: 65,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "victorydance",
@@ -8546,7 +9195,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 45,
     accuracy: 100,
-    pp: 25
+    pp: 25,
+    flags: { contact: true, protect: true },
   },
   {
     id: "visegrip",
@@ -8556,7 +9206,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 55,
     accuracy: 100,
-    pp: 30
+    pp: 30,
+    flags: { contact: true, protect: true },
   },
   {
     id: "vitalthrow",
@@ -8566,7 +9217,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 70,
     accuracy: true,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "voltswitch",
@@ -8576,7 +9228,8 @@ export const moves: Move[] = [
     category: "special",
     power: 70,
     accuracy: 100,
-    pp: 20
+    pp: 20,
+    flags: { protect: true },
   },
   {
     id: "volttackle",
@@ -8589,6 +9242,7 @@ export const moves: Move[] = [
     pp: 15,
     hasSecondaryEffect: true,
     recoil: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "wakeupslap",
@@ -8598,7 +9252,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 70,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { contact: true, protect: true },
   },
   {
     id: "waterfall",
@@ -8609,7 +9264,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "watergun",
@@ -8619,7 +9275,8 @@ export const moves: Move[] = [
     category: "special",
     power: 40,
     accuracy: 100,
-    pp: 25
+    pp: 25,
+    flags: { protect: true },
   },
   {
     id: "waterpledge",
@@ -8629,7 +9286,8 @@ export const moves: Move[] = [
     category: "special",
     power: 80,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "waterpulse",
@@ -8642,6 +9300,7 @@ export const moves: Move[] = [
     pp: 20,
     hasSecondaryEffect: true,
     isPulseAura: true,
+    flags: { pulse: true, protect: true },
   },
   {
     id: "watershuriken",
@@ -8653,6 +9312,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 20,
     multihit: 5,
+    flags: { protect: true },
   },
   {
     id: "watersport",
@@ -8673,7 +9333,8 @@ export const moves: Move[] = [
     power: 150,
     accuracy: 100,
     pp: 5,
-    isSpread: true
+    isSpread: true,
+    flags: { protect: true },
   },
   {
     id: "wavecrash",
@@ -8685,6 +9346,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     recoil: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "weatherball",
@@ -8696,6 +9358,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     dynamicEffectId: "weatherBallEffect", // 天候によってタイプと威力が変わる
+    flags: { protect: true, bullet: true },
   },
   {
     id: "ivycudgel",
@@ -8707,6 +9370,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 10,
     dynamicEffectId: "ivyCudgelEffect", // 追加
+    flags: { protect: true },
   },
   {
     id: "hex",
@@ -8722,6 +9386,7 @@ export const moves: Move[] = [
       type: "checkbox",
       label: "相手が状態異常 (威力2倍)",
       key: "TargetStatused", // AttackerStateで管理するキー
+    flags: { protect: true },
     },
   },
   {
@@ -8732,7 +9397,8 @@ export const moves: Move[] = [
     category: "special",
     power: 35,
     accuracy: 85,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "whirlwind",
@@ -8742,7 +9408,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 20
+    pp: 20,
+    flags: { wind: true },
   },
   {
     id: "wickedblow",
@@ -8756,6 +9423,7 @@ export const moves: Move[] = [
     isPunch: true,
     makesContact: true, // 接触技であるため追加を推奨
     alwaysCrit: true,   // ★★★ このプロパティを追加 ★★
+    flags: { contact: true, punch: true, protect: true },
   },
   {
     id: "wickedtorque",
@@ -8766,7 +9434,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true },
   },
   {
     id: "wideguard",
@@ -8788,7 +9457,8 @@ export const moves: Move[] = [
     accuracy: 80,
     pp: 10,
     isSpread: true,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, wind: true },
   },
   {
     id: "wildcharge",
@@ -8800,6 +9470,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 15,
     recoil: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "willowisp",
@@ -8809,7 +9480,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 85,
-    pp: 15
+    pp: 15,
+    flags: { protect: true },
   },
   {
     id: "wingattack",
@@ -8819,7 +9491,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 60,
     accuracy: 100,
-    pp: 35
+    pp: 35,
+    flags: { contact: true, protect: true },
   },
   {
     id: "wish",
@@ -8870,7 +9543,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: 100,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "wrap",
@@ -8880,7 +9554,8 @@ export const moves: Move[] = [
     category: "physical",
     power: 15,
     accuracy: 90,
-    pp: 20
+    pp: 20,
+    flags: { contact: true, protect: true },
   },
   {
     id: "wringout",
@@ -8890,7 +9565,8 @@ export const moves: Move[] = [
     category: "special",
     power: 0,
     accuracy: 100,
-    pp: 5
+    pp: 5,
+    flags: { contact: true, protect: true },
   },
   {
     id: "xscissor",
@@ -8902,6 +9578,7 @@ export const moves: Move[] = [
     accuracy: 100,
     pp: 15,
     isSlash: true,
+    flags: { contact: true, slicing: true, protect: true },
   },
   {
     id: "yawn",
@@ -8911,7 +9588,8 @@ export const moves: Move[] = [
     category: "status",
     power: 0,
     accuracy: true,
-    pp: 10
+    pp: 10,
+    flags: { protect: true },
   },
   {
     id: "zapcannon",
@@ -8922,7 +9600,8 @@ export const moves: Move[] = [
     power: 120,
     accuracy: 50,
     pp: 5,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { protect: true, bullet: true },
   },
   {
     id: "zenheadbutt",
@@ -8933,7 +9612,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 90,
     pp: 15,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
   {
     id: "zingzap",
@@ -8944,7 +9624,8 @@ export const moves: Move[] = [
     power: 80,
     accuracy: 100,
     pp: 10,
-    hasSecondaryEffect: true
+    hasSecondaryEffect: true,
+    flags: { contact: true, protect: true },
   },
 
   {
@@ -8959,6 +9640,7 @@ export const moves: Move[] = [
     makesContact: true, // くさむすびは接触技
     dynamicEffectId: "defenderWeightBasedPower", // ★新しいdynamicEffectId
     description: '相手の重さによって威力が変わる。',
+    flags: { contact: true, protect: true },
   },
   {
     id: "lowkick",
@@ -8972,6 +9654,7 @@ export const moves: Move[] = [
     makesContact: true, // けたぐりは接触技
     dynamicEffectId: "defenderWeightBasedPower", // ★新しいdynamicEffectId
     description: '相手の重さによって威力が変わる。',
+    flags: { contact: true, protect: true },
   },
   {
     id: "powertrip",
@@ -8985,6 +9668,7 @@ export const moves: Move[] = [
     description: "自分の能力ランクが1つ上がるたびに威力が20ずつ上がる。威力は最大860。",
     makesContact: true,
     isRankBasedPower: true, // ★ 追加
+    flags: { contact: true, protect: true },
   },
   {
     id: "storedpower",
@@ -8997,6 +9681,7 @@ export const moves: Move[] = [
     pp: 10,
     description: "自分の能力ランクが1つ上がるたびに威力が20ずつ上がる。威力は最大860。",
     isRankBasedPower: true, // ★ 追加
+    flags: { protect: true },
   },
 
 ];

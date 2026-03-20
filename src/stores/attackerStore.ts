@@ -1,6 +1,6 @@
 // src/stores/attackerStore.ts
 import { create } from 'zustand';
-import {
+import type {
   AttackerState, Pokemon, Move, StatCalculation, NatureModifier,
   MoveCategory,
   AttackerStateSnapshotForLog, StatCalculationSnapshot, MoveDynamicContext, Nature, DefenderState,
@@ -14,7 +14,7 @@ import { popularMoves } from '../data/popularMoves'; // ★ popularMoves をイ�
 import { getEffectiveMoveProperties } from '../utils/moveEffects';
 import { useGlobalStateStore } from './globalStateStore';
 import { useDefenderStore } from './defenderStore';
-import { TeamMember } from './teamStore';
+import type { TeamMember } from './teamStore';
 
 
 // ユーティリティ関数

@@ -97,6 +97,17 @@ export interface Move {
   isPulseAura?: boolean;
   hasSecondaryEffect?: boolean;
   affectedBySheerForceNegative?: boolean;
+  flags?: {
+    contact?: boolean;   // 接触技（直接攻撃）
+    punch?: boolean;     // パンチ技
+    bite?: boolean;      // キバ技
+    slicing?: boolean;   // 切断技
+    sound?: boolean;     // 音技
+    pulse?: boolean;     // 波動技
+    protect?: boolean;   // まもる有効
+    bullet?: boolean;    // 弾技
+    wind?: boolean;      // 風技
+  };
   isTeraBlast?: boolean;
   multihit?: number | "2-5";
   uiOption?: MoveUiOption;

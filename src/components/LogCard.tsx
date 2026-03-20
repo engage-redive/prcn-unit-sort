@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import ReactDOM from 'react-dom';
 import {
   LoggedDamageEntry,
   PokemonType,
   DisasterState,
 } from '../types';
 import { useHistoryStore } from '../stores/historyStore';
-import { X, Trash2, Info, RotateCcw } from 'lucide-react';
+import { X, Trash2, Info, RotateCcw, Package, Sparkles } from 'lucide-react';
 
 import { moves } from '../data/moves';
 import { getPokemonIconPath } from '../utils/uiHelpers';
@@ -63,106 +64,51 @@ const getDamageColorHistory = (percentage: number) => {
   return 'text-white';
 };
 
-const calculateKOChanceForHistory = (damagesPerUsage: number[], hp: number, usagesToTest: number): number => {
-    if (usagesToTest <= 0) return 0;
-    if (hp <= 0) return 100;
-    const validDamages = damagesPerUsage.filter(d => typeof d === 'number' && !isNaN(d));
-    if (validDamages.length === 0) return 0;
-    if (usagesToTest === 1) {
-      let koCount = 0;
-      for (const damage of validDamages) { if (damage >= hp) koCount++; }
-      return (koCount / validDamages.length) * 100;
-    }
-    const uniqueDamages: number[] = []; const frequencies: number[] = [];
-    for (const damage of validDamages) {
-      const index = uniqueDamages.indexOf(damage);
-      if (index === -1) { uniqueDamages.push(damage); frequencies.push(1); } 
-      else { frequencies[index]++; }
-    }
-    const totalFrequency = validDamages.length;
-    if (usagesToTest === 2) { 
-        let koProb = 0;
-        for (let i = 0; i < uniqueDamages.length; i++) {
-            const d1 = uniqueDamages[i], p1 = frequencies[i] / totalFrequency;
-            for (let j = 0; j < uniqueDamages.length; j++) {
-                const d2 = uniqueDamages[j], p2 = frequencies[j] / totalFrequency;
-                if (d1 + d2 >= hp) koProb += p1 * p2;
-            }
-        }
-        return koProb * 100;
-    }
-    if (usagesToTest === 3) { 
-        let koProb = 0;
-        for (let i = 0; i < uniqueDamages.length; i++) {
-            const d1 = uniqueDamages[i], p1 = frequencies[i] / totalFrequency;
-            for (let j = 0; j < uniqueDamages.length; j++) {
-                const d2 = uniqueDamages[j], p2 = frequencies[j] / totalFrequency;
-                for (let k = 0; k < uniqueDamages.length; k++) {
-                    const d3 = uniqueDamages[k], p3 = frequencies[k] / totalFrequency;
-                    if (d1 + d2 + d3 >= hp) koProb += p1 * p2 * p3;
-                }
-            }
-        }
-        return koProb * 100;
-    }
-    let prevProbs: Map<number, number> = new Map(); prevProbs.set(0, 1);
-    for (let h = 0; h < usagesToTest; h++) {
-      const currentProbs: Map<number, number> = new Map();
-      for (const [prevTotal, prevProb] of prevProbs.entries()) {
-        for (let i = 0; i < uniqueDamages.length; i++) {
-          const damage = uniqueDamages[i], freq = frequencies[i] / totalFrequency;
-          const newTotal = prevTotal + damage;
-          currentProbs.set(newTotal, (currentProbs.get(newTotal) || 0) + prevProb * freq);
-        }
+const getExactMultiHitDistribution = (singleHitDamages: number[], hitCount: number): Map<number, number> => {
+  let distribution = new Map<number, number>();
+  if (!singleHitDamages || singleHitDamages.length === 0) return distribution;
+  for (const d of singleHitDamages) {
+    distribution.set(d, (distribution.get(d) || 0) + 1 / singleHitDamages.length);
+  }
+  for (let i = 1; i < hitCount; i++) {
+    const nextDist = new Map<number, number>();
+    for (const [currentDmg, currentProb] of distribution.entries()) {
+      for (const d of singleHitDamages) {
+        const newDmg = currentDmg + d;
+        const newProb = currentProb * (1 / singleHitDamages.length);
+        nextDist.set(newDmg, (nextDist.get(newDmg) || 0) + newProb);
       }
-      prevProbs = currentProbs;
     }
-    let koProb = 0;
-    for (const [total, prob] of prevProbs.entries()) { if (total >= hp) koProb += prob; }
-    return Math.min(100, koProb * 100);
+    distribution = nextDist;
+  }
+  return distribution;
 };
 
-// ★ 修正: isVariablePowerMove を引数に追加
-const getKOTextHistory = (
-  damagesPerSingleHitDistribution: number[],
-  hp: number,
-  currentHitCount: number,
-  calculateKOChance: (damagesPerUsage: number[], hp: number, usagesToTest: number) => number,
-  isVariablePowerMove: boolean, // ★ 引数追加
-  showPercentage: boolean = true
-): string => {
-    if (!damagesPerSingleHitDistribution || damagesPerSingleHitDistribution.length !== 16) {
-      return "計算不可";
+const getKOInfoHistory = (distMap: Map<number, number>, hp: number) => {
+  if (distMap.size === 0) return "計算不可";
+  const sorted = Array.from(distMap.keys()).sort((a, b) => a - b);
+  const minD = sorted[0], maxD = sorted[sorted.length - 1];
+  if (maxD <= 0) return "ダメージなし";
+  const minHits = Math.ceil(hp / maxD), maxHits = minD > 0 ? Math.ceil(hp / minD) : Infinity;
+  if (minHits > 9) return minHits === maxHits ? `確定${minHits}発` : `複数${minHits}発`;
+  if (minHits === maxHits) return `確定${minHits}発`;
+  let currentProbDist = distMap;
+  for (let i = 1; i < minHits; i++) {
+    const nextDist = new Map<number, number>();
+    for (const [d1, p1] of currentProbDist.entries()) {
+      if (d1 >= hp) { nextDist.set(d1, (nextDist.get(d1) || 0) + p1); continue; }
+      for (const [d2, p2] of distMap.entries()) {
+        const newD = d1 + d2;
+        nextDist.set(newD, (nextDist.get(newD) || 0) + p1 * p2);
+      }
     }
-    if (hp <= 0) return "確定1発";
-
-    // ★ 修正: isVariablePowerMove に応じてヒット数を決定
-    const koHitCount = isVariablePowerMove ? 1 : currentHitCount;
-    const damagesPerUsage = damagesPerSingleHitDistribution.map(d => d * koHitCount);
-
-    const minDamagePerUsage = Math.min(...damagesPerUsage);
-    const maxDamagePerUsage = Math.max(...damagesPerUsage);
-
-    if (maxDamagePerUsage <= 0) return "ダメージなし";
-    
-    const minUsagesToKO = Math.ceil(hp / maxDamagePerUsage);
-    const confirmedUsagesToKO = minDamagePerUsage > 0 ? Math.ceil(hp / minDamagePerUsage) : Infinity;
-
-    if (minUsagesToKO === Infinity && confirmedUsagesToKO === Infinity) return "ダメージなし";
-    
-    if (minUsagesToKO > 10 && confirmedUsagesToKO > 10) {
-        if (confirmedUsagesToKO !== Infinity) return `確定${confirmedUsagesToKO}発`;
-        return `乱数${minUsagesToKO}発`;
-    }
-
-    if (minUsagesToKO === confirmedUsagesToKO) return `確定${minUsagesToKO}発`;
-    
-    if (!showPercentage) return `乱数${minUsagesToKO}発`;
-    
-    const koChanceVal = calculateKOChance(damagesPerUsage, hp, minUsagesToKO);
-    if (koChanceVal < 0.01 && koChanceVal > 0) return `乱数${minUsagesToKO}発 (<0.01%)`;
-    if (koChanceVal > 99.99 && koChanceVal < 100) return `乱数${minUsagesToKO}発 (>99.99%)`;
-    return `乱数${minUsagesToKO}発 (${formatPercentageHistory(koChanceVal)}%)`;
+    currentProbDist = nextDist;
+  }
+  let koProb = 0;
+  for (const [dmg, prob] of currentProbDist.entries()) { if (dmg >= hp) koProb += prob; }
+  const pPercent = koProb * 100;
+  if (pPercent >= 99.999) return `確定${minHits}発`;
+  return `乱数${minHits}発 (${formatPercentageHistory(pPercent)}%)`;
 };
 
 const getHpBarColorByRemainingHp = (remainingPercentage: number) => {
@@ -184,6 +130,24 @@ interface LogCardProps {
 const LogCard: React.FC<LogCardProps> = ({ logEntry }) => {
   const { deleteLog, loadLogToCalculators } = useHistoryStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Escキーでモーダルを閉じる
+  const handleEscKey = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') setIsModalOpen(false);
+  }, []);
+
+  useEffect(() => {
+    if (isModalOpen) {
+      document.addEventListener('keydown', handleEscKey);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.removeEventListener('keydown', handleEscKey);
+      document.body.style.overflow = '';
+    };
+  }, [isModalOpen, handleEscKey]);
 
   const {
     timestamp,
@@ -220,14 +184,21 @@ const LogCard: React.FC<LogCardProps> = ({ logEntry }) => {
   const actualRemainingHPMinPercentageInLog = Math.max(0, 100 - clampedCurrentDisplayMaxPercentageInLog);
   const actualRemainingHPMaxPercentageInLog = Math.max(0, 100 - clampedCurrentDisplayMinPercentageInLog);
   
-  const damagesForKO = isCritical ? result.criticalDamages : result.normalDamages;
-  const koTextDisplay = getKOTextHistory(
-    damagesForKO,
-    defenderOriginalHP,
-    hitCount,
-    calculateKOChanceForHistory,
-    isVariablePowerMove 
-  );
+  const effectiveHitCount = (isVariablePowerMove || result.isMultiHitCombined) ? 1 : hitCount;
+  const normalDistMap = React.useMemo(() => getExactMultiHitDistribution(result.normalDamages, effectiveHitCount), [result.normalDamages, effectiveHitCount]);
+  const criticalDistMap = React.useMemo(() => getExactMultiHitDistribution(result.criticalDamages, effectiveHitCount), [result.criticalDamages, effectiveHitCount]);
+  
+  const minMax = React.useMemo(() => {
+    const nDmgs = Array.from(normalDistMap.keys());
+    const cDmgs = Array.from(criticalDistMap.keys());
+    return {
+      nMin: Math.min(...nDmgs), nMax: Math.max(...nDmgs),
+      cMin: Math.min(...cDmgs), cMax: Math.max(...cDmgs),
+    };
+  }, [normalDistMap, criticalDistMap]);
+
+  const damagesForKO = isCritical ? criticalDistMap : normalDistMap;
+  const koTextDisplay = getKOInfoHistory(damagesForKO, defenderOriginalHP);
   
   const handleDeleteClick = () => {
     deleteLog(logEntry.id);
@@ -243,293 +214,463 @@ const LogCard: React.FC<LogCardProps> = ({ logEntry }) => {
   };
 
   return (
-    <div className="bg-gray-800 p-4 rounded-lg shadow-md mb-4">
-      <div className="flex justify-between items-start mb-3">
-        <div>
-            <span className="text-xs text-gray-400">
+    <>
+    <div className="bg-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-xl shadow-lg mb-4 relative overflow-hidden flex flex-col">
+      {/* ヘッダー領域 */}
+      <div className="flex justify-between items-center bg-slate-900/50 p-2 px-4 border-b border-slate-700/50 relative z-10">
+        <div className="flex items-center gap-2">
+            <span className="text-xs text-slate-400 font-mono">
                 {new Date(timestamp).toLocaleString()}
-                {isDoubleBattle && <span className="ml-2 px-1.5 py-0.5 text-xs bg-blue-500 text-white rounded-full">ダブル</span>}
-                {isCritical && <span className="ml-2 px-1.5 py-0.5 text-xs bg-red-600 text-white rounded-full">急所</span>}
             </span>
+            {isDoubleBattle && <span className="px-1.5 py-0.5 text-[10px] bg-blue-500/80 text-white rounded font-medium border border-blue-400/50 tracking-wider">ダブル</span>}
+            {isCritical && <span className="px-1.5 py-0.5 text-[10px] bg-red-500/80 text-white rounded font-medium border border-red-400/50 tracking-wider">急所</span>}
         </div>
         <button
           onClick={handleDeleteClick}
-          className="text-red-400 hover:text-red-600"
+          className="text-slate-500 hover:text-red-400 transition-colors p-1"
           aria-label="ログを削除"
         >
-          <Trash2 size={18} />
+          <Trash2 size={16} />
         </button>
       </div>
 
-      <div className="flex items-center space-x-3 mb-2">
-        <div className="flex flex-col items-center w-1/3">
-          <img
-            src={getPokemonIconPath(attackerDetails.pokemonId)}
-            alt={attackerDetails.pokemonName}
-            className="w-16 h-16 mb-1 border border-gray-700 rounded"
-          />
-          <p className="text-xs text-center truncate w-full" title={attackerDetails.pokemonName}>{attackerDetails.pokemonName}</p>
-          {attackerDetails.item && <p className="text-[10px] text-gray-400 text-center truncate w-full" title={attackerDetails.item}>持: {attackerDetails.item}</p>}
-          {attackerDetails.ability && <p className="text-[10px] text-gray-400 text-center truncate w-full" title={attackerDetails.ability}>特: {attackerDetails.ability}</p>}
-        </div>
-
-        <div className="flex-grow text-center">
-            <p className="font-semibold text-sm">
-                {attackerMoveName}
-                {hitCount > 1 && <span className="text-xs"> ({hitCount}回)</span>}
-            </p>
-            <p className="text-lg font-bold my-1">
-                <span className={getDamageColorHistory(minPercentageDisplay)}>{minDamageDisplay}</span>
-                {' ~ '}
-                <span className={getDamageColorHistory(maxPercentageDisplay)}>{maxDamageDisplay}</span>
-            </p>
-            <p className="text-xs text-gray-300">
-                ({formatPercentageHistory(minPercentageDisplay)}% ~ {formatPercentageHistory(maxPercentageDisplay)}%)
-            </p>
-            <p className="text-xs font-semibold mt-1">{koTextDisplay}</p>
-        </div>
-
-        <div className="flex flex-col items-center w-1/3">
-          <img
-            src={getPokemonIconPath(defenderDetails.pokemonId)}
-            alt={defenderDetails.pokemonName}
-            className="w-16 h-16 mb-1 border border-gray-700 rounded"
-          />
-          <p className="text-xs text-center truncate w-full" title={defenderDetails.pokemonName}>{defenderDetails.pokemonName}</p>
-          {defenderDetails.item && <p className="text-[10px] text-gray-400 text-center truncate w-full" title={defenderDetails.item}>持: {defenderDetails.item}</p>}
-          {defenderDetails.ability && <p className="text-[10px] text-gray-400 text-center truncate w-full" title={defenderDetails.ability}>特: {defenderDetails.ability}</p>}
-        </div>
-      </div>
-      
-      <div className="w-full h-3 bg-white rounded-full overflow-hidden mb-1">
-        <div className="h-full relative">
-          {actualRemainingHPMinPercentageInLog > 0 && (
-            <div
-              className={`absolute top-0 left-0 h-full ${getHpBarColorByRemainingHp(actualRemainingHPMinPercentageInLog)}`}
-              style={{ width: `${actualRemainingHPMinPercentageInLog}%` }}
-            />
-          )}
-          {actualRemainingHPMaxPercentageInLog > actualRemainingHPMinPercentageInLog && (
-            <div
-              className={`absolute top-0 h-full ${getHpRangeBarColorByRemainingHp(actualRemainingHPMinPercentageInLog)}`}
-              style={{
-                left: `${actualRemainingHPMinPercentageInLog}%`,
-                width: `${Math.max(0, actualRemainingHPMaxPercentageInLog - actualRemainingHPMinPercentageInLog)}%`,
-              }}
-            />
-          )}
-        </div>
-      </div>
-      <div className="flex justify-between text-xs text-gray-400 mb-3">
-        <span>残りHP (最大HP: {defenderOriginalHP})</span>
-      </div>
-
-      <div className="mt-2 flex items-center justify-center space-x-4">
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="text-sm text-blue-400 hover:underline flex items-center"
-        >
-          <Info size={16} className="mr-1"/> 詳細を見る
-        </button>
-        <button
-          onClick={handleLoadClick}
-          className="text-sm text-green-400 hover:underline flex items-center disabled:text-gray-500 disabled:no-underline"
-          disabled={!logEntry.attackerStateSnapshot || !logEntry.defenderStateSnapshot || !logEntry.globalStatesSnapshot}
-          title={(!logEntry.attackerStateSnapshot || !logEntry.defenderStateSnapshot || !logEntry.globalStatesSnapshot) ? "古い形式のログは復元できません" : "この計算を復元"}
-        >
-          <RotateCcw size={16} className="mr-1"/> この計算をロード
-        </button>
-      </div>
-
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4">
-          <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 relative">
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold text-white text-center flex-grow">計算ログ詳細</h2>
-                <button
-                  className="text-gray-400 hover:text-white"
-                  onClick={() => setIsModalOpen(false)}
-                  aria-label="閉じる"
-                >
-                  <X className="w-6 h-6" />
-                </button>
+      <div className="p-4 flex flex-col md:flex-row items-center md:items-stretch gap-4 lg:gap-6 relative z-10">
+        {/* 攻撃側 */}
+        <div className="flex-1 w-full bg-slate-900/40 rounded-lg p-3 flex flex-col border border-slate-700/30 relative">
+          <div className="absolute top-2 left-2 text-[10px] text-red-400 font-bold tracking-wider opacity-60">ATTACKER</div>
+          
+          <div className="flex items-center gap-3 mt-3">
+            <div className="relative">
+              <img
+                src={getPokemonIconPath(attackerDetails.pokemonId)}
+                alt={attackerDetails.pokemonName}
+                className="w-14 h-14 drop-shadow-md relative z-10"
+              />
+              {/* ギミックアイコン (攻撃側) */}
+              {attackerDetails.isStellar ? (
+                 <img src="/images/Stellar_icon.png" className="absolute -bottom-2 -right-2 w-6 h-6 z-20 drop-shadow-md" alt="ステラ" />
+              ) : attackerDetails.teraType ? (
+                 <img src="/images/Terastal_icon.png" className="absolute -bottom-2 -right-2 w-6 h-6 z-20 drop-shadow-md" alt="テラスタル" />
+              ) : null}
             </div>
 
-            <div className="mb-2">
-              <p>攻：{attackerPokemonName}:{attackerMoveName} {hitCount > 1 && `${hitCount}回`}</p>
-              <p>防：{defenderPokemonName} (HP: {defenderOriginalHP})</p>
-            </div>
-            <div className="mb-2">
-              <p className="text-sm text-gray-400 mb-1">通常{hitCount > 1 && ` (${hitCount}回)`}</p>
-              <p className="text-white font-medium">
-                <span className={getDamageColorHistory(result.minPercentage)}>{result.minDamage * displayHitCount}</span>
-                {' - '}
-                <span className={getDamageColorHistory(result.maxPercentage)}>{result.maxDamage * displayHitCount}</span>
-                <span className="text-sm text-gray-400 ml-2">
-                  ({formatPercentageHistory(result.minPercentage)}% - {formatPercentageHistory(result.maxPercentage)}%)
-                  {' '}{getKOTextHistory(result.normalDamages, defenderOriginalHP, hitCount, calculateKOChanceForHistory, isVariablePowerMove)}
-                </span>
-              </p>
-            </div>
-            <div className="mb-4">
-              <p className="text-sm text-red-400 mb-1">急所{hitCount > 1 && ` (${hitCount}回)`}</p>
-              <p className="text-white font-medium">
-                <span className={getDamageColorHistory(result.critMinPercentage)}>{result.critMinDamage * displayHitCount}</span>
-                {' - '}
-                <span className={getDamageColorHistory(result.critMaxPercentage)}>{result.critMaxDamage * displayHitCount}</span>
-                <span className="text-sm text-gray-400 ml-2">
-                  ({formatPercentageHistory(result.critMinPercentage)}% - {formatPercentageHistory(result.critMaxPercentage)}%)
-                  {' '}{getKOTextHistory(result.criticalDamages, defenderOriginalHP, hitCount, calculateKOChanceForHistory, isVariablePowerMove)}
-                </span>
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="text-lg font-medium text-red-400 mb-3 border-b border-gray-700 pb-1">攻撃側: {attackerDetails.pokemonName}</h3>
-                <div className="flex items-start mb-2">
-                    <img 
-                      src={getPokemonIconPath(attackerDetails.pokemonId)} 
-                      alt={attackerDetails.pokemonName} 
-                      className="w-12 h-12 inline-block mr-2 border border-gray-700 rounded" 
-                    />
-                    <div className="flex flex-col space-y-1">
-                        {Array.isArray(attackerDetails.displayTypes) && attackerDetails.displayTypes.map((type, idx) => (
-                            type && <span 
-                                key={`log-attacker-type-${idx}`}
-                                className="px-2 py-0.5 rounded text-xs font-medium text-white"
-                                style={{ backgroundColor: getTypeColorFromHistory(type as PokemonType | 'stellar') }}
-                            >
-                                {getTypeNameJpFromHistory(type as PokemonType | 'stellar')}
-                            </span>
-                        ))}
-                    </div>
-                </div>
-                <ul className="space-y-1 text-sm text-gray-300">
-                  <li>技の威力: <span className="font-semibold text-white">{attackerDetails.movePower}</span></li>
-                  {attackerDetails.moveCategory && (
-                    <li>技カテゴリ: <span className="font-semibold text-white">
-                        {attackerDetails.moveCategory === 'physical' ? '物理' : attackerDetails.moveCategory === 'special' ? '特殊' : '変化'}
-                    </span></li>
-                  )}
-                  <li>攻撃/特攻の値: <span className="font-semibold text-white">{attackerDetails.offensiveStatValue}</span></li>
-                  <li>攻撃/特攻ランク: <span className="font-semibold text-white">{attackerDetails.offensiveStatRank >= 0 ? `+${attackerDetails.offensiveStatRank}` : attackerDetails.offensiveStatRank}</span></li>
-                  {attackerDetails.teraType && !attackerDetails.isStellar && <li>テラスタル: <span className="font-semibold text-white">{getTypeNameJpFromHistory(attackerDetails.teraType)}</span></li>}
-                  {attackerDetails.isStellar && <li>テラスタル: <span className="font-semibold text-pink-400">{getTypeNameJpFromHistory('stellar')}</span></li>}
-                  {attackerDetails.item && <li>持ち物: <span className="font-semibold text-white">{attackerDetails.item}</span></li>}
-                  {attackerDetails.ability && <li>特性: <span className="font-semibold text-white">{attackerDetails.ability}</span></li>}
-                  {attackerDetails.isBurned && <li className="text-red-400 font-semibold">火傷状態</li>}
-                  {attackerDetails.hasHelpingHand && <li className="text-green-400 font-semibold">てだすけ</li>}
-                </ul>
+            <div className="flex flex-col min-w-0 flex-1">
+              <span className="text-sm font-bold text-white truncate w-full" title={attackerDetails.pokemonName}>
+                {attackerDetails.pokemonName}
+              </span>
+              <div className="flex flex-col space-y-0.5 mt-1 text-[11px] text-slate-300">
+                {attackerDetails.item && (
+                  <div className="flex items-center gap-1 truncate w-full">
+                    <Package size={10} className="shrink-0 text-amber-400" />
+                    <span className="truncate">{attackerDetails.item}</span>
+                  </div>
+                )}
+                {attackerDetails.ability && (
+                  <div className="flex items-center gap-1 truncate w-full">
+                    <Sparkles size={10} className="shrink-0 text-emerald-400" />
+                    <span className="truncate">{attackerDetails.ability}</span>
+                  </div>
+                )}
               </div>
-
-              <div>
-                <h3 className="text-lg font-medium text-blue-400 mb-3 border-b border-gray-700 pb-1">防御側: {defenderDetails.pokemonName}</h3>
-                 <div className="flex items-start mb-2">
-                    <img 
-                        src={getPokemonIconPath(defenderDetails.pokemonId)} 
-                        alt={defenderDetails.pokemonName} 
-                        className="w-12 h-12 inline-block mr-2 border border-gray-700 rounded"
-                    />
-                    <div className="flex flex-col space-y-1">
-                        {Array.isArray(defenderDetails.displayTypes) && defenderDetails.displayTypes.map((type, idx) => (
-                            type && <span 
-                                key={`log-defender-type-${idx}`}
-                                className="px-2 py-0.5 rounded text-xs font-medium text-white"
-                                style={{ backgroundColor: getTypeColorFromHistory(type) }}
-                            >
-                                {getTypeNameJpFromHistory(type)}
-                            </span>
-                        ))}
-                    </div>
-                </div>
-                <ul className="space-y-1 text-sm text-gray-300">
-                  {defenderDetails.maxHp && <li>最大HP: <span className="font-semibold text-white">{defenderDetails.maxHp}</span></li>}
-                  <li>防御/特防の値: <span className="font-semibold text-white">{defenderDetails.defensiveStatValue}</span></li>
-                  <li>防御/特防ランク: <span className="font-semibold text-white">{defenderDetails.defensiveStatRank >= 0 ? `+${defenderDetails.defensiveStatRank}` : defenderDetails.defensiveStatRank}</span></li>
-                  <li>相性: <span className="font-semibold text-white">×{result.effectiveness.toFixed(2)}</span></li>
-                  {defenderDetails.item && <li>持ち物: <span className="font-semibold text-white">{defenderDetails.item}</span></li>}
-                  {defenderDetails.ability && <li>特性: <span className="font-semibold text-white">{defenderDetails.ability}</span></li>}
-                  {defenderDetails.hasReflect && <li className="text-blue-300 font-semibold">リフレクター</li>}
-                  {defenderDetails.hasLightScreen && <li className="text-yellow-300 font-semibold">ひかりのかべ</li>}
-                  {defenderDetails.hasFriendGuard && <li className="text-purple-300 font-semibold">フレンドガード</li>}
-                </ul>
-              </div>
-            </div>
-            
-            {(globalStatesSnapshot?.weather || globalStatesSnapshot?.field || (globalStatesSnapshot?.disasters && Object.values(globalStatesSnapshot.disasters).some(d => d))) && (
-              <div className="mt-6 pt-4 border-t border-gray-700">
-                <h3 className="text-lg font-medium text-indigo-400 mb-3">フィールド状態</h3>
-                <ul className="space-y-1 text-sm text-gray-300">
-                  {globalStatesSnapshot?.weather && globalStatesSnapshot.weather !== 'none' && <li>天候: <span className="font-semibold text-white">{WEATHER_NAME_JP_HISTORY[globalStatesSnapshot.weather as keyof typeof WEATHER_NAME_JP_HISTORY] || globalStatesSnapshot.weather}</span></li>}
-                  {globalStatesSnapshot?.field && globalStatesSnapshot.field !== 'none' && <li>フィールド: <span className="font-semibold text-white">{FIELD_NAME_JP_HISTORY[globalStatesSnapshot.field as keyof typeof FIELD_NAME_JP_HISTORY] || globalStatesSnapshot.field}</span></li>}
-                  {globalStatesSnapshot?.disasters && Object.entries(globalStatesSnapshot.disasters).map(([key, value]) => 
-                    value && <li key={key}>災い: <span className="font-semibold text-red-400">{DISASTER_MAP_HISTORY[key as keyof DisasterState]}</span></li>
-                  )}
-                </ul>
-              </div>
-            )}
-
-            <div className="mt-4 pt-4 border-t border-gray-700">
-              <h4 className="text-white font-medium text-sm mb-2">通常ダメージ分布{hitCount > 1 && ` (技1回あたり)`}</h4>
-              <div className="grid grid-cols-8 gap-[2px] text-[10px]">
-                {result.normalDamages.map((damageValue, i) => {
-                  const factor = 0.85 + i * 0.01;
-                  const totalDamage = isVariablePowerMove ? damageValue : (damageValue * hitCount);
-                  const percentage = defenderOriginalHP > 0 ? (totalDamage / defenderOriginalHP) * 100 : 0;
-                  return (
-                    <div
-                      key={`log-normal-dist-${i}`}
-                      className="bg-gray-700 p-[2px] rounded text-center leading-tight"
-                    >
-                      <div className="text-gray-400">×{factor.toFixed(2)}</div>
-                      <div className={getDamageColorHistory(percentage)}>{totalDamage}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="mt-4">
-              <h4 className="text-red-400 font-medium text-sm mb-2">急所ダメージ分布{hitCount > 1 && ` (技1回あたり)`}</h4>
-              <div className="grid grid-cols-8 gap-[2px] text-[10px]">
-                {result.criticalDamages.map((damageValue, i) => {
-                   const factor = 0.85 + i * 0.01;
-                   const totalDamage = isVariablePowerMove ? damageValue : (damageValue * hitCount);
-                  const percentage = defenderOriginalHP > 0 ? (totalDamage / defenderOriginalHP) * 100 : 0;
-                  return (
-                    <div
-                      key={`log-crit-dist-${i}`}
-                      className="bg-gray-700 p-[2px] rounded text-center leading-tight"
-                    >
-                      <div className="text-gray-400">×{factor.toFixed(2)}</div>
-                      <div className={getDamageColorHistory(percentage)}>{totalDamage}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="mt-8 flex space-x-3">
-                <button
-                    onClick={handleLoadClick}
-                    className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors flex items-center justify-center disabled:bg-gray-500"
-                    disabled={!logEntry.attackerStateSnapshot || !logEntry.defenderStateSnapshot || !logEntry.globalStatesSnapshot}
-                    title={(!logEntry.attackerStateSnapshot || !logEntry.defenderStateSnapshot || !logEntry.globalStatesSnapshot) ? "古い形式のログは復元できません" : "この計算を復元"}
-                >
-                    <RotateCcw size={16} className="mr-2"/> この計算をロード
-                </button>
-                <button
-                    onClick={() => setIsModalOpen(false)}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors"
-                >
-                    閉じる
-                </button>
             </div>
           </div>
         </div>
-      )}
+
+        {/* 中央: ダメージ＆技情報 */}
+        <div className="flex-1 w-full flex flex-col items-center justify-center py-2 md:py-0">
+            <div className="text-center mb-2 w-full">
+                <p className="font-bold text-sm text-white bg-slate-700/50 py-1 px-3 rounded-full inline-block border border-slate-600/50 shadow-sm truncate max-w-full">
+                    {attackerMoveName}
+                    {hitCount > 1 && <span className="text-[11px] text-slate-300 ml-1">({hitCount}回)</span>}
+                </p>
+            </div>
+            
+            <p className="text-xl font-bold my-1 drop-shadow-md text-center shrink-0">
+                <span className={getDamageColorHistory(minPercentageDisplay)}>{minDamageDisplay}</span>
+                <span className="text-slate-500 mx-1">~</span>
+                <span className={getDamageColorHistory(maxPercentageDisplay)}>{maxDamageDisplay}</span>
+            </p>
+            <p className="text-xs text-slate-400 font-mono shrink-0">
+                ({formatPercentageHistory(minPercentageDisplay)}% ~ {formatPercentageHistory(maxPercentageDisplay)}%)
+            </p>
+            
+            <div className="mt-2 text-center shrink-0">
+               <span className="text-[13px] font-bold text-yellow-500 drop-shadow-sm px-2 py-0.5 bg-yellow-900/30 rounded border border-yellow-700/30 flex items-center justify-center min-h-[28px]">
+                 {koTextDisplay}
+               </span>
+            </div>
+        </div>
+
+        {/* 防御側 */}
+        <div className="flex-1 w-full bg-slate-900/40 rounded-lg p-3 flex flex-col border border-slate-700/30 relative">
+          <div className="absolute top-2 right-2 text-[10px] text-blue-400 font-bold tracking-wider opacity-60">DEFENDER</div>
+          
+          <div className="flex items-center gap-3 mt-3 flex-row-reverse md:flex-row text-right md:text-left">
+            <div className="relative">
+              <img
+                src={getPokemonIconPath(defenderDetails.pokemonId)}
+                alt={defenderDetails.pokemonName}
+                className="w-14 h-14 drop-shadow-md relative z-10"
+              />
+              {/* ギミックアイコン (防御側) */}
+              {logEntry.defenderStateSnapshot.isStellar ? (
+                 <img src="/images/Stellar_icon.png" className="absolute -bottom-2 -right-2 w-6 h-6 z-20 drop-shadow-md transform md:translate-x-0 -translate-x-full md:left-auto md:right-auto right-0" alt="ステラ" />
+              ) : logEntry.defenderStateSnapshot.teraType ? (
+                 <img src="/images/Terastal_icon.png" className="absolute -bottom-2 -right-2 w-6 h-6 z-20 drop-shadow-md transform md:translate-x-0 -translate-x-full md:left-auto md:right-auto right-0" alt="テラスタル" />
+              ) : null}
+            </div>
+
+            <div className="flex flex-col min-w-0 flex-1">
+              <span className="text-sm font-bold text-white truncate w-full" title={defenderDetails.pokemonName}>
+                {defenderDetails.pokemonName}
+              </span>
+              <div className="flex flex-col space-y-0.5 mt-1 text-[11px] text-slate-300 items-end md:items-start">
+                {defenderDetails.item && (
+                  <div className="flex items-center gap-1 truncate w-full justify-end md:justify-start">
+                    <Package size={10} className="shrink-0 text-amber-400 hidden md:block" />
+                    <span className="truncate">{defenderDetails.item}</span>
+                    <Package size={10} className="shrink-0 text-amber-400 md:hidden block" />
+                  </div>
+                )}
+                {defenderDetails.ability && (
+                  <div className="flex items-center gap-1 truncate w-full justify-end md:justify-start">
+                    <Sparkles size={10} className="shrink-0 text-emerald-400 hidden md:block" />
+                    <span className="truncate">{defenderDetails.ability}</span>
+                    <Sparkles size={10} className="shrink-0 text-emerald-400 md:hidden block" />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* HPバーエリア */}
+      <div className="px-5 pb-4 relative z-10 w-[95%] mx-auto">
+        <div className="flex justify-between text-[10px] text-slate-400 mb-1 px-1 font-mono">
+          <span>HP {Math.max(0, defenderOriginalHP - maxDamageDisplay)} ~ {Math.max(0, defenderOriginalHP - minDamageDisplay)}</span>
+          <span>Max {defenderOriginalHP}</span>
+        </div>
+        <div className="w-full h-2.5 bg-slate-950 rounded-full overflow-hidden shadow-inner border border-slate-800">
+          <div className="h-full relative transition-all duration-300">
+            {actualRemainingHPMinPercentageInLog > 0 && (
+              <div
+                className={`absolute top-0 left-0 h-full ${getHpBarColorByRemainingHp(actualRemainingHPMinPercentageInLog)}`}
+                style={{ width: `${actualRemainingHPMinPercentageInLog}%` }}
+              />
+            )}
+            {actualRemainingHPMaxPercentageInLog > actualRemainingHPMinPercentageInLog && (
+              <div
+                className={`absolute top-0 h-full ${getHpRangeBarColorByRemainingHp(actualRemainingHPMinPercentageInLog)}`}
+                style={{
+                  left: `${actualRemainingHPMinPercentageInLog}%`,
+                  width: `${Math.max(0, actualRemainingHPMaxPercentageInLog - actualRemainingHPMinPercentageInLog)}%`,
+                }}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* フッターアクション */}
+      <div className="flex border-t border-slate-700/50 bg-slate-900/30 relative z-10">
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="flex-1 py-2.5 text-xs text-blue-400 hover:text-blue-300 hover:bg-slate-800/80 transition-colors flex items-center justify-center font-medium border-r border-slate-700/50"
+        >
+          <Info size={14} className="mr-1.5"/> 詳細データ
+        </button>
+        <button
+          onClick={handleLoadClick}
+          className="flex-1 py-2.5 text-xs text-emerald-400 hover:text-emerald-300 hover:bg-slate-800/80 transition-colors flex items-center justify-center font-medium disabled:text-slate-600 disabled:hover:bg-transparent"
+          disabled={!logEntry.attackerStateSnapshot || !logEntry.defenderStateSnapshot || !logEntry.globalStatesSnapshot}
+          title={(!logEntry.attackerStateSnapshot || !logEntry.defenderStateSnapshot || !logEntry.globalStatesSnapshot) ? "古い形式のログは復元できません" : "この計算を復元"}
+        >
+          <RotateCcw size={14} className="mr-1.5"/> 復元する
+        </button>
+      </div>
     </div>
+
+      {/* モーダル: React Portalで独立レイヤーに描画 */}
+      {isModalOpen && ReactDOM.createPortal(
+        <div
+          className="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-[9999] flex items-center justify-center p-3 sm:p-6"
+          onClick={(e) => { if (e.target === e.currentTarget) setIsModalOpen(false); }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="計算ログ詳細"
+        >
+          <div className="bg-slate-900 border border-slate-700/60 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[92vh] flex flex-col overflow-hidden relative">
+            {/* ヘッダー (sticky) */}
+            <div className="sticky top-0 bg-slate-900/95 backdrop-blur-lg px-5 py-4 flex justify-between items-center border-b border-slate-800 z-30 shrink-0">
+                <h2 className="text-lg font-bold text-white flex items-center">
+                  <Info size={20} className="mr-2 text-blue-400" />
+                  計算ログ詳細
+                </h2>
+                <button
+                  className="text-slate-400 hover:text-white transition-colors bg-slate-800 hover:bg-slate-700 p-2 rounded-full"
+                  onClick={() => setIsModalOpen(false)}
+                  aria-label="閉じる"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+            </div>
+
+            {/* スクロール可能なコンテンツ */}
+            <div className="flex-1 overflow-y-auto overscroll-contain p-5 space-y-5">
+                {/* サマリー */}
+                <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-slate-200 flex items-center">
+                      <span className="w-5 h-5 rounded bg-red-500/20 text-red-400 font-bold text-[11px] flex items-center justify-center mr-2 shrink-0">攻</span>
+                      <img src={getPokemonIconPath(attackerDetails.pokemonId)} alt="" className="w-6 h-6 mr-1.5 shrink-0" />
+                      {attackerPokemonName} → {attackerMoveName}
+                      {hitCount > 1 && <span className="text-slate-400 ml-1 text-xs">({hitCount}回)</span>}
+                    </p>
+                    <p className="text-sm font-medium text-slate-200 flex items-center">
+                      <span className="w-5 h-5 rounded bg-blue-500/20 text-blue-400 font-bold text-[11px] flex items-center justify-center mr-2 shrink-0">防</span>
+                      <img src={getPokemonIconPath(defenderDetails.pokemonId)} alt="" className="w-6 h-6 mr-1.5 shrink-0" />
+                      {defenderPokemonName}
+                      <span className="text-slate-400 ml-1.5 text-xs">(HP: {defenderOriginalHP})</span>
+                    </p>
+                  </div>
+                  <div className="flex gap-2 shrink-0">
+                    {isDoubleBattle && <span className="px-2 py-0.5 text-[10px] bg-blue-500/80 text-white rounded font-medium border border-blue-400/50">ダブル</span>}
+                    {isCritical && <span className="px-2 py-0.5 text-[10px] bg-red-500/80 text-white rounded font-medium border border-red-400/50">急所モード</span>}
+                  </div>
+                </div>
+                
+                {/* ダメージ結果 */}
+                <div className="space-y-3 mb-6">
+                  <div className="p-3 bg-gray-900 rounded border-l-4 border-gray-400">
+                    <p className="text-xs text-gray-400 mb-1">通常</p>
+                    <p className="font-bold text-white text-lg">
+                      {minMax.nMin} - {minMax.nMax}
+                      <span className="text-sm ml-2 text-gray-400">({formatPercentageHistory((minMax.nMin / defenderOriginalHP) * 100)}% - {formatPercentageHistory((minMax.nMax / defenderOriginalHP) * 100)}%)</span>
+                      <span className="ml-2 text-blue-300 text-sm font-medium">{getKOInfoHistory(normalDistMap, defenderOriginalHP)}</span>
+                    </p>
+                  </div>
+                  <div className="p-3 bg-gray-900 rounded border-l-4 border-red-500">
+                    <p className="text-xs text-red-400 mb-1">急所</p>
+                    <p className="font-bold text-white text-lg">
+                      {minMax.cMin} - {minMax.cMax}
+                      <span className="text-sm ml-2 text-gray-400">({formatPercentageHistory((minMax.cMin / defenderOriginalHP) * 100)}% - {formatPercentageHistory((minMax.cMax / defenderOriginalHP) * 100)}%)</span>
+                      <span className="ml-2 text-red-300 text-sm font-medium">{getKOInfoHistory(criticalDistMap, defenderOriginalHP)}</span>
+                    </p>
+                  </div>
+                </div>
+
+                {/* 攻撃側・防御側 詳細 */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* 攻撃側 */}
+                  <div className="bg-slate-800/30 rounded-xl p-4 border border-slate-700/30">
+                    <h3 className="text-sm font-bold text-red-400 mb-3 border-b border-slate-700/50 pb-2 flex items-center">
+                        <span className="w-1.5 h-5 bg-red-500 rounded-sm mr-2 inline-block"></span>
+                        攻撃側: {attackerDetails.pokemonName}
+                    </h3>
+                    <div className="flex items-center mb-3">
+                        <div className="relative mr-3">
+                            <img 
+                              src={getPokemonIconPath(attackerDetails.pokemonId)} 
+                              alt={attackerDetails.pokemonName} 
+                              className="w-12 h-12 drop-shadow-md" 
+                            />
+                            {attackerDetails.isStellar ? (
+                                <img src="/images/Stellar_icon.png" className="absolute -bottom-1 -right-1 w-5 h-5 z-20 drop-shadow" alt="ステラ" />
+                            ) : attackerDetails.teraType ? (
+                                <img src="/images/Terastal_icon.png" className="absolute -bottom-1 -right-1 w-5 h-5 z-20 drop-shadow" alt="テラスタル" />
+                            ) : null}
+                        </div>
+                        <div className="flex flex-wrap gap-1">
+                            {Array.isArray(attackerDetails.displayTypes) && attackerDetails.displayTypes.map((type, idx) => (
+                                type && <span 
+                                    key={`modal-attacker-type-${idx}`}
+                                    className="px-2 py-0.5 rounded text-[10px] font-medium text-white shadow-sm"
+                                    style={{ backgroundColor: getTypeColorFromHistory(type as PokemonType | 'stellar') }}
+                                >
+                                    {getTypeNameJpFromHistory(type as PokemonType | 'stellar')}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                    <ul className="space-y-2 text-xs text-slate-300">
+                      <li className="flex justify-between">技の威力: <span className="font-semibold text-white">{attackerDetails.movePower}</span></li>
+                      {attackerDetails.moveCategory && (
+                        <li className="flex justify-between">技カテゴリ: <span className="font-semibold text-white">
+                            {attackerDetails.moveCategory === 'physical' ? '物理' : attackerDetails.moveCategory === 'special' ? '特殊' : '変化'}
+                        </span></li>
+                      )}
+                      <li className="flex justify-between">攻撃/特攻: <span className="font-semibold text-white">{attackerDetails.offensiveStatValue}</span></li>
+                      <li className="flex justify-between">ランク補正: <span className="font-semibold text-white">{attackerDetails.offensiveStatRank >= 0 ? `+${attackerDetails.offensiveStatRank}` : attackerDetails.offensiveStatRank}</span></li>
+                      {attackerDetails.teraType && !attackerDetails.isStellar && <li className="flex justify-between">テラスタル: <span className="font-semibold text-white">{getTypeNameJpFromHistory(attackerDetails.teraType)}</span></li>}
+                      {attackerDetails.isStellar && <li className="flex justify-between">テラスタル: <span className="font-semibold text-pink-400">{getTypeNameJpFromHistory('stellar')}</span></li>}
+                      {attackerDetails.item && (
+                        <li className="flex justify-between items-center">
+                          <span className="flex items-center"><Package size={11} className="mr-1 text-amber-400" />持ち物:</span>
+                          <span className="font-semibold text-white truncate max-w-[120px]" title={attackerDetails.item || undefined}>{attackerDetails.item}</span>
+                        </li>
+                      )}
+                      {attackerDetails.ability && (
+                        <li className="flex justify-between items-center">
+                          <span className="flex items-center"><Sparkles size={11} className="mr-1 text-emerald-400" />特性:</span>
+                          <span className="font-semibold text-white truncate max-w-[120px]" title={attackerDetails.ability || undefined}>{attackerDetails.ability}</span>
+                        </li>
+                      )}
+                      {attackerDetails.isBurned && <li className="text-red-400 font-bold border-t border-slate-700/50 pt-1.5 mt-1.5">🔥 火傷状態</li>}
+                      {attackerDetails.hasHelpingHand && <li className="text-emerald-400 font-bold border-t border-slate-700/50 pt-1.5 mt-1.5">👏 てだすけ</li>}
+                    </ul>
+                  </div>
+
+                  {/* 防御側 */}
+                  <div className="bg-slate-800/30 rounded-xl p-4 border border-slate-700/30">
+                    <h3 className="text-sm font-bold text-blue-400 mb-3 border-b border-slate-700/50 pb-2 flex items-center">
+                        <span className="w-1.5 h-5 bg-blue-500 rounded-sm mr-2 inline-block"></span>
+                        防御側: {defenderDetails.pokemonName}
+                    </h3>
+                    <div className="flex items-center mb-3">
+                        <div className="relative mr-3">
+                            <img 
+                                src={getPokemonIconPath(defenderDetails.pokemonId)} 
+                                alt={defenderDetails.pokemonName} 
+                                className="w-12 h-12 drop-shadow-md"
+                            />
+                            {logEntry.defenderStateSnapshot.isStellar ? (
+                                <img src="/images/Stellar_icon.png" className="absolute -bottom-1 -right-1 w-5 h-5 z-20 drop-shadow" alt="ステラ" />
+                            ) : logEntry.defenderStateSnapshot.teraType ? (
+                                <img src="/images/Terastal_icon.png" className="absolute -bottom-1 -right-1 w-5 h-5 z-20 drop-shadow" alt="テラスタル" />
+                            ) : null}
+                        </div>
+                        <div className="flex flex-wrap gap-1">
+                            {Array.isArray(defenderDetails.displayTypes) && defenderDetails.displayTypes.map((type, idx) => (
+                                type && <span 
+                                    key={`modal-defender-type-${idx}`}
+                                    className="px-2 py-0.5 rounded text-[10px] font-medium text-white shadow-sm"
+                                    style={{ backgroundColor: getTypeColorFromHistory(type) }}
+                                >
+                                    {getTypeNameJpFromHistory(type)}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                    <ul className="space-y-2 text-xs text-slate-300">
+                      {defenderDetails.maxHp && <li className="flex justify-between">最大HP: <span className="font-semibold text-white">{defenderDetails.maxHp}</span></li>}
+                      <li className="flex justify-between">防御/特防: <span className="font-semibold text-white">{defenderDetails.defensiveStatValue}</span></li>
+                      <li className="flex justify-between">ランク補正: <span className="font-semibold text-white">{defenderDetails.defensiveStatRank >= 0 ? `+${defenderDetails.defensiveStatRank}` : defenderDetails.defensiveStatRank}</span></li>
+                      <li className="flex justify-between">タイプ相性: <span className="font-semibold text-white bg-slate-700/50 px-1.5 rounded">×{result.effectiveness.toFixed(2)}</span></li>
+                      {defenderDetails.item && (
+                        <li className="flex justify-between items-center">
+                          <span className="flex items-center"><Package size={11} className="mr-1 text-amber-400" />持ち物:</span>
+                          <span className="font-semibold text-white truncate max-w-[120px]" title={defenderDetails.item || undefined}>{defenderDetails.item}</span>
+                        </li>
+                      )}
+                      {defenderDetails.ability && (
+                        <li className="flex justify-between items-center">
+                          <span className="flex items-center"><Sparkles size={11} className="mr-1 text-emerald-400" />特性:</span>
+                          <span className="font-semibold text-white truncate max-w-[120px]" title={defenderDetails.ability || undefined}>{defenderDetails.ability}</span>
+                        </li>
+                      )}
+                      {defenderDetails.hasReflect && <li className="text-blue-300 border-t border-slate-700/50 pt-1.5 mt-1.5">🛡️ リフレクター</li>}
+                      {defenderDetails.hasLightScreen && <li className="text-yellow-300 border-t border-slate-700/50 pt-1.5 mt-1.5">🔆 ひかりのかべ</li>}
+                      {defenderDetails.hasFriendGuard && <li className="text-purple-300 border-t border-slate-700/50 pt-1.5 mt-1.5">🤝 フレンドガード</li>}
+                    </ul>
+                  </div>
+                </div>
+                
+                {/* フィールド状態 */}
+                {(globalStatesSnapshot?.weather || globalStatesSnapshot?.field || (globalStatesSnapshot?.disasters && Object.values(globalStatesSnapshot.disasters).some(d => d))) && (
+                  <div className="bg-slate-800/30 rounded-xl p-4 border border-slate-700/30">
+                    <h3 className="text-sm font-bold text-indigo-400 mb-2 border-b border-slate-700/50 pb-2 flex items-center">
+                        <span className="w-1.5 h-5 bg-indigo-500 rounded-sm mr-2 inline-block"></span>
+                        バトルフィールド状態
+                    </h3>
+                    <div className="flex flex-wrap gap-2 text-xs">
+                      {globalStatesSnapshot?.weather && globalStatesSnapshot.weather !== 'none' && (
+                          <span className="bg-slate-700/80 px-2.5 py-1.5 rounded-lg text-slate-200 border border-slate-600/50">
+                              天候: <span className="font-bold text-white ml-1">{WEATHER_NAME_JP_HISTORY[globalStatesSnapshot.weather as keyof typeof WEATHER_NAME_JP_HISTORY] || globalStatesSnapshot.weather}</span>
+                          </span>
+                      )}
+                      {globalStatesSnapshot?.field && globalStatesSnapshot.field !== 'none' && (
+                          <span className="bg-slate-700/80 px-2.5 py-1.5 rounded-lg text-slate-200 border border-slate-600/50">
+                              フィールド: <span className="font-bold text-white ml-1">{FIELD_NAME_JP_HISTORY[globalStatesSnapshot.field as keyof typeof FIELD_NAME_JP_HISTORY] || globalStatesSnapshot.field}</span>
+                          </span>
+                      )}
+                      {globalStatesSnapshot?.disasters && Object.entries(globalStatesSnapshot.disasters).map(([key, value]) => 
+                        value && (
+                            <span key={key} className="bg-red-900/40 text-red-300 px-2.5 py-1.5 rounded-lg border border-red-800/50">
+                                災い: <span className="font-bold text-red-400 ml-1">{DISASTER_MAP_HISTORY[key as keyof DisasterState]}</span>
+                            </span>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* ダメージ分布 */}
+                <div className="space-y-4">
+                    <div className="bg-slate-800/30 rounded-xl py-3 px-4 border border-slate-700/30">
+                      <h4 className="text-slate-300 font-semibold text-xs mb-3">通常ダメージ分布 {hitCount > 1 && `(1回あたり)`}</h4>
+                      <div className="grid grid-cols-8 gap-1 text-[9px] sm:text-[10px]">
+                        {result.normalDamages.map((damageValue, i) => {
+                          const factor = 0.85 + i * 0.01;
+                          const totalDamage = isVariablePowerMove ? damageValue : (damageValue * hitCount);
+                          const percentage = defenderOriginalHP > 0 ? (totalDamage / defenderOriginalHP) * 100 : 0;
+                          return (
+                            <div
+                              key={`modal-normal-dist-${i}`}
+                              className="bg-slate-900/80 p-1.5 rounded-md text-center border border-slate-700/50"
+                            >
+                              <div className="text-slate-500 mb-0.5 text-[8px]">×{factor.toFixed(2)}</div>
+                              <div className={`${getDamageColorHistory(percentage)} font-bold`}>{totalDamage}</div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="bg-red-900/10 rounded-xl py-3 px-4 border border-red-900/20">
+                      <h4 className="text-red-400 font-semibold text-xs mb-3">急所ダメージ分布 {hitCount > 1 && `(1回あたり)`}</h4>
+                      <div className="grid grid-cols-8 gap-1 text-[9px] sm:text-[10px]">
+                        {result.criticalDamages.map((damageValue, i) => {
+                           const factor = 0.85 + i * 0.01;
+                           const totalDamage = isVariablePowerMove ? damageValue : (damageValue * hitCount);
+                          const percentage = defenderOriginalHP > 0 ? (totalDamage / defenderOriginalHP) * 100 : 0;
+                          return (
+                            <div
+                              key={`modal-crit-dist-${i}`}
+                              className="bg-slate-900/80 p-1.5 rounded-md text-center border border-red-900/30"
+                            >
+                              <div className="text-slate-500 mb-0.5 text-[8px]">×{factor.toFixed(2)}</div>
+                              <div className={`${getDamageColorHistory(percentage)} font-bold`}>{totalDamage}</div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* フッター (sticky) */}
+            <div className="sticky bottom-0 bg-slate-900/95 backdrop-blur-lg px-5 py-4 flex gap-3 border-t border-slate-800 z-30 shrink-0">
+                <button
+                    onClick={() => setIsModalOpen(false)}
+                    className="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors border border-slate-700"
+                >
+                    閉じる
+                </button>
+                <button
+                    onClick={handleLoadClick}
+                    className="flex-[2] bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 px-4 rounded-lg transition-colors flex items-center justify-center disabled:bg-slate-800 disabled:text-slate-500 disabled:border disabled:border-slate-700 shadow-lg shadow-emerald-900/20"
+                    disabled={!logEntry.attackerStateSnapshot || !logEntry.defenderStateSnapshot || !logEntry.globalStatesSnapshot}
+                >
+                    <RotateCcw size={18} className="mr-2"/> 
+                    {(!logEntry.attackerStateSnapshot || !logEntry.defenderStateSnapshot || !logEntry.globalStatesSnapshot) ? "復元不可" : "この計算状態を復元する"}
+                </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+    </>
   );
 };
 

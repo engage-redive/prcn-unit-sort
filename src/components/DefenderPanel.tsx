@@ -11,6 +11,64 @@ import { useGlobalStateStore } from '../stores/globalStateStore';
 import { useDefenderStore } from '../stores/defenderStore';
 import { getTypeNameJp, getTypeColor, getPokemonIconPath } from '../utils/uiHelpers';
 
+// ─── ギミック切り替えアイコンボタン ───
+interface GimmickButtonProps {
+  id: string;
+  iconSrc: string;
+  label: string;
+  active: boolean;
+  disabled: boolean;
+  onClick: () => void;
+  glowColor?: string;
+}
+
+const GimmickButton: React.FC<GimmickButtonProps> = ({
+  id, iconSrc, label, active, disabled, onClick, glowColor = 'rgba(255,255,255,0.7)',
+}) => {
+  return (
+    <button
+      id={id}
+      type="button"
+      title={label}
+      aria-label={label}
+      aria-pressed={active}
+      disabled={disabled}
+      onClick={onClick}
+      className={[
+        'relative flex items-center justify-center w-7 h-7 rounded-md transition-all duration-150 select-none',
+        'focus:outline-none focus-visible:ring-2 focus-visible:ring-white',
+        disabled
+          ? 'opacity-30 cursor-not-allowed'
+          : 'cursor-pointer hover:scale-110 active:scale-95',
+        active && !disabled
+          ? 'bg-white/15'
+          : '',
+      ].join(' ')}
+      style={active && !disabled ? { boxShadow: `0 0 8px 2px ${glowColor}` } : undefined}
+    >
+      <img
+        src={iconSrc}
+        alt={label}
+        className={[
+          'w-6 h-6 object-contain transition-all duration-150',
+          !active || disabled ? 'grayscale opacity-60' : '',
+        ].join(' ')}
+        onError={(e) => {
+          const el = e.currentTarget;
+          el.style.display = 'none';
+          const parent = el.parentElement;
+          if (parent && !parent.querySelector('.icon-fallback')) {
+            const span = document.createElement('span');
+            span.className = 'icon-fallback text-[9px] text-gray-400 font-bold text-center leading-tight';
+            span.textContent = label;
+            parent.appendChild(span);
+          }
+        }}
+      />
+    </button>
+  );
+};
+
 const ALL_POKEMON_TYPES = ["normal", "fire", "water", "grass", "electric", "ice", "fighting", "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", "dragon", "dark", "steel", "fairy"] as const;
 const PROTOSYNTHESIS_ABILITY_ID = 'protosynthesis';
 const QUARK_DRIVE_ABILITY_ID = 'quark_drive';
@@ -221,10 +279,30 @@ const DefenderPanel: React.FC<DefenderPanelProps> = ({
 
         {selectedPokemon && (
           <div className="mt-4">
-            <div className="flex items-center mb-1">
-              <label className="text-sm font-medium text-gray-300 mr-2">タイプ</label>
-              <input type="checkbox" id="defender1Terastallized" checked={defenderIsTerastallized} onChange={(e) => handleTerastallizedToggle(e.target.checked)} className="w-4 h-4 rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-900" disabled={!selectedPokemon} />
-              <label htmlFor="defender1Terastallized" className={`ml-1 text-sm ${!selectedPokemon ? 'text-gray-500' : 'text-white'}`}>テラスタル</label>
+            <div className="flex flex-wrap justify-between items-center mb-2 gap-2 w-full">
+              <label className="text-sm font-medium text-gray-300">タイプ</label>
+              
+              <div className="flex items-center gap-2">
+                {/* ダイマックス（将来実装用: 現在はグレーアウト表示のみ） */}
+                <GimmickButton
+                  id="dmax-toggle-defender"
+                  iconSrc="/images/Gigamax_icon.png"
+                  label="ダイマックス"
+                  active={false}
+                  disabled={true}
+                  onClick={() => {}}
+                  glowColor="rgba(255,50,255,0.7)"
+                />
+                <GimmickButton
+                  id="defender1Terastallized"
+                  iconSrc="/images/Terastal_icon.png"
+                  label="テラスタル"
+                  active={defenderIsTerastallized}
+                  disabled={!selectedPokemon}
+                  onClick={() => handleTerastallizedToggle(!defenderIsTerastallized)}
+                  glowColor="rgba(100,200,255,0.8)"
+                />
+              </div>
             </div>
             <div className="flex items-center space-x-2">
               <div className="relative w-1/2" ref={type1DropdownRef}>

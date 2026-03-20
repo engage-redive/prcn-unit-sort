@@ -17832,7 +17832,7 @@ export const pokedex: Pokemon[] = [
     "weight": 61
   },
   {
-    "id": "0645-s",
+    "id": "0645-t",
     "name": "ランドロス (れいじゅう)",
     "nameEn": "Landorus-Therian",
     "types": ["ground", "flying"],
@@ -17849,7 +17849,7 @@ export const pokedex: Pokemon[] = [
     "weight": 68
   },
   {
-    "id": "0905-s",
+    "id": "0905-t",
     "name": "ラブトロス (れいじゅう)",
     "nameEn": "Enamorus-Therian",
     "types": ["fairy", "flying"],
