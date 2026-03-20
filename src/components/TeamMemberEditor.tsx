@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Pokemon, Move, Item, Ability, PokemonType, Nature } from '../types';
-import { X, Save, ClipboardCopy } from 'lucide-react'; // ClipboardCopy をインポート
+import { X, Save, ClipboardCopy } from 'lucide-react';
 import Select from 'react-select';
-import StatSlider from './TeamEditorSlider';
+import StatBar from './StatBar';
 import { POKEMON_TYPE_NAMES_JP } from '../calculation/pokemonTypesJp';
 
 interface TeamMember {
@@ -37,33 +37,23 @@ interface TeamMemberEditorProps {
 
 // ひらがなをカタカナに変換する関数
 const hiraganaToKatakana = (str: string): string => {
-  if (!str) return ''; // nullやundefined、空文字の場合はそのまま返す
-  return str.replace(/[\u3041-\u3096]/g, (match) => { // \u3041-\u3096 はひらがなの範囲
-    const charCode = match.charCodeAt(0) + 0x60; // カタカナのコードポイントに変換
+  if (!str) return '';
+  return str.replace(/[\u3041-\u3096]/g, (match) => {
+    const charCode = match.charCodeAt(0) + 0x60;
     return String.fromCharCode(charCode);
   });
 };
 
-// react-select のカスタムフィルター関数
-// ラベルと入力の両方をカタカナに変換して比較
 const customSelectFilter = (
-  option: { label: string; value: any; data?: any }, // react-selectのoption型
+  option: { label: string; value: any; data?: any },
   rawInput: string
 ): boolean => {
   const inputValue = rawInput.trim();
-  if (!inputValue) {
-    return true; // 入力が空の場合はすべてのオプションを表示
-  }
-
-  // 検索文字列（入力値）をカタカナに変換し、小文字化（英字混在なども考慮）
+  if (!inputValue) return true;
   const katakanaInputValue = hiraganaToKatakana(inputValue).toLowerCase();
-  // オプションのラベルもカタカナに変換し、小文字化
   const katakanaOptionLabel = hiraganaToKatakana(option.label).toLowerCase();
-
-  // オプションのカタカナ化ラベルが、入力のカタカナ化文字列を含むかチェック
   return katakanaOptionLabel.includes(katakanaInputValue);
 };
-
 
 const PokemonTypeOptions = (Object.keys(POKEMON_TYPE_NAMES_JP) as PokemonType[]).map(type => ({
   value: type,
@@ -81,7 +71,15 @@ const baseStatLabels: Record<keyof TeamMember['statPoints'], string> = {
   speed: 'S',
 };
 
-// Helper function to capitalize first letter of a string (TeamManager.tsx から移植)
+const statBarColors: Record<keyof TeamMember['statPoints'], string> = {
+  hp: 'bg-green-500',
+  attack: 'bg-red-500',
+  defense: 'bg-yellow-500',
+  specialAttack: 'bg-blue-500',
+  specialDefense: 'bg-teal-500',
+  speed: 'bg-purple-500',
+};
+
 const capitalize = (s: string) => {
   if (typeof s !== 'string' || s.length === 0) return '';
   return s.charAt(0).toUpperCase() + s.slice(1);
@@ -218,16 +216,16 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
     }
   };
 
-  const getStatLabelWithNature = (statKey: keyof TeamMember['statPoints'], nature: Nature | null): string => {
+  const getStatLabelWithNature = (statKey: keyof TeamMember['statPoints'], nature: Nature | null): { label: string; color: string } => {
     let label = baseStatLabels[statKey];
+    let color = 'text-gray-300';
     if (nature) {
-      if (nature.increasedStat === statKey) label += '↑';
-      if (nature.decreasedStat === statKey) label += '↓';
+      if (nature.increasedStat === statKey) { label += '↑'; color = 'text-red-400'; }
+      if (nature.decreasedStat === statKey) { label += '↓'; color = 'text-blue-400'; }
     }
-    return label;
+    return { label, color };
   };
 
-  // --- コピー機能のためのハンドラ ---
   const handleCopyToClipboardCurrentMember = () => {
     const { pokemon, item, ability, level, teraType, statPoints, nature, moves: memberMoves } = editedMember;
 
@@ -258,7 +256,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
       }
     });
     if (statPointStrings.length > 0) {
-      lines.push(`EVs: ${statPointStrings.join(' / ')}`); // Showdown互換のためラベルはEVsとする
+      lines.push(`EVs: ${statPointStrings.join(' / ')}`);
     }
 
     if (nature) {
@@ -273,16 +271,11 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
 
     const textToCopy = lines.join('\n');
     navigator.clipboard.writeText(textToCopy)
-      .then(() => {
-        // 必要であれば成功時のフィードバックをここに (例: トースト通知)
-        // alert('コピーしました！'); // シンプルなアラート
-      })
       .catch(err => {
         console.error('クリップボードへのコピーに失敗しました:', err);
         alert('クリップボードへのコピーに失敗しました。');
       });
   };
-  // --- ここまでコピー機能のためのハンドラ ---
 
 
   const pokemonOptions = allPokemon.map(p => ({ value: p.id, label: p.name }));
@@ -290,13 +283,13 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
   const pokemonAbilityNames = editedMember.pokemon.abilities || [];
   const filteredAbilityObjects = allAbilities.filter(ability => ability.nameEn && pokemonAbilityNames.includes(ability.nameEn));
   const abilityOptions = filteredAbilityObjects.map(a => ({ value: a.nameEn, label: a.name }));
-  const natureOptions = allNatures.map(n => ({ value: n.name, label: n.name }));
+  const natureOptions = allNatures.map(n => ({ value: n.name, label: n.name_jp || n.name }));
   const moveOptions = allMoves.map(m => ({ value: m.nameEn, label: m.name }));
 
   const totalStatPoints = getTotalStatPoints();
   const remainingPoints = 66 - totalStatPoints;
 
-  const selectStylesSlightlyLessCompressed = {
+  const selectStyles = {
     control: (base: any) => ({ ...base, backgroundColor: '#374151', borderColor: '#4B5563', color: 'white', minHeight: '30px', height: '30px', boxShadow: 'none', '&:hover': { borderColor: '#6B7280' } }),
     singleValue: (base: any) => ({ ...base, color: 'white', fontSize: '0.75rem' }),
     input: (base: any) => ({ ...base, color: 'white', margin: '0', padding: '0 2px', fontSize: '0.75rem' }),
@@ -322,7 +315,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
         </div>
 
         {/* ポケモン、レベル */}
-        <div className="grid grid-cols-[1fr_70px] gap-x-1 mb-1">
+        <div className="grid grid-cols-[1fr_70px] gap-x-1 mb-1 px-1">
           <div>
             <label className="block text-gray-300 text-[10px] font-bold mb-0.5">ポケモン</label>
             <Select
@@ -332,7 +325,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
               onChange={handlePokemonChange}
               placeholder="ポケモン"
               isClearable={false}
-              styles={selectStylesSlightlyLessCompressed}
+              styles={selectStyles}
               filterOption={customSelectFilter}
             />
           </div>
@@ -342,7 +335,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
           </div>
         </div>
         {/* わざ */}
-        <div className="mb-1">
+        <div className="mb-1 px-1">
           <label className="block text-gray-300 text-[10px] font-bold mb-0.5">わざ</label>
           <div className="space-y-1">
             {[0, 1, 2, 3].map((index) => (
@@ -354,7 +347,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
                   onChange={(selectedOption) => handleMoveChange(index, selectedOption)}
                   isClearable
                   placeholder={`わざ${index + 1}`}
-                  styles={selectStylesSlightlyLessCompressed}
+                  styles={selectStyles}
                   filterOption={customSelectFilter}
                 />
               </div>
@@ -362,7 +355,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
           </div>
         </div>
         {/* 持ち物、とくせい */}
-        <div className="grid grid-cols-2 gap-x-1.5 mb-1">
+        <div className="grid grid-cols-2 gap-x-1.5 mb-1 px-1">
           <div>
             <label className="block text-gray-300 text-[10px] font-bold mb-0.5">持ち物</label>
             <Select
@@ -372,7 +365,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
               onChange={handleItemChange}
               isClearable
               placeholder="なし"
-              styles={selectStylesSlightlyLessCompressed}
+              styles={selectStyles}
               filterOption={customSelectFilter}
             />
           </div>
@@ -386,13 +379,13 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
               isClearable
               placeholder={abilityOptions.length === 0 ? "選択不可" : "なし"}
               isDisabled={abilityOptions.length === 0}
-              styles={selectStylesSlightlyLessCompressed}
+              styles={selectStyles}
               filterOption={customSelectFilter}
             />
           </div>
         </div>
         {/* テラス、性格 */}
-        <div className="grid grid-cols-2 gap-x-1.5 mb-2">
+        <div className="grid grid-cols-2 gap-x-1.5 mb-2 px-1">
           <div>
             <label className="block text-gray-300 text-[10px] font-bold mb-0.5">テラス</label>
             <Select
@@ -401,7 +394,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
               value={PokemonTypeOptions.find(opt => opt.value === editedMember.teraType)}
               onChange={handleTeraTypeChange}
               placeholder="テラスタイプ"
-              styles={selectStylesSlightlyLessCompressed}
+              styles={selectStyles}
               filterOption={customSelectFilter}
             />
           </div>
@@ -414,15 +407,32 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
               onChange={handleNatureChange}
               isClearable
               placeholder="なし"
-              styles={selectStylesSlightlyLessCompressed}
+              styles={selectStyles}
               filterOption={customSelectFilter}
             />
           </div>
         </div>
 
-        <div className="mb-2">
-          <h3 className="text-sm font-semibold mb-1 text-white">ステータスポイント (残: {remainingPoints})</h3>
-          <div className="space-y-0.5">
+        {/* ──────── ステータスポイントセクション ──────── */}
+        <div className="mb-2 px-1">
+          {/* ヘッダー行 */}
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-sm font-bold text-white">ステータスポイント</h3>
+            <div className="flex items-center gap-2">
+              <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${remainingPoints > 0 ? 'bg-blue-900 text-blue-200' : remainingPoints === 0 ? 'bg-green-900 text-green-200' : 'bg-red-900 text-red-200'}`}>
+                残 {remainingPoints} / 66
+              </span>
+              <button
+                onClick={() => setEditedMember(prev => ({ ...prev, statPoints: { hp: 0, attack: 0, defense: 0, specialAttack: 0, specialDefense: 0, speed: 0 } }))}
+                className="text-[10px] px-2 py-0.5 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded transition-colors"
+              >
+                全リセット
+              </button>
+            </div>
+          </div>
+
+          {/* ステータス行 */}
+          <div className="space-y-3">
             {statKeys.map(stat => {
               const baseStatValue = editedMember.pokemon.baseStats?.[stat] || 50;
               const pointsValue = editedMember.statPoints[stat];
@@ -433,41 +443,66 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
               }
               const actualStat = calculateStat(baseStatValue, pointsValue, natureModifier, stat);
               let actualMaxValueForSlider: number;
-              if (remainingPoints <= 0 && pointsValue === 0) { //残り0で現在値も0なら増やせない
+              if (remainingPoints <= 0 && pointsValue === 0) {
                   actualMaxValueForSlider = 0;
-              } else if (remainingPoints <= 0) { //残り0だが現在値があるなら、そこが上限
+              } else if (remainingPoints <= 0) {
                   actualMaxValueForSlider = pointsValue;
-              }
-               else {
+              } else {
                   actualMaxValueForSlider = Math.min(32, pointsValue + remainingPoints);
               }
 
+              const { label, color } = getStatLabelWithNature(stat, editedMember.nature);
+              const barColor = statBarColors[stat];
+
               return (
-                <div key={stat} className="grid grid-cols-[20px_42px_1fr_20px] items-center gap-x-2 py-0.5 mr-2">
-                  <label className="text-gray-300 text-[10px] font-medium whitespace-nowrap pr-0.5 text-center">
-                    {getStatLabelWithNature(stat, editedMember.nature)}
-                  </label>
-                  <input
-                    type="number"
-                    value={pointsValue}
-                    onChange={(e) => handleStatPointChange(stat, parseInt(e.target.value, 10) || 0)}
-                    className="w-full px-1 py-0 h-5 bg-gray-700 border border-gray-600 rounded text-white text-[10px] text-center focus:ring-blue-500 focus:border-blue-500 tabular-nums"
-                    min="0" max="32"
-                  />
-                  <div className="flex-1 mx-0.5 h-5 flex items-center min-w-0"
-                    style={{ touchAction: 'pan-y' }}
-                    >
-                    <StatSlider
-                      label=""
+                <div key={stat} className="space-y-1.5">
+                  {/* ラベル行: H↑ / ポイント数値入力 / 実値 / クイックボタン */}
+                  <div className="flex items-center gap-2">
+                    <span className={`w-6 text-center text-xs font-bold shrink-0 ${color}`}>
+                      {label}
+                    </span>
+                    {/* 数値入力 */}
+                    <input
+                      type="number"
                       value={pointsValue}
-                      fixedMax={32}
-                      actualMaxValue={actualMaxValueForSlider}
-                      onChange={(requestedValue) => handleStatPointChange(stat, requestedValue)}
-                      sliderHeight="h-2.5"
-                      className="hide-stat-slider-real-value"
+                      onChange={(e) => handleStatPointChange(stat, parseInt(e.target.value, 10) || 0)}
+                      className="w-10 px-1 py-0.5 h-6 bg-gray-700 border border-gray-600 rounded text-white text-[11px] text-center focus:ring-1 focus:ring-blue-500 focus:border-blue-500 tabular-nums"
+                      min="0" max="32"
                     />
+                    {/* 実値 */}
+                    <span className={`text-sm font-bold tabular-nums w-8 text-center ${natureModifier > 1 ? 'text-red-400' : natureModifier < 1 ? 'text-blue-400' : 'text-white'}`}>
+                      {actualStat}
+                    </span>
+                    {/* クイックボタン */}
+                    <div className="flex gap-1 ml-auto">
+                      <button
+                        onClick={() => handleStatPointChange(stat, 0)}
+                        disabled={pointsValue === 0}
+                        className="text-[10px] w-6 h-6 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                        title="0にリセット"
+                      >
+                        0
+                      </button>
+                      <button
+                        onClick={() => handleStatPointChange(stat, actualMaxValueForSlider)}
+                        disabled={pointsValue >= actualMaxValueForSlider}
+                        className={`text-[10px] w-6 h-6 rounded transition-colors disabled:opacity-30 disabled:cursor-not-allowed ${barColor.replace('bg-', 'bg-').replace('-500', '-700')} hover:opacity-80 text-white`}
+                        title="最大まで振る"
+                      >
+                        ↑
+                      </button>
+                    </div>
                   </div>
-                  <span className="text-[11px] text-white text-right tabular-nums font-medium">{actualStat}</span>
+                  {/* カスタムスライダー */}
+                  <StatBar
+                    value={pointsValue}
+                    fixedMax={32}
+                    actualMaxValue={actualMaxValueForSlider}
+                    onChange={(v) => handleStatPointChange(stat, v)}
+                    barColor={barColor}
+                    limitColor={barColor.replace('-500', '-900')}
+                    disabled={actualMaxValueForSlider === 0 && pointsValue === 0}
+                  />
                 </div>
               );
             })}

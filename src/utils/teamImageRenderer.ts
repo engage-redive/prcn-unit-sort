@@ -1,6 +1,7 @@
 import { PokemonType } from '../types';
 import { TeamMember } from '../stores/teamStore';
 import { pokedex } from '../data/pokedex';
+import { getPokemonIconPath } from './uiHelpers';
 
 // calculateStats 関数は変更なし
 const calculateStats = (member: TeamMember) => {
@@ -117,7 +118,7 @@ export async function createTeamImage(team: TeamMember[]): Promise<string> {
         const y = row * (cardHeight + gap);
 
         const baseUrl = window.location.origin;
-        const pokemonIconUrl = `${baseUrl}/icon/${member.pokemon.id.toString().padStart(4, '0')}.png`;
+        const pokemonIconUrl = `${baseUrl}${getPokemonIconPath(member.pokemon.id)}`;
         const itemIconUrl = member.item ? `${baseUrl}/itemsIcon/${member.item.id}.png` : '';
         const moveIconUrls = member.moves.map((move: any) => move ? `${baseUrl}/typesIcon/${move.type}_icon_sv.png` : '');
 

@@ -1,10 +1,12 @@
-import React from 'react';
-import { Plus, Minus } from 'lucide-react';
+// src/components/StatSlider.tsx
+// PointerEvents API を使ったカスタムスライダー（AttackerPanel / DefenderPanel 用）
+
+import React, { useRef, useCallback } from 'react';
 
 interface StatSliderProps {
   label: string;
-  value: number; // 現在の努力値 (0, 4, 12, ..., 252 のいずれか)
-  max: number;   // スライダーの最大値 (通常は252)
+  value: number;
+  max: number;
   onChange: (value: number) => void;
   realValue?: number;
   effortValue?: number;
@@ -15,82 +17,116 @@ interface StatSliderProps {
 const StatSlider: React.FC<StatSliderProps> = ({
   label,
   value,
-  max, // ポケモンの努力値の場合、このmaxは252を想定
+  max,
   onChange,
   realValue,
   effortValue,
   currentStat,
-  disabled
+  disabled,
 }) => {
-  // スライダーの値を最も近い有効なステータスポイントに丸める関数
-  const getValidStatPoint = (val: number): number => {
-    return Math.max(0, Math.min(Math.round(val), max));
+  const trackRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+
+  const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
+
+  const valueFromPointer = useCallback(
+    (clientX: number): number => {
+      const track = trackRef.current;
+      if (!track) return value;
+      const rect = track.getBoundingClientRect();
+      const ratio = clamp((clientX - rect.left) / rect.width, 0, 1);
+      return clamp(Math.round(ratio * max), 0, max);
+    },
+    [value, max]
+  );
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (disabled) return;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    isDragging.current = true;
+    const newVal = valueFromPointer(e.clientX);
+    if (newVal !== value) onChange(newVal);
   };
 
-  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseInt(e.target.value, 10);
-    onChange(getValidStatPoint(newValue));
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDragging.current || disabled) return;
+    const newVal = valueFromPointer(e.clientX);
+    if (newVal !== value) onChange(newVal);
+  };
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    isDragging.current = false;
+    e.currentTarget.releasePointerCapture(e.pointerId);
   };
 
   const handleIncrement = () => {
-    if (disabled || value >= max) return; // max は通常252
-
-    let nextValue = value + 1;
-    onChange(Math.min(nextValue, max)); // maxを超えないように
+    if (disabled || value >= max) return;
+    onChange(Math.min(value + 1, max));
   };
 
   const handleDecrement = () => {
     if (disabled || value <= 0) return;
-
-    let prevValue = value - 1;
-    onChange(Math.max(prevValue, 0)); // 0未満にならないように
+    onChange(Math.max(value - 1, 0));
   };
+
+  const fillPct = max > 0 ? (clamp(value, 0, max) / max) * 100 : 0;
 
   return (
     <div className="w-full mb-4">
       <div className="flex justify-between items-center mb-1">
         <div className="text-white font-medium text-sm">{label}</div>
-        {(realValue !== undefined || currentStat !== undefined) && <div className="text-white font-bold">{realValue ?? currentStat}</div>}
+        {(realValue !== undefined || currentStat !== undefined) && (
+          <div className="text-white font-bold">{realValue ?? currentStat}</div>
+        )}
       </div>
-      
-      <div className="flex items-center space-x-2">
+
+      <div className="flex items-center gap-2">
+        {/* デクリメントボタン */}
         <button
           onClick={handleDecrement}
-          disabled={disabled}
-          className={`p-1 rounded-full bg-gray-700 text-white transition-colors ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-600'}`}
-          aria-label={`Decrement ${label}`}
+          disabled={disabled || value <= 0}
+          className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-700 text-white transition-colors hover:bg-gray-600 disabled:opacity-40 disabled:cursor-not-allowed shrink-0 text-base leading-none"
+          aria-label={`${label} を減らす`}
         >
-          <Minus className="h-4 w-4" />
+          −
         </button>
-        
-        <div className="flex-1 relative">
-          <input
-            type="range"
-            min="0"
-            max={max} // スライダーのUI上の最大値 (努力値では252)
-            value={value} // 現在の努力値
-            onChange={handleSliderChange}
-            disabled={disabled}
-            className={`w-full h-2 bg-gray-700 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-blue-500 [&::-webkit-slider-thumb]:transition-colors ${disabled ? 'opacity-50 cursor-not-allowed' : '[&::-webkit-slider-thumb]:hover:bg-blue-400'}`}
-            aria-label={`${label} slider`}
+
+        {/* カスタムトラック */}
+        <div
+          ref={trackRef}
+          className={`relative flex-1 h-5 flex items-center rounded-full cursor-pointer select-none ${disabled ? 'opacity-40 cursor-not-allowed' : ''}`}
+          style={{ touchAction: 'none' }}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
+          role="slider"
+          aria-valuenow={value}
+          aria-valuemin={0}
+          aria-valuemax={max}
+        >
+          <div className="absolute inset-0 rounded-full bg-gray-700" />
+          <div
+            className="absolute top-0 bottom-0 left-0 rounded-full bg-blue-500"
+            style={{ width: `${fillPct}%` }}
           />
-          {/* スライダーのトラックの wypełniona część */}
-          <div 
-            className="absolute top-0 left-0 h-2 bg-blue-500 rounded-full pointer-events-none"
-            style={{ width: `${(value / max) * 100}%` }}
+          <div
+            className="absolute w-5 h-5 rounded-full bg-blue-400 shadow-md border-2 border-white"
+            style={{ left: `calc(${fillPct}% - 10px)` }}
           />
         </div>
-        
+
+        {/* インクリメントボタン */}
         <button
           onClick={handleIncrement}
-          disabled={disabled}
-          className={`p-1 rounded-full bg-gray-700 text-white transition-colors ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-600'}`}
-          aria-label={`Increment ${label}`}
+          disabled={disabled || value >= max}
+          className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-700 text-white transition-colors hover:bg-gray-600 disabled:opacity-40 disabled:cursor-not-allowed shrink-0 text-base leading-none"
+          aria-label={`${label} を増やす`}
         >
-          <Plus className="h-4 w-4" />
+          ＋
         </button>
       </div>
-      
+
       <div className="flex justify-between text-xs text-gray-400 mt-1">
         <span>0</span>
         {effortValue !== undefined && <span className="text-white font-bold">{effortValue}</span>}

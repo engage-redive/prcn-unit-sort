@@ -44,6 +44,7 @@ export const getTypeColor = (type: string): string => {
 /**
  * ポケモンIDからアイコン画像のパスを生成する。
  * - ハイフンを含むID（例: "0889-c"）はそのままファイル名として使用。
+ * - 4桁の数字の後に文字が続くID（例: "0479h"）は、4桁目と5桁目の間にハイフンを挿入する。
  * - 数値または純粋な数字文字列（例: 1, "25"）は4桁ゼロ埋めする。
  */
 export const getPokemonIconPath = (id: string | number): string => {
@@ -52,6 +53,12 @@ export const getPokemonIconPath = (id: string | number): string => {
   if (idStr.includes('-')) {
     return `/icon/${idStr}.png`;
   }
+  
+  // 4桁の数字の後に文字がある場合 (例: "0479h" -> "0479-h")
+  if (/^[0-9]{4}.+/.test(idStr)) {
+    return `/icon/${idStr.slice(0, 4)}-${idStr.slice(4)}.png`;
+  }
+
   // 数値の場合は4桁ゼロ埋め
   return `/icon/${idStr.padStart(4, '0')}.png`;
 };
