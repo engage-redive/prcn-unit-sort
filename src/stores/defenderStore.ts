@@ -342,7 +342,7 @@ export const useDefenderStore = create<DefenderStore>((set, get) => ({
     const speedStat = restoreStat(pokemon.baseStats.speed, statPoints.speed, 'speed');
 
     const newState: Partial<DefenderState> = {
-        pokemon, item, ability, teraType,
+        pokemon, item, ability, teraType: teraType === 'none' ? null : teraType,
         hpStat, attackStat, defenseStat, specialAttackStat, specialDefenseStat, speedStat,
         hpInputValue: hpStat.final.toString(),
         // attackInputValue: attackStat.final.toString(),

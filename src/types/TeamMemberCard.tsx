@@ -97,7 +97,7 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member, onClick }) => {
 
   return (
     <div
-      className="relative overflow-hidden rounded-xl cursor-pointer select-none group"
+      className="relative overflow-hidden rounded-xl cursor-pointer select-none group h-full flex flex-col"
       style={{
         background: 'linear-gradient(135deg, #1a1f2e 0%, #0f1318 100%)',
         border: '1px solid rgba(255,255,255,0.08)',

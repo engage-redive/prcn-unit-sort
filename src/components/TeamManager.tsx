@@ -469,7 +469,7 @@ const TeamManager: React.FC<TeamManagerProps> = ({
             <p className="text-sm text-gray-400 mb-3">各ポケモンの情報を空行で区切ってください。複数匹を一度に追加できます。</p>
             <textarea
               className="w-full h-40 p-3 bg-gray-700 border border-gray-600 rounded text-sm focus:ring-blue-500 focus:border-blue-500 font-mono"
-              placeholder={`複数匹の例（空行で区切る）:\n\nCharizard @ Life Orb\nAbility: Blaze\nLevel: 50\nEVs: 252 SpA / 4 SpD / 252 Spe\nTimid Nature\n- Flamethrower\n- Solar Beam\n- Focus Blast\n- Roost`}
+              placeholder={``}
               value={importText}
               onChange={(e) => setImportText(e.target.value)}
             />
@@ -481,7 +481,7 @@ const TeamManager: React.FC<TeamManagerProps> = ({
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {selectedTeam.members.map((member) => (
-            <div key={member.id} className="relative group">
+            <div key={member.id} className="relative group h-full">
               <TeamMemberCard member={member} onClick={() => handleEditMember(member)} />
               <div className="absolute top-1 right-1 flex flex-col items-end space-y-1.5 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out">
                 <button onClick={(e) => { e.stopPropagation(); handleDeleteMemberFromTeam(member.id); }} className="p-1.5 bg-red-600 hover:bg-red-700 rounded-full text-white flex items-center justify-center w-6 h-6" title={`${member.pokemon.name} をチームから削除`}><X className="h-4 w-4" /></button>
@@ -491,7 +491,7 @@ const TeamManager: React.FC<TeamManagerProps> = ({
             </div>
           ))}
           {Array.from({ length: Math.max(0, 6 - selectedTeam.members.length) }).map((_, index) => (
-            <div key={`empty-slot-${index}`} className="bg-gray-800 p-3 rounded-lg shadow border border-dashed border-gray-600 flex flex-col items-center justify-center min-h-[230px] cursor-pointer hover:border-blue-500 transition-colors" onClick={handleAddNewMember} title="ポケモンを追加"><Plus className="h-10 w-10 text-gray-500 mb-2" /><span className="text-gray-400 text-sm">ポケモンを追加</span></div>
+            <div key={`empty-slot-${index}`} className="bg-gray-800 p-3 rounded-xl shadow border border-dashed border-gray-600 flex flex-col items-center justify-center h-full min-h-[140px] cursor-pointer hover:border-blue-500 transition-colors" onClick={handleAddNewMember} title="ポケモンを追加"><Plus className="h-10 w-10 text-gray-500 mb-2" /><span className="text-gray-400 text-sm">ポケモンを追加</span></div>
           ))}
         </div>
       </>

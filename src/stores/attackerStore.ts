@@ -583,7 +583,7 @@ export const useAttackerStore = create<AttackerStore>((set, get) => ({
       pokemon, item, ability,
       loadedMoves: loadedTeamMoves || [null, null, null, null],
       move: initialMove,
-      teraType: null, loadedTeraType: teraType, isStellar: false,
+      teraType: null, loadedTeraType: teraType === 'none' ? null : teraType, isStellar: false,
       hpStatPoints: statPoints.hp, actualMaxHp, currentHp: actualMaxHp,
       attackStat, specialAttackStat, defenseStat, specialDefenseStat, speedStat,
       attackInputValue: attackStat.final.toString(),
