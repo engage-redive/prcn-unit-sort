@@ -1,4 +1,4 @@
-﻿import { Item, } from '../types';
+import { Item, } from '../types';
 
 export const items: Item[] = [
   {
@@ -92,13 +92,13 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "abomasite",
+    id: "Abomasite",
     name: "ユキノオナイト",
     nameEn: "Abomasite",
     effect: {}
   },
   {
-    id: "absolite",
+    id: "Absolite",
     name: "アブソルナイト",
     nameEn: "Absolite",
     effect: {}
@@ -128,13 +128,13 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "aerodactylite",
+    id: "Aerodactylite",
     name: "プテラナイト",
     nameEn: "Aerodactylite",
     effect: {}
   },
   {
-    id: "aggronite",
+    id: "Aggronite",
     name: "ボスゴドラナイト",
     nameEn: "Aggronite",
     effect: {}
@@ -152,7 +152,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "alakazite",
+    id: "Alakazite",
     name: "フーディナイト",
     nameEn: "Alakazite",
     effect: {}
@@ -164,13 +164,13 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "altarianite",
+    id: "Altarianite",
     name: "チルタリスナイト",
     nameEn: "Altarianite",
     effect: {}
   },
   {
-    id: "ampharosite",
+    id: "Ampharosite",
     name: "デンリュウナイト",
     nameEn: "Ampharosite",
     effect: {}
@@ -194,7 +194,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "audinite",
+    id: "Audinite",
     name: "タブンネナイト",
     nameEn: "Audinite",
     effect: {}
@@ -212,7 +212,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "banettite",
+    id: "Banettite",
     name: "ジュペッタナイト",
     nameEn: "Banettite",
     effect: {}
@@ -224,8 +224,8 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "beedrillite",
-    name: "スピアナイト",
+    id: "Beedrillite",
+    name: "スピアーナイト",
     nameEn: "Beedrillite",
     effect: {}
   },
@@ -292,13 +292,13 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "blastoisinite",
+    id: "Blastoisinite",
     name: "カメックスナイト",
     nameEn: "Blastoisinite",
     effect: {}
   },
   {
-    id: "blazikenite",
+    id: "Blazikenite",
     name: "バシャーモナイト",
     nameEn: "Blazikenite",
     effect: {}
@@ -358,7 +358,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "cameruptite",
+    id: "Cameruptite",
     name: "バクーダナイト",
     nameEn: "Cameruptite",
     effect: {}
@@ -370,14 +370,14 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "charizarditex",
-    name: "リザードナイトＸ",
+    id: "Charizardite X",
+    name: "リザードナイトX",
     nameEn: "Charizardite X",
     effect: {}
   },
   {
-    id: "charizarditey",
-    name: "リザードナイトＹ",
+    id: "Charizardite Y",
+    name: "リザードナイトY",
     nameEn: "Charizardite Y",
     effect: {}
   },
@@ -556,7 +556,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "diancite",
+    id: "Diancite",
     name: "ディアンシナイト",
     nameEn: "Diancite",
     effect: {}
@@ -886,7 +886,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "galladite",
+    id: "Galladite",
     name: "エルレイドナイト",
     nameEn: "Galladite",
     effect: {}
@@ -898,20 +898,20 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "garchompite",
+    id: "Garchompite",
     name: "ガブリアスナイト",
     nameEn: "Garchompite",
     effect: {}
   },
   {
-    id: "gardevoirite",
+    id: "Gardevoirite",
     name: "サーナイトナイト",
     nameEn: "Gardevoirite",
     effect: {}
   },
   {
-    id: "gengarite",
-    name: "ゲンガナイト",
+    id: "Gengarite",
+    name: "ゲンガーナイト",
     nameEn: "Gengarite",
     effect: {}
   },
@@ -934,7 +934,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "glalitite",
+    id: "Glalitite",
     name: "オニゴーリナイト",
     nameEn: "Glalitite",
     effect: {}
@@ -1019,7 +1019,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "gyaradosite",
+    id: "Gyaradosite",
     name: "ギャラドスナイト",
     nameEn: "Gyaradosite",
     effect: {}
@@ -1077,7 +1077,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "heracronite",
+    id: "Heracronite",
     name: "ヘラクロスナイト",
     nameEn: "Heracronite",
     effect: {}
@@ -1089,8 +1089,8 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "houndoominite",
-    name: "ヘルガナイト",
+    id: "Houndoominite",
+    name: "ヘルガーナイト",
     nameEn: "Houndoominite",
     effect: {}
   },
@@ -1179,7 +1179,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "kangaskhanite",
+    id: "Kangaskhanite",
     name: "ガルーラナイト",
     nameEn: "Kangaskhanite",
     effect: {}
@@ -1209,13 +1209,13 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "latiasite",
+    id: "Latiasite",
     name: "ラティアスナイト",
     nameEn: "Latiasite",
     effect: {}
   },
   {
-    id: "latiosite",
+    id: "Latiosite",
     name: "ラティオスナイト",
     nameEn: "Latiosite",
     effect: {}
@@ -1281,7 +1281,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "lopunnite",
+    id: "Lopunnite",
     name: "ミミロップナイト",
     nameEn: "Lopunnite",
     effect: {}
@@ -1299,7 +1299,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "lucarionite",
+    id: "Lucarionite",
     name: "ルカリオナイト",
     nameEn: "Lucarionite",
     effect: {}
@@ -1396,7 +1396,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "manectite",
+    id: "Manectite",
     name: "ライボルトナイト",
     nameEn: "Manectite",
     effect: {}
@@ -1426,13 +1426,13 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "mawilite",
+    id: "Mawilite",
     name: "クチートナイト",
     nameEn: "Mawilite",
     effect: {}
   },
   {
-    id: "medichamite",
+    id: "Medichamite",
     name: "チャーレムナイト",
     nameEn: "Medichamite",
     effect: {}
@@ -1444,7 +1444,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "metagrossite",
+    id: "Metagrossite",
     name: "メタグロスナイト",
     nameEn: "Metagrossite",
     effect: {}
@@ -1484,14 +1484,14 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "mewtwonitex",
-    name: "ミュウツナイトＸ",
+    id: "Mewtwonite X",
+    name: "ミュウツーナイトX",
     nameEn: "Mewtwonite X",
     effect: {}
   },
   {
-    id: "mewtwonitey",
-    name: "ミュウツナイトＹ",
+    id: "Mewtwonite Y",
+    name: "ミュウツーナイトY",
     nameEn: "Mewtwonite Y",
     effect: {}
   },
@@ -1669,7 +1669,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "pidgeotite",
+    id: "Pidgeotite",
     name: "ピジョットナイト",
     nameEn: "Pidgeotite",
     effect: {}
@@ -1693,7 +1693,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "pinsirite",
+    id: "Pinsirite",
     name: "カイロスナイト",
     nameEn: "Pinsirite",
     effect: {}
@@ -2022,7 +2022,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "sablenite",
+    id: "Sablenite",
     name: "ヤミラミナイト",
     nameEn: "Sablenite",
     effect: {}
@@ -2058,19 +2058,19 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "salamencite",
+    id: "Salamencite",
     name: "ボーマンダナイト",
     nameEn: "Salamencite",
     effect: {}
   },
   {
-    id: "sceptilite",
+    id: "Sceptilite",
     name: "ジュカインナイト",
     nameEn: "Sceptilite",
     effect: {}
   },
   {
-    id: "scizorite",
+    id: "Scizorite",
     name: "ハッサムナイト",
     nameEn: "Scizorite",
     effect: {}
@@ -2098,8 +2098,8 @@ export const items: Item[] = [
     }
   },
   {
-    id: "sharpedonite",
-    name: "サメハダナイト",
+    id: "Sharpedonite",
+    name: "サメハダーナイト",
     nameEn: "Sharpedonite",
     effect: {}
   },
@@ -2162,7 +2162,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "slowbronite",
+    id: "Slowbronite",
     name: "ヤドランナイト",
     nameEn: "Slowbronite",
     effect: {}
@@ -2242,7 +2242,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "steelixite",
+    id: "Steelixite",
     name: "ハガネールナイト",
     nameEn: "Steelixite",
     effect: {}
@@ -2296,7 +2296,7 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "swampertite",
+    id: "Swampertite",
     name: "ラグラージナイト",
     nameEn: "Swampertite",
     effect: {}
@@ -2384,7 +2384,7 @@ export const items: Item[] = [
     }
   },
   {
-    id: "tyranitarite",
+    id: "Tyranitarite",
     name: "バンギラスナイト",
     nameEn: "Tyranitarite",
     effect: {}
@@ -2420,8 +2420,8 @@ export const items: Item[] = [
     effect: {}
   },
   {
-    id: "venusaurite",
-    name: "フシギバナイト",
+    id: "Venusaurite",
+    name: "フシギバナナイト",
     nameEn: "Venusaurite",
     effect: {}
   },
@@ -2728,5 +2728,274 @@ export const items: Item[] = [
       type: 'none',
     }
   },
-
+  {
+    id: "Baxcalibrite",
+    name: "セグレイブナイト",
+    nameEn: "Baxcalibrite",
+    effect: {}
+  },
+  {
+    id: "Chandelurite",
+    name: "シャンデラナイト",
+    nameEn: "Chandelurite",
+    effect: {}
+  },
+  {
+    id: "Chesnaughtite",
+    name: "ブリガロンナイト",
+    nameEn: "Chesnaughtite",
+    effect: {}
+  },
+  {
+    id: "Chimechite",
+    name: "チリーンナイト",
+    nameEn: "Chimechite",
+    effect: {}
+  },
+  {
+    id: "Clefablite",
+    name: "ピクシーナイト",
+    nameEn: "Clefablite",
+    effect: {}
+  },
+  {
+    id: "Crabominite",
+    name: "ケケンカナイト",
+    nameEn: "Crabominite",
+    effect: {}
+  },
+  {
+    id: "Darkranite",
+    name: "ダークライナイト",
+    nameEn: "Darkranite",
+    effect: {}
+  },
+  {
+    id: "Delphoxite",
+    name: "マフォクシーナイト",
+    nameEn: "Delphoxite",
+    effect: {}
+  },
+  {
+    id: "Dragalgite",
+    name: "ドラミドロナイト",
+    nameEn: "Dragalgite",
+    effect: {}
+  },
+  {
+    id: "Dragoninite",
+    name: "カイリューナイト",
+    nameEn: "Dragoninite",
+    effect: {}
+  },
+  {
+    id: "Drampanite",
+    name: "ジジーロンナイト",
+    nameEn: "Drampanite",
+    effect: {}
+  },
+  {
+    id: "Eelektrossite",
+    name: "シビルドンナイト",
+    nameEn: "Eelektrossite",
+    effect: {}
+  },
+  {
+    id: "Emboarite",
+    name: "エンブオーナイト",
+    nameEn: "Emboarite",
+    effect: {}
+  },
+  {
+    id: "Excadrite",
+    name: "ドリュウズナイト",
+    nameEn: "Excadrite",
+    effect: {}
+  },
+  {
+    id: "Falinksite",
+    name: "タイレーツナイト",
+    nameEn: "Falinksite",
+    effect: {}
+  },
+  {
+    id: "Feraligite",
+    name: "オーダイルナイト",
+    nameEn: "Feraligite",
+    effect: {}
+  },
+  {
+    id: "Floettite",
+    name: "フラエッテナイト",
+    nameEn: "Floettite",
+    effect: {}
+  },
+  {
+    id: "Froslassite",
+    name: "ユキメノコナイト",
+    nameEn: "Froslassite",
+    effect: {}
+  },
+  {
+    id: "Garchompite Z",
+    name: "ガブリアスナイトZ",
+    nameEn: "Garchompite Z",
+    effect: {}
+  },
+  {
+    id: "Glimmoranite",
+    name: "キラフロルナイト",
+    nameEn: "Glimmoranite",
+    effect: {}
+  },
+  {
+    id: "Golisopite",
+    name: "グソクムシャナイト",
+    nameEn: "Golisopite",
+    effect: {}
+  },
+  {
+    id: "Golurkite",
+    name: "ゴルーグナイト",
+    nameEn: "Golurkite",
+    effect: {}
+  },
+  {
+    id: "Greninjite",
+    name: "ゲッコウガナイト",
+    nameEn: "Greninjite",
+    effect: {}
+  },
+  {
+    id: "Hawluchanite",
+    name: "ルチャブルナイト",
+    nameEn: "Hawluchanite",
+    effect: {}
+  },
+  {
+    id: "Heatranite",
+    name: "ヒードランナイト",
+    nameEn: "Heatranite",
+    effect: {}
+  },
+  {
+    id: "Lucarionite Z",
+    name: "ルカリオナイトZ",
+    nameEn: "Lucarionite Z",
+    effect: {}
+  },
+  {
+    id: "Magearnite",
+    name: "マギアナナイト",
+    nameEn: "Magearnite",
+    effect: {}
+  },
+  {
+    id: "Malamarite",
+    name: "カラマネロナイト",
+    nameEn: "Malamarite",
+    effect: {}
+  },
+  {
+    id: "Meganiumite",
+    name: "メガニウムナイト",
+    nameEn: "Meganiumite",
+    effect: {}
+  },
+  {
+    id: "Meowsticite",
+    name: "ニャオニクスナイト",
+    nameEn: "Meowsticite",
+    effect: {}
+  },
+  {
+    id: "Pyroarite",
+    name: "カエンジシナイト",
+    nameEn: "Pyroarite",
+    effect: {}
+  },
+  {
+    id: "Raichunite X",
+    name: "ライチュウナイトX",
+    nameEn: "Raichunite X",
+    effect: {}
+  },
+  {
+    id: "Raichunite Y",
+    name: "ライチュウナイトY",
+    nameEn: "Raichunite Y",
+    effect: {}
+  },
+  {
+    id: "Scolipite",
+    name: "ペンドラーナイト",
+    nameEn: "Scolipite",
+    effect: {}
+  },
+  {
+    id: "Scovillainite",
+    name: "スコヴィランナイト",
+    nameEn: "Scovillainite",
+    effect: {}
+  },
+  {
+    id: "Scraftinite",
+    name: "ズルズキンナイト",
+    nameEn: "Scraftinite",
+    effect: {}
+  },
+  {
+    id: "Skarmorite",
+    name: "エアームドナイト",
+    nameEn: "Skarmorite",
+    effect: {}
+  },
+  {
+    id: "Staraptite",
+    name: "ムクホークナイト",
+    nameEn: "Staraptite",
+    effect: {}
+  },
+  {
+    id: "Starminite",
+    name: "スターミーナイト",
+    nameEn: "Starminite",
+    effect: {}
+  },
+  {
+    id: "Tatsugirinite",
+    name: "シャリタツナイト",
+    nameEn: "Tatsugirinite",
+    effect: {}
+  },
+  {
+    id: "Victreebelite",
+    name: "ウツボットナイト",
+    nameEn: "Victreebelite",
+    effect: {}
+  },
+  {
+    id: "Zeraorite",
+    name: "ゼラオアナイト",
+    nameEn: "Zeraorite",
+    effect: {}
+  },
+  {
+    id: "Zygardite",
+    name: "ジガルデナイト",
+    nameEn: "Zygardite",
+    effect: {}
+  },
+  {
+    id: "Absolite Z",
+    name: "アブソルナイトZ",
+    nameEn: "Absolite Z",
+    effect: {}
+  },
+  {
+    id: "Barbaracite",
+    name: "ガメノデスナイト",
+    nameEn: "Barbaracite",
+    effect: {}
+  }
 ];

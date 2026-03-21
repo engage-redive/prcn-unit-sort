@@ -17832,7 +17832,7 @@ export const pokedex: Pokemon[] = [
     "weight": 61
   },
   {
-    "id": "0645-t",
+    "id": "0645-s",
     "name": "ランドロス (れいじゅう)",
     "nameEn": "Landorus-Therian",
     "types": ["ground", "flying"],
@@ -17849,7 +17849,7 @@ export const pokedex: Pokemon[] = [
     "weight": 68
   },
   {
-    "id": "0905-t",
+    "id": "0905-s",
     "name": "ラブトロス (れいじゅう)",
     "nameEn": "Enamorus-Therian",
     "types": ["fairy", "flying"],
@@ -18606,7 +18606,7 @@ export const pokedex: Pokemon[] = [
     "weight": 155.5,
     "baseSpecies": "0003",
     "isMega": true,
-    "reqItem": "venusaurite"
+    "reqItem": "Venusaurite"
   },
   // requiredItem: Charizardite X
   {
@@ -18632,7 +18632,7 @@ export const pokedex: Pokemon[] = [
     "weight": 110.5,
     "baseSpecies": "0006",
     "isMega": true,
-    "reqItem": "charizarditex"
+    "reqItem": "Charizardite X"
   },
   // requiredItem: Charizardite Y
   {
@@ -18658,7 +18658,7 @@ export const pokedex: Pokemon[] = [
     "weight": 100.5,
     "baseSpecies": "0006",
     "isMega": true,
-    "reqItem": "charizarditey"
+    "reqItem": "Charizardite Y"
   },
   // requiredItem: Blastoisinite
   {
@@ -18683,7 +18683,7 @@ export const pokedex: Pokemon[] = [
     "weight": 101.1,
     "baseSpecies": "0009",
     "isMega": true,
-    "reqItem": "blastoisinite"
+    "reqItem": "Blastoisinite"
   },
   // requiredItem: Beedrillite
   {
@@ -18709,7 +18709,7 @@ export const pokedex: Pokemon[] = [
     "weight": 40.5,
     "baseSpecies": "0015",
     "isMega": true,
-    "reqItem": "beedrillite"
+    "reqItem": "Beedrillite"
   },
   // requiredItem: Pidgeotite
   {
@@ -18735,7 +18735,7 @@ export const pokedex: Pokemon[] = [
     "weight": 50.5,
     "baseSpecies": "0018",
     "isMega": true,
-    "reqItem": "pidgeotite"
+    "reqItem": "Pidgeotite"
   },
   // requiredItem: Raichunite X
   {
@@ -18760,7 +18760,7 @@ export const pokedex: Pokemon[] = [
     "weight": 38,
     "baseSpecies": "0026",
     "isMega": true,
-    "reqItem": "aloraichuniumz"
+    "reqItem": "Raichunite X"
   },
   // requiredItem: Raichunite Y
   {
@@ -18785,7 +18785,7 @@ export const pokedex: Pokemon[] = [
     "weight": 26,
     "baseSpecies": "0026",
     "isMega": true,
-    "reqItem": "aloraichuniumz"
+    "reqItem": "Raichunite Y"
   },
   // requiredItem: Clefablite
   {
@@ -18813,7 +18813,7 @@ export const pokedex: Pokemon[] = [
     "weight": 42.3,
     "baseSpecies": "0036",
     "isMega": true,
-    "reqItem": "clefableite"
+    "reqItem": "Clefablite"
   },
   // requiredItem: Alakazite
   {
@@ -18838,7 +18838,7 @@ export const pokedex: Pokemon[] = [
     "weight": 48,
     "baseSpecies": "0065",
     "isMega": true,
-    "reqItem": "alakazite"
+    "reqItem": "Alakazite"
   },
   // requiredItem: Victreebelite
   {
@@ -18865,7 +18865,7 @@ export const pokedex: Pokemon[] = [
     "weight": 125.5,
     "baseSpecies": "0071",
     "isMega": true,
-    "reqItem": "victreebelite"
+    "reqItem": "Victreebelite"
   },
   // requiredItem: Slowbronite
   {
@@ -18891,7 +18891,7 @@ export const pokedex: Pokemon[] = [
     "weight": 120,
     "baseSpecies": "0080",
     "isMega": true,
-    "reqItem": "slowbronite"
+    "reqItem": "Slowbronite"
   },
   // requiredItem: Gengarite
   {
@@ -18917,7 +18917,7 @@ export const pokedex: Pokemon[] = [
     "weight": 40.5,
     "baseSpecies": "0094",
     "isMega": true,
-    "reqItem": "gengarite"
+    "reqItem": "Gengarite"
   },
   // requiredItem: Kangaskhanite
   {
@@ -18942,7 +18942,7 @@ export const pokedex: Pokemon[] = [
     "weight": 100,
     "baseSpecies": "0115",
     "isMega": true,
-    "reqItem": "kangaskhanite"
+    "reqItem": "Kangaskhanite"
   },
   // requiredItem: Starminite
   {
@@ -18970,7 +18970,7 @@ export const pokedex: Pokemon[] = [
     "weight": 80,
     "baseSpecies": "0121",
     "isMega": true,
-    "reqItem": "starmiete"
+    "reqItem": "Starminite"
   },
   // requiredItem: Pinsirite
   {
@@ -18996,7 +18996,7 @@ export const pokedex: Pokemon[] = [
     "weight": 59,
     "baseSpecies": "0127",
     "isMega": true,
-    "reqItem": "pinsirite"
+    "reqItem": "Pinsirite"
   },
   // requiredItem: Gyaradosite
   {
@@ -19022,7 +19022,7 @@ export const pokedex: Pokemon[] = [
     "weight": 305,
     "baseSpecies": "0130",
     "isMega": true,
-    "reqItem": "gyaradosite"
+    "reqItem": "Gyaradosite"
   },
   // requiredItem: Aerodactylite
   {
@@ -19048,7 +19048,7 @@ export const pokedex: Pokemon[] = [
     "weight": 79,
     "baseSpecies": "0142",
     "isMega": true,
-    "reqItem": "aerodactylite"
+    "reqItem": "Aerodactylite"
   },
   // requiredItem: Dragoninite
   {
@@ -19075,7 +19075,7 @@ export const pokedex: Pokemon[] = [
     "weight": 290,
     "baseSpecies": "0149",
     "isMega": true,
-    "reqItem": "dragonite"
+    "reqItem": "Dragoninite"
   },
   // requiredItem: Mewtwonite X
   {
@@ -19101,7 +19101,7 @@ export const pokedex: Pokemon[] = [
     "weight": 127,
     "baseSpecies": "0150",
     "isMega": true,
-    "reqItem": "mewtwonite-x"
+    "reqItem": "Mewtwonite X"
   },
   // requiredItem: Mewtwonite Y
   {
@@ -19126,7 +19126,7 @@ export const pokedex: Pokemon[] = [
     "weight": 33,
     "baseSpecies": "0150",
     "isMega": true,
-    "reqItem": "mewtwonite-y"
+    "reqItem": "Mewtwonite Y"
   },
   // requiredItem: Meganiumite
   {
@@ -19153,7 +19153,7 @@ export const pokedex: Pokemon[] = [
     "weight": 201,
     "baseSpecies": "0154",
     "isMega": true,
-    "reqItem": "meganiumite"
+    "reqItem": "Meganiumite"
   },
   // requiredItem: Feraligite
   {
@@ -19180,7 +19180,7 @@ export const pokedex: Pokemon[] = [
     "weight": 108.8,
     "baseSpecies": "0160",
     "isMega": true,
-    "reqItem": "feraligatrite"
+    "reqItem": "Feraligite"
   },
   // requiredItem: Ampharosite
   {
@@ -19206,7 +19206,7 @@ export const pokedex: Pokemon[] = [
     "weight": 61.5,
     "baseSpecies": "0181",
     "isMega": true,
-    "reqItem": "ampharosite"
+    "reqItem": "Ampharosite"
   },
   // requiredItem: Steelixite
   {
@@ -19232,7 +19232,7 @@ export const pokedex: Pokemon[] = [
     "weight": 740,
     "baseSpecies": "0208",
     "isMega": true,
-    "reqItem": "steelixite"
+    "reqItem": "Steelixite"
   },
   // requiredItem: Scizorite
   {
@@ -19258,7 +19258,7 @@ export const pokedex: Pokemon[] = [
     "weight": 125,
     "baseSpecies": "0212",
     "isMega": true,
-    "reqItem": "scizorite"
+    "reqItem": "Scizorite"
   },
   // requiredItem: Heracronite
   {
@@ -19284,7 +19284,7 @@ export const pokedex: Pokemon[] = [
     "weight": 62.5,
     "baseSpecies": "0214",
     "isMega": true,
-    "reqItem": "heracronite"
+    "reqItem": "Heracronite"
   },
   // requiredItem: Skarmorite
   {
@@ -19311,7 +19311,8 @@ export const pokedex: Pokemon[] = [
     "height": 1.7,
     "weight": 40.4,
     "baseSpecies": "0227",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Skarmorite"
   },
   // requiredItem: Houndoominite
   {
@@ -19337,7 +19338,7 @@ export const pokedex: Pokemon[] = [
     "weight": 49.5,
     "baseSpecies": "0229",
     "isMega": true,
-    "reqItem": "houndoominite"
+    "reqItem": "Houndoominite"
   },
   // requiredItem: Tyranitarite
   {
@@ -19363,7 +19364,7 @@ export const pokedex: Pokemon[] = [
     "weight": 255,
     "baseSpecies": "0248",
     "isMega": true,
-    "reqItem": "tyranitarite"
+    "reqItem": "Tyranitarite"
   },
   // requiredItem: Sceptilite
   {
@@ -19389,7 +19390,7 @@ export const pokedex: Pokemon[] = [
     "weight": 55.2,
     "baseSpecies": "0254",
     "isMega": true,
-    "reqItem": "sceptilite"
+    "reqItem": "Sceptilite"
   },
   // requiredItem: Blazikenite
   {
@@ -19415,7 +19416,7 @@ export const pokedex: Pokemon[] = [
     "weight": 52,
     "baseSpecies": "0257",
     "isMega": true,
-    "reqItem": "blazikenite"
+    "reqItem": "Blazikenite"
   },
   // requiredItem: Swampertite
   {
@@ -19441,7 +19442,7 @@ export const pokedex: Pokemon[] = [
     "weight": 102,
     "baseSpecies": "0260",
     "isMega": true,
-    "reqItem": "swampertite"
+    "reqItem": "Swampertite"
   },
   // requiredItem: Gardevoirite
   {
@@ -19467,7 +19468,7 @@ export const pokedex: Pokemon[] = [
     "weight": 48.4,
     "baseSpecies": "0282",
     "isMega": true,
-    "reqItem": "gardevoirite"
+    "reqItem": "Gardevoirite"
   },
   // requiredItem: Sablenite
   {
@@ -19493,7 +19494,7 @@ export const pokedex: Pokemon[] = [
     "weight": 161,
     "baseSpecies": "0302",
     "isMega": true,
-    "reqItem": "sablenite"
+    "reqItem": "Sablenite"
   },
   // requiredItem: Mawilite
   {
@@ -19519,7 +19520,7 @@ export const pokedex: Pokemon[] = [
     "weight": 23.5,
     "baseSpecies": "0303",
     "isMega": true,
-    "reqItem": "mawilite"
+    "reqItem": "Mawilite"
   },
   // requiredItem: Aggronite
   {
@@ -19544,7 +19545,7 @@ export const pokedex: Pokemon[] = [
     "weight": 395,
     "baseSpecies": "0306",
     "isMega": true,
-    "reqItem": "aggronite"
+    "reqItem": "Aggronite"
   },
   // requiredItem: Medichamite
   {
@@ -19570,7 +19571,7 @@ export const pokedex: Pokemon[] = [
     "weight": 31.5,
     "baseSpecies": "0308",
     "isMega": true,
-    "reqItem": "medichamite"
+    "reqItem": "Medichamite"
   },
   // requiredItem: Manectite
   {
@@ -19595,7 +19596,7 @@ export const pokedex: Pokemon[] = [
     "weight": 44,
     "baseSpecies": "0310",
     "isMega": true,
-    "reqItem": "manectite"
+    "reqItem": "Manectite"
   },
   // requiredItem: Sharpedonite
   {
@@ -19621,7 +19622,7 @@ export const pokedex: Pokemon[] = [
     "weight": 130.3,
     "baseSpecies": "0319",
     "isMega": true,
-    "reqItem": "sharpedonite"
+    "reqItem": "Sharpedonite"
   },
   // requiredItem: Cameruptite
   {
@@ -19647,7 +19648,7 @@ export const pokedex: Pokemon[] = [
     "weight": 320.5,
     "baseSpecies": "0323",
     "isMega": true,
-    "reqItem": "cameruptite"
+    "reqItem": "Cameruptite"
   },
   // requiredItem: Altarianite
   {
@@ -19673,7 +19674,7 @@ export const pokedex: Pokemon[] = [
     "weight": 20.6,
     "baseSpecies": "0334",
     "isMega": true,
-    "reqItem": "altarianite"
+    "reqItem": "Altarianite"
   },
   // requiredItem: Banettite
   {
@@ -19698,7 +19699,7 @@ export const pokedex: Pokemon[] = [
     "weight": 13,
     "baseSpecies": "0354",
     "isMega": true,
-    "reqItem": "banettite"
+    "reqItem": "Banettite"
   },
   // requiredItem: Chimechite
   {
@@ -19723,7 +19724,8 @@ export const pokedex: Pokemon[] = [
     "height": 1.2,
     "weight": 8,
     "baseSpecies": "0358",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Chimechite"
   },
   // requiredItem: Absolite
   {
@@ -19748,7 +19750,7 @@ export const pokedex: Pokemon[] = [
     "weight": 49,
     "baseSpecies": "0359",
     "isMega": true,
-    "reqItem": "absolite"
+    "reqItem": "Absolite"
   },
   // requiredItem: Absolite Z
   {
@@ -19774,7 +19776,7 @@ export const pokedex: Pokemon[] = [
     "weight": 49,
     "baseSpecies": "0359",
     "isMega": true,
-    "reqItem": "absolite"
+    "reqItem": "Absolite Z"
   },
   // requiredItem: Glalitite
   {
@@ -19799,7 +19801,7 @@ export const pokedex: Pokemon[] = [
     "weight": 350.2,
     "baseSpecies": "0362",
     "isMega": true,
-    "reqItem": "glalitite"
+    "reqItem": "Glalitite"
   },
   // requiredItem: Salamencite
   {
@@ -19825,7 +19827,7 @@ export const pokedex: Pokemon[] = [
     "weight": 112.6,
     "baseSpecies": "0373",
     "isMega": true,
-    "reqItem": "salamencite"
+    "reqItem": "Salamencite"
   },
   // requiredItem: Metagrossite
   {
@@ -19851,7 +19853,7 @@ export const pokedex: Pokemon[] = [
     "weight": 942.9,
     "baseSpecies": "0376",
     "isMega": true,
-    "reqItem": "metagrossite"
+    "reqItem": "Metagrossite"
   },
   // requiredItem: Latiasite
   {
@@ -19877,7 +19879,7 @@ export const pokedex: Pokemon[] = [
     "weight": 52,
     "baseSpecies": "0380",
     "isMega": true,
-    "reqItem": "latiasite"
+    "reqItem": "Latiasite"
   },
   // requiredItem: Latiosite
   {
@@ -19903,7 +19905,7 @@ export const pokedex: Pokemon[] = [
     "weight": 70,
     "baseSpecies": "0381",
     "isMega": true,
-    "reqItem": "latiosite"
+    "reqItem": "Latiosite"
   },
   {
     "id": "0384-m",
@@ -19927,8 +19929,7 @@ export const pokedex: Pokemon[] = [
     "height": 10.8,
     "weight": 392,
     "baseSpecies": "0384",
-    "isMega": true,
-    "reqItem": "rayquazite"
+    "isMega": true
   },
   // requiredItem: Staraptite
   {
@@ -19954,7 +19955,8 @@ export const pokedex: Pokemon[] = [
     "height": 1.9,
     "weight": 50,
     "baseSpecies": "0398",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Staraptite"
   },
   // requiredItem: Lopunnite
   {
@@ -19980,7 +19982,7 @@ export const pokedex: Pokemon[] = [
     "weight": 28.3,
     "baseSpecies": "0428",
     "isMega": true,
-    "reqItem": "lopunnite"
+    "reqItem": "Lopunnite"
   },
   // requiredItem: Garchompite
   {
@@ -20006,7 +20008,7 @@ export const pokedex: Pokemon[] = [
     "weight": 95,
     "baseSpecies": "0445",
     "isMega": true,
-    "reqItem": "garchompite"
+    "reqItem": "Garchompite"
   },
   // requiredItem: Garchompite Z
   {
@@ -20031,7 +20033,7 @@ export const pokedex: Pokemon[] = [
     "weight": 99,
     "baseSpecies": "0445",
     "isMega": true,
-    "reqItem": "garchompite"
+    "reqItem": "Garchompite Z"
   },
   // requiredItem: Lucarionite
   {
@@ -20057,7 +20059,7 @@ export const pokedex: Pokemon[] = [
     "weight": 57.5,
     "baseSpecies": "0448",
     "isMega": true,
-    "reqItem": "lucarionite"
+    "reqItem": "Lucarionite"
   },
   // requiredItem: Lucarionite Z
   {
@@ -20083,7 +20085,7 @@ export const pokedex: Pokemon[] = [
     "weight": 49.4,
     "baseSpecies": "0448",
     "isMega": true,
-    "reqItem": "lucarionite"
+    "reqItem": "Lucarionite Z"
   },
   // requiredItem: Abomasite
   {
@@ -20109,7 +20111,7 @@ export const pokedex: Pokemon[] = [
     "weight": 185,
     "baseSpecies": "0460",
     "isMega": true,
-    "reqItem": "abomasite"
+    "reqItem": "Abomasite"
   },
   // requiredItem: Galladite
   {
@@ -20135,7 +20137,7 @@ export const pokedex: Pokemon[] = [
     "weight": 56.4,
     "baseSpecies": "0475",
     "isMega": true,
-    "reqItem": "galladite"
+    "reqItem": "Galladite"
   },
   // requiredItem: Froslassite
   {
@@ -20161,7 +20163,8 @@ export const pokedex: Pokemon[] = [
     "height": 2.6,
     "weight": 29.6,
     "baseSpecies": "0478",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Froslassite"
   },
   // requiredItem: Heatranite
   {
@@ -20211,7 +20214,8 @@ export const pokedex: Pokemon[] = [
     "height": 3,
     "weight": 240,
     "baseSpecies": "0491",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Darkranite"
   },
   // requiredItem: Emboarite
   {
@@ -20237,7 +20241,8 @@ export const pokedex: Pokemon[] = [
     "height": 1.8,
     "weight": 180.3,
     "baseSpecies": "0500",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Emboarite"
   },
   // requiredItem: Excadrite
   {
@@ -20264,7 +20269,8 @@ export const pokedex: Pokemon[] = [
     "height": 0.9,
     "weight": 60,
     "baseSpecies": "0530",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Excadrite"
   },
   // requiredItem: Audinite
   {
@@ -20290,7 +20296,7 @@ export const pokedex: Pokemon[] = [
     "weight": 32,
     "baseSpecies": "0531",
     "isMega": true,
-    "reqItem": "audinite"
+    "reqItem": "Audinite"
   },
   // requiredItem: Scolipite
   {
@@ -20318,7 +20324,7 @@ export const pokedex: Pokemon[] = [
     "weight": 230.5,
     "baseSpecies": "0545",
     "isMega": true,
-    "reqItem": "scolipede"
+    "reqItem": "Scolipite"
   },
   // requiredItem: Scraftinite
   {
@@ -20345,7 +20351,8 @@ export const pokedex: Pokemon[] = [
     "height": 1.1,
     "weight": 31,
     "baseSpecies": "0560",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Scraftinite"
   },
   // requiredItem: Eelektrossite
   {
@@ -20369,7 +20376,8 @@ export const pokedex: Pokemon[] = [
     "height": 3,
     "weight": 160,
     "baseSpecies": "0604",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Eelektrossite"
   },
   // requiredItem: Chandelurite
   {
@@ -20396,7 +20404,8 @@ export const pokedex: Pokemon[] = [
     "height": 2.5,
     "weight": 69.6,
     "baseSpecies": "0609",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Chandelurite"
   },
   // requiredItem: Golurkite
   {
@@ -20423,7 +20432,8 @@ export const pokedex: Pokemon[] = [
     "height": 4,
     "weight": 330,
     "baseSpecies": "0623",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Golurkite"
   },
   // requiredItem: Chesnaughtite
   {
@@ -20448,7 +20458,8 @@ export const pokedex: Pokemon[] = [
     "height": 1.6,
     "weight": 90,
     "baseSpecies": "0652",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Chesnaughtite"
   },
   // requiredItem: Delphoxite
   {
@@ -20473,7 +20484,8 @@ export const pokedex: Pokemon[] = [
     "height": 1.5,
     "weight": 39,
     "baseSpecies": "0655",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Delphoxite"
   },
   // requiredItem: Greninjite
   {
@@ -20498,7 +20510,8 @@ export const pokedex: Pokemon[] = [
     "height": 1.5,
     "weight": 40,
     "baseSpecies": "0658",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Greninjite"
   },
   // requiredItem: Pyroarite
   {
@@ -20525,7 +20538,8 @@ export const pokedex: Pokemon[] = [
     "height": 1.5,
     "weight": 93.3,
     "baseSpecies": "0668",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Pyroarite"
   },
   // requiredItem: Floettite
   {
@@ -20550,7 +20564,8 @@ export const pokedex: Pokemon[] = [
     "height": 0.2,
     "weight": 100.8,
     "baseSpecies": "0670",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Floettite"
   },
   // requiredItem: Malamarite
   {
@@ -20577,7 +20592,8 @@ export const pokedex: Pokemon[] = [
     "height": 2.9,
     "weight": 69.8,
     "baseSpecies": "0687",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Malamarite"
   },
   // requiredItem: Barbaracite
   {
@@ -20604,7 +20620,8 @@ export const pokedex: Pokemon[] = [
     "height": 2.2,
     "weight": 100,
     "baseSpecies": "0689",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Barbaracite"
   },
   // requiredItem: Dragalgite
   {
@@ -20631,7 +20648,8 @@ export const pokedex: Pokemon[] = [
     "height": 2.1,
     "weight": 100.3,
     "baseSpecies": "0691",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Dragalgite"
   },
   // requiredItem: Hawluchanite
   {
@@ -20658,7 +20676,8 @@ export const pokedex: Pokemon[] = [
     "height": 1,
     "weight": 25,
     "baseSpecies": "0701",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Hawluchanite"
   },
   // requiredItem: Zygardite
   {
@@ -20683,7 +20702,8 @@ export const pokedex: Pokemon[] = [
     "height": 7.7,
     "weight": 610,
     "baseSpecies": "0718",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Zygardite"
   },
   // requiredItem: Diancite
   {
@@ -20709,7 +20729,7 @@ export const pokedex: Pokemon[] = [
     "weight": 27.8,
     "baseSpecies": "0719",
     "isMega": true,
-    "reqItem": "diancite"
+    "reqItem": "Diancite"
   },
   // requiredItem: Crabominite
   {
@@ -20736,7 +20756,8 @@ export const pokedex: Pokemon[] = [
     "height": 2.6,
     "weight": 252.8,
     "baseSpecies": "0740",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Crabominite"
   },
   // requiredItem: Golisopite
   {
@@ -20761,7 +20782,8 @@ export const pokedex: Pokemon[] = [
     "height": 2.3,
     "weight": 148,
     "baseSpecies": "0768",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Golisopite"
   },
   // requiredItem: Drampanite
   {
@@ -20788,7 +20810,8 @@ export const pokedex: Pokemon[] = [
     "height": 3,
     "weight": 185,
     "baseSpecies": "0780",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Drampanite"
   },
   // requiredItem: Magearnite
   {
@@ -20837,7 +20860,8 @@ export const pokedex: Pokemon[] = [
     "height": 1.5,
     "weight": 44.5,
     "baseSpecies": "0807",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Zeraorite"
   },
   // requiredItem: Falinksite
   {
@@ -20862,7 +20886,8 @@ export const pokedex: Pokemon[] = [
     "height": 1.6,
     "weight": 99,
     "baseSpecies": "0870",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Falinksite"
   },
   // requiredItem: Scovillainite
   {
@@ -20889,7 +20914,8 @@ export const pokedex: Pokemon[] = [
     "height": 1.2,
     "weight": 22,
     "baseSpecies": "0952",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Scovillainite"
   },
   // requiredItem: Glimmoranite
   {
@@ -20915,7 +20941,8 @@ export const pokedex: Pokemon[] = [
     "height": 2.8,
     "weight": 77,
     "baseSpecies": "0970",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Glimmoranite"
   },
   // requiredItem: Baxcalibrite
   {
@@ -20941,7 +20968,8 @@ export const pokedex: Pokemon[] = [
     "height": 2.1,
     "weight": 315,
     "baseSpecies": "0998",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Baxcalibrite"
   },
   {
     "id": "0978-m",
@@ -20960,7 +20988,8 @@ export const pokedex: Pokemon[] = [
     "height": 0.3,
     "weight": 8,
     "baseSpecies": "0978",
-    "isMega": true
+    "isMega": true,
+    "reqItem": "Tatsugirinite"
   }
 ];
 
