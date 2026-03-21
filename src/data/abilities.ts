@@ -120,7 +120,8 @@ export const abilities: Ability[] = [
   {
     id: 'adaptability',
     name: 'てきおうりょく',
-    nameEn: 'Adaptability'
+    nameEn: 'Adaptability',
+    side: 'attacker'
   },
   {
     id: 'aerilate',

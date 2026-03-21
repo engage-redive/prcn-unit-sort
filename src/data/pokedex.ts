@@ -15808,7 +15808,7 @@ export const pokedex: Pokemon[] = [
   },
   {
     "id": "0925",
-    "name": "イッカネズミ (３びきかぞく)",
+    "name": "イッカネズミ",
     "nameEn": "Maushold",
     "types": ["normal"],
     "baseStats": {
@@ -20990,6 +20990,108 @@ export const pokedex: Pokemon[] = [
     "baseSpecies": "0978",
     "isMega": true,
     "reqItem": "Tatsugirinite"
+  },
+  {
+    "id": "0088-a",
+    "name": "ベトベター (アローラ)",
+    "nameEn": "Grimer-Alola",
+    "types": ["poison", "dark"],
+    "baseStats": {
+      "hp": 80,
+      "attack": 80,
+      "defense": 50,
+      "specialAttack": 40,
+      "specialDefense": 50,
+      "speed": 25
+    },
+    "abilities": ["Poison Touch", "Gluttony", "Power of Alchemy"],
+    "height": 0.7,
+    "weight": 42
+  },
+  {
+    "id": "0089-a",
+    "name": "ベトベトン (アローラ)",
+    "nameEn": "Muk-Alola",
+    "types": ["poison", "dark"],
+    "baseStats": {
+      "hp": 105,
+      "attack": 105,
+      "defense": 75,
+      "specialAttack": 65,
+      "specialDefense": 100,
+      "speed": 50
+    },
+    "abilities": ["Poison Touch", "Gluttony", "Power of Alchemy"],
+    "height": 1,
+    "weight": 52
+  },
+  {
+    "id": "0019",
+    "name": "コラッタ",
+    "nameEn": "Rattata",
+    "types": ["normal"],
+    "baseStats": {
+      "hp": 30,
+      "attack": 56,
+      "defense": 35,
+      "specialAttack": 25,
+      "specialDefense": 35,
+      "speed": 72
+    },
+    "abilities": ["Run Away", "Guts", "Hustle"],
+    "height": 0.3,
+    "weight": 3.5
+  },
+  {
+    "id": "0019-a",
+    "name": "コラッタ (アローラ)",
+    "nameEn": "Rattata-Alola",
+    "types": ["dark", "normal"],
+    "baseStats": {
+      "hp": 30,
+      "attack": 56,
+      "defense": 35,
+      "specialAttack": 25,
+      "specialDefense": 35,
+      "speed": 72
+    },
+    "abilities": ["Gluttony", "Hustle", "Thick Fat"],
+    "height": 0.3,
+    "weight": 3.8
+  },
+  {
+    "id": "0020",
+    "name": "ラッタ",
+    "nameEn": "Raticate",
+    "types": ["normal"],
+    "baseStats": {
+      "hp": 55,
+      "attack": 81,
+      "defense": 60,
+      "specialAttack": 50,
+      "specialDefense": 70,
+      "speed": 97
+    },
+    "abilities": ["Run Away", "Guts", "Hustle"],
+    "height": 0.7,
+    "weight": 18.5
+  },
+  {
+    "id": "0020-a",
+    "name": "ラッタ (アローラ)",
+    "nameEn": "Raticate-Alola",
+    "types": ["dark", "normal"],
+    "baseStats": {
+      "hp": 75,
+      "attack": 71,
+      "defense": 70,
+      "specialAttack": 40,
+      "specialDefense": 80,
+      "speed": 77
+    },
+    "abilities": ["Gluttony", "Hustle", "Thick Fat"],
+    "height": 0.7,
+    "weight": 25.5
   }
 ];
 
