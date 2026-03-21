@@ -116,7 +116,7 @@ const calculateStat = (
 const getValidStatPoint = (val: number): number => Math.max(0, Math.min(Math.round(val), 32));
 const getValidStatPointFloor = (limit: number): number => Math.max(0, Math.min(Math.floor(limit), 32));
 
-// ─── react-select スタイル（モバイルファースト: 高さ 44px） ───
+// ─── react-select スタイル（モバイルファースト: 高さ 44px, font-size 16px でiOSズーム防止） ───
 const selectStyles = {
   control: (base: any) => ({
     ...base,
@@ -128,16 +128,18 @@ const selectStyles = {
     borderRadius: '10px',
     '&:hover': { borderColor: '#6B7280' },
   }),
-  singleValue: (base: any) => ({ ...base, color: 'white', fontSize: '0.875rem' }),
-  input: (base: any) => ({ ...base, color: 'white', margin: '0', padding: '0 2px', fontSize: '0.875rem' }),
-  placeholder: (base: any) => ({ ...base, color: '#6B7280', fontSize: '0.875rem' }),
+  singleValue: (base: any) => ({ ...base, color: 'white', fontSize: '16px' }),
+  input: (base: any) => ({ ...base, color: 'white', margin: '0', padding: '0 2px', fontSize: '16px' }),
+  placeholder: (base: any) => ({ ...base, color: '#6B7280', fontSize: '16px' }),
   menu: (base: any) => ({ ...base, backgroundColor: '#1e2433', zIndex: 50, borderRadius: '10px' }),
+  menuPortal: (base: any) => ({ ...base, zIndex: 9999 }),
   option: (base: any, state: any) => ({
     ...base,
     backgroundColor: state.isFocused ? '#374151' : '#1e2433',
     color: 'white',
-    padding: '10px 12px',
-    fontSize: '0.875rem',
+    padding: '12px 14px',
+    minHeight: '44px',
+    fontSize: '16px',
   }),
   valueContainer: (base: any) => ({ ...base, padding: '0 12px' }),
   indicatorsContainer: (base: any) => ({ ...base, padding: '0 4px' }),
@@ -161,6 +163,13 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
   useEffect(() => {
     setEditedMember(member);
   }, [member]);
+
+  // ─── bodyスクロールロック（ドロワー表示中に背景スクロールを防止） ───
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = originalOverflow; };
+  }, []);
 
   // ─── ハンドラ（ロジック変更なし） ───
   const handlePokemonChange = (selectedOption: any) => {
@@ -305,7 +314,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
           {/* 閉じるボタン */}
           <button
             onClick={onClose}
-            className="flex items-center justify-center w-9 h-9 rounded-full bg-white/8 hover:bg-white/15 transition-colors text-gray-400 hover:text-white mr-3 flex-shrink-0"
+            className="flex items-center justify-center w-11 h-11 rounded-full bg-white/8 hover:bg-white/15 transition-colors text-gray-400 hover:text-white mr-3 flex-shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
@@ -322,7 +331,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
           <button
             onClick={handleCopyToClipboardCurrentMember}
             title="Showdown形式でコピー"
-            className="flex items-center gap-1.5 ml-2 px-3 h-9 rounded-lg bg-amber-600/20 hover:bg-amber-600/35 text-amber-300 text-xs font-medium transition-colors flex-shrink-0"
+            className="flex items-center gap-1.5 ml-2 px-3 h-11 rounded-lg bg-amber-600/20 hover:bg-amber-600/35 text-amber-300 text-xs font-medium transition-colors flex-shrink-0"
           >
             <ClipboardCopy className="w-3.5 h-3.5" />
             コピー
@@ -330,7 +339,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
         </div>
 
         {/* ════════════════ スクロール可能メインコンテンツ ════════════════ */}
-        <div className="flex-1 overflow-y-auto overscroll-contain px-4 pt-4 pb-2 space-y-5">
+        <div className="flex-1 overflow-y-auto overscroll-contain px-4 pt-4 pb-4 space-y-5">
 
           {/* ── ポケモン選択 + レベル ── */}
           <section>
@@ -346,6 +355,9 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
                   isClearable={false}
                   styles={selectStyles}
                   filterOption={customSelectFilter}
+                  menuPlacement="auto"
+                  menuPosition="fixed"
+                  menuPortalTarget={document.body}
                 />
               </div>
               <div className="flex-shrink-0 w-20">
@@ -353,7 +365,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
                   type="number"
                   value={editedMember.level}
                   onChange={e => setEditedMember(prev => ({ ...prev, level: Math.max(1, Math.min(100, parseInt(e.target.value, 10) || 1)) }))}
-                  className="w-full h-11 px-2 rounded-[10px] bg-[#1e2433] border border-[#374151] text-white text-sm text-center focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                  className="w-full h-11 px-2 rounded-[10px] bg-[#1e2433] border border-[#374151] text-white text-base text-center focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                   min="1" max="100"
                   placeholder="Lv."
                 />
@@ -376,6 +388,9 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
                   placeholder={`わざ ${index + 1}`}
                   styles={selectStyles}
                   filterOption={customSelectFilter}
+                  menuPlacement="auto"
+                  menuPosition="fixed"
+                  menuPortalTarget={document.body}
                 />
               ))}
             </div>
@@ -394,6 +409,9 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
                 placeholder="なし"
                 styles={selectStyles}
                 filterOption={customSelectFilter}
+                menuPlacement="auto"
+                menuPosition="fixed"
+                menuPortalTarget={document.body}
               />
             </div>
             <div>
@@ -408,6 +426,9 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
                 isDisabled={abilityOptions.length === 0}
                 styles={selectStyles}
                 filterOption={customSelectFilter}
+                menuPlacement="auto"
+                menuPosition="fixed"
+                menuPortalTarget={document.body}
               />
             </div>
           </section>
@@ -424,6 +445,9 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
                 placeholder="タイプ"
                 styles={selectStyles}
                 filterOption={customSelectFilter}
+                menuPlacement="auto"
+                menuPosition="fixed"
+                menuPortalTarget={document.body}
               />
             </div>
             <div>
@@ -437,6 +461,9 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
                 placeholder="なし"
                 styles={selectStyles}
                 filterOption={customSelectFilter}
+                menuPlacement="auto"
+                menuPosition="fixed"
+                menuPortalTarget={document.body}
               />
             </div>
           </section>
@@ -459,7 +486,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
                     ...prev,
                     statPoints: { hp: 0, attack: 0, defense: 0, specialAttack: 0, specialDefense: 0, speed: 0 }
                   }))}
-                  className="text-xs px-2.5 py-1 rounded-lg bg-white/8 hover:bg-white/15 text-gray-400 hover:text-white transition-colors"
+                  className="text-xs px-2.5 py-1.5 rounded-lg bg-white/8 hover:bg-white/15 text-gray-400 hover:text-white transition-colors"
                 >
                   全リセット
                 </button>
@@ -499,7 +526,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
                       <button
                         onClick={() => handleStatPointChange(stat, pointsValue - 1)}
                         disabled={pointsValue <= 0}
-                        className="flex items-center justify-center w-9 h-9 rounded-lg bg-white/8 hover:bg-white/15 text-white text-lg font-bold transition-colors disabled:opacity-25 disabled:cursor-not-allowed flex-shrink-0"
+                        className="flex items-center justify-center w-11 h-11 rounded-lg bg-white/8 hover:bg-white/15 text-white text-lg font-bold transition-colors disabled:opacity-25 disabled:cursor-not-allowed flex-shrink-0"
                         aria-label={`${label} を減らす`}
                       >
                         <ChevronDown className="w-4 h-4" />
@@ -510,7 +537,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
                         type="number"
                         value={pointsValue}
                         onChange={e => handleStatPointChange(stat, parseInt(e.target.value, 10) || 0)}
-                        className="w-12 h-9 rounded-lg bg-[#1e2433] border border-[#374151] text-white text-sm font-bold text-center focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none tabular-nums"
+                        className="w-14 h-11 rounded-lg bg-[#1e2433] border border-[#374151] text-white text-base font-bold text-center focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none tabular-nums"
                         min="0" max="32"
                       />
 
@@ -518,7 +545,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
                       <button
                         onClick={() => handleStatPointChange(stat, pointsValue + 1)}
                         disabled={pointsValue >= actualMaxValueForSlider}
-                        className="flex items-center justify-center w-9 h-9 rounded-lg bg-white/8 hover:bg-white/15 text-white text-lg font-bold transition-colors disabled:opacity-25 disabled:cursor-not-allowed flex-shrink-0"
+                        className="flex items-center justify-center w-11 h-11 rounded-lg bg-white/8 hover:bg-white/15 text-white text-lg font-bold transition-colors disabled:opacity-25 disabled:cursor-not-allowed flex-shrink-0"
                         aria-label={`${label} を増やす`}
                       >
                         <ChevronUp className="w-4 h-4" />
@@ -535,7 +562,7 @@ const TeamMemberEditor: React.FC<TeamMemberEditorProps> = ({
                       <button
                         onClick={() => handleStatPointChange(stat, actualMaxValueForSlider)}
                         disabled={pointsValue >= actualMaxValueForSlider}
-                        className={`text-[11px] px-2 h-9 rounded-lg ${accentColor} text-white font-bold transition-colors disabled:opacity-25 disabled:cursor-not-allowed flex-shrink-0`}
+                        className={`text-[11px] px-3 h-11 rounded-lg ${accentColor} text-white font-bold transition-colors disabled:opacity-25 disabled:cursor-not-allowed flex-shrink-0`}
                         title="上限まで振る"
                       >
                         MAX
